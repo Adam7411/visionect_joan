@@ -69,7 +69,7 @@ Po poprawnej instalacji i restarcie Home Assistant:
 - Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
 - Działa z urządzeniem **Joan 6**, inne modele nie zostały przetestowane.
 - [Wykorzystanie tabletu Visionect Joan 6 jako panelu sterowania Home Assistant](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant).
----
+- Użyłem AI aby szybko napisać dużą część kodu.
 
 ## Licencja
 
