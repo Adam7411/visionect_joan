@@ -5,8 +5,7 @@
 
 
 Niestandardowy dodatek wyświetlający podstawowe informacje tableta **Joan 6** w Home Assistant.
-Główny zamiar kontrola poziomu baterii wyświetlacza Joan 6 (automatyzacje, powiadomienia, itp)
-
+Główny zamiar kontrola poziomu baterii wyświetlacza Joan 6 
 ## Wyświetlane informacje:
 
 - Bateria
