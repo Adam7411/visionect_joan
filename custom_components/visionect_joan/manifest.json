@@ -1,0 +1,12 @@
+{
+  "domain": "visionect_joan",
+  "name": "Visionect Joan",
+  "version": "1.0.0",
+  "config_flow": true,
+  "documentation": "https://github.com/Adam7411/visionect-joan_HA",
+  "issue_tracker": "https://github.com/Adam7411/visionect-joan_HA/issues",
+  "codeowners": ["@Adam7411"],
+  "requirements": ["requests==2.31.0"],
+  "iot_class": "cloud_polling",
+  "icon": "mdi:tablet-dashboard"
+}
