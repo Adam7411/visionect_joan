@@ -11,7 +11,7 @@ Sygnał WiFi
 Temperatura
 itp.
 
-Instalacja
+Instalacja dodatku
 Integrację można zainstalować na dwa sposoby: przez HACS (zalecane) lub manualnie.
 
 Instalacja przez HACS (zalecana metoda)
@@ -29,9 +29,22 @@ Rozpakuj pobrane archiwum.
 Skopiuj cały katalog visionect_joan (ten, w którym znajduje się m.in. plik manifest.json) do folderu custom_components w głównym katalogu konfiguracyjnym Twojego Home Assistant.
 Ostateczna ścieżka powinna wyglądać tak:  \config\custom_components\visionect_joan
 Uruchom ponownie Home Assistant.
+____________________________________________________________________________________________________
 
 Konfiguracja
 Po poprawnej instalacji i ponownym uruchomieniu Home Assistant:
 Przejdź do Ustawienia > Urządzenia i usługi.
 Kliknij przycisk "+ Dodaj integrację" w prawym dolnym rogu.
 Wyszukaj na liście "Visionect Joan" i kliknij, aby rozpocząć konfigurację.
+Wpisujemy adres strony login hasło Visionect Software Suite API key	API secret
+
+![image](https://github.com/user-attachments/assets/98a9c588-365c-47d1-bde6-532055221460)
+
+
+![image](https://github.com/user-attachments/assets/186c46f7-2b59-472d-aafc-bde40979baea)
+
+
+
+
+
+
