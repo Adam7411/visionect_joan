@@ -1,7 +1,8 @@
 
 # Visionect Joan
 
-![image](https://github.com/user-attachments/assets/efe1b378-8884-40dc-b384-707b4113f3f1)
+![image](https://github.com/user-attachments/assets/9d9a18c6-5518-432f-81c1-b7a4286760d8)
+
 
 Niestandardowy dodatek wyświetlający podstawowe informacje tableta **Joan 6** w Home Assistant.
 
