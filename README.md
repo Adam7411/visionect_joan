@@ -1,6 +1,8 @@
 
 # Visionect Joan
 
+![image](https://github.com/user-attachments/assets/efe1b378-8884-40dc-b384-707b4113f3f1)
+
 Niestandardowy dodatek wyświetlający podstawowe informacje tableta **Joan 6** w Home Assistant.
 
 ## Wyświetlane informacje:
@@ -50,8 +52,8 @@ Po poprawnej instalacji i restarcie Home Assistant:
 - Adres URL
 - Login
 - Hasło
-- API Key
-- API Secret
+- API Key i API Secret (tworzymy przyciskiem Add new API key)
+
 
 ### Przykładowe zrzuty ekranu
 
