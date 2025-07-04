@@ -53,7 +53,7 @@ Po poprawnej instalacji i restarcie Home Assistant:
 - Adres URL
 - Login
 - Hasło
-- API Key i API Secret (tworzymy przyciskiem Add new API key)
+- API Key i API Secret (tworzymy w Visionect Software Suite w zakładce Users przyciskiem Add new API key)
 
 
 ### Przykładowe zrzuty ekranu
