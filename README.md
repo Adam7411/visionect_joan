@@ -1,47 +1,77 @@
-# visionect_joan
-Niestandardowy dodatek wyświetla podstawowe informacje tableta Joan 6 w Home Assistant
 
-Bateria
-Całkowita pamięć
-Czas pracy
-Interwał odświeżania
-Napięcie baterii
-Status
-Sygnał WiFi
-Temperatura
-itp.
+# Visionect Joan
 
-Instalacja dodatku
-Integrację można zainstalować na dwa sposoby: przez HACS (zalecane) lub manualnie.
+Niestandardowy dodatek wyświetlający podstawowe informacje tableta **Joan 6** w Home Assistant.
 
-Instalacja przez HACS (zalecana metoda)
-Upewnij się, że w Twoim Home Assistant jest zainstalowany HACS.
-Przejdź do HACS -> Integracje.
-Kliknij menu z trzema kropkami w prawym górnym rogu i wybierz "Niestandardowe repozytoria".
-Wklej adres URL tego repozytorium, wybierz kategorię "Integracja" i kliknij "Dodaj".
-Wyszukaj na liście integrację "Visionect Joan" i kliknij "Zainstaluj".
-Uruchom ponownie Home Assistant, aby zastosować zmiany.
+## Wyświetlane informacje:
 
-Instalacja manualna
-Przejdź do strony Releases (Wydania) na GitHubie.
-Pobierz najnowsze wydanie, klikając na plik visionect-joan.zip (lub Source code (zip)).
-Rozpakuj pobrane archiwum.
-Skopiuj cały katalog visionect_joan (ten, w którym znajduje się m.in. plik manifest.json) do folderu custom_components w głównym katalogu konfiguracyjnym Twojego Home Assistant.
-Ostateczna ścieżka powinna wyglądać tak:  \config\custom_components\visionect_joan
-Uruchom ponownie Home Assistant.
-____________________________________________________________________________________________________
+- Bateria
+- Całkowita pamięć
+- Czas pracy
+- Interwał odświeżania
+- Napięcie baterii
+- Status
+- Sygnał WiFi
+- Temperatura
+- i inne...
 
-Konfiguracja
-Po poprawnej instalacji i ponownym uruchomieniu Home Assistant:
-Przejdź do Ustawienia > Urządzenia i usługi.
-Kliknij przycisk "+ Dodaj integrację" w prawym dolnym rogu.
-Wyszukaj na liście "Visionect Joan" i kliknij, aby rozpocząć konfigurację.
-Wpisujemy adres strony login hasło Visionect Software Suite API key	API secret
+---
+
+## Instalacja dodatku
+
+Integrację można zainstalować na dwa sposoby: przez **HACS** (zalecane) lub **manualnie**.
+
+### Instalacja przez HACS (zalecana)
+
+1. Upewnij się, że w Twoim Home Assistant jest zainstalowany [HACS](https://hacs.xyz/).
+2. Przejdź do `HACS -> Integracje`.
+3. Kliknij menu z trzema kropkami w prawym górnym rogu i wybierz **„Niestandardowe repozytoria”**.
+4. Wklej adres URL tego repozytorium, wybierz kategorię **„Integracja”** i kliknij **„Dodaj”**.
+5. Wyszukaj na liście integrację **„Visionect Joan”** i kliknij **„Zainstaluj”**.
+6. Uruchom ponownie Home Assistant, aby zastosować zmiany.
+
+### Instalacja manualna
+
+
+1. Pobierz najnowsze wydanie, klikając na `visionect-joan.zip` (lub `Source code (zip)`).
+2. Rozpakuj pobrane archiwum do /config/custom_components/
+3. Uruchom ponownie Home Assistant.
+
+---
+
+## Konfiguracja
+
+Po poprawnej instalacji i restarcie Home Assistant:
+
+1. Przejdź do `Ustawienia > Urządzenia i usługi`.
+2. Kliknij **„+ Dodaj integrację”** w prawym dolnym rogu.
+3. Wyszukaj **„Visionect Joan”** i kliknij, aby rozpocząć konfigurację.
+4. Wprowadź dane logowania do Visionect Software Suite:
+- Adres URL
+- Login
+- Hasło
+- API Key
+- API Secret
+
+### Przykładowe zrzuty ekranu
 
 ![image](https://github.com/user-attachments/assets/98a9c588-365c-47d1-bde6-532055221460)
 
-
 ![image](https://github.com/user-attachments/assets/186c46f7-2b59-472d-aafc-bde40979baea)
+
+---
+
+## Uwagi
+
+- Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
+- Działa z urządzeniem **Joan 6**, inne modele nie zostały przetestowane.
+
+---
+
+## Licencja
+
+Projekt udostępniany na licencji MIT.
+
 
 
 
