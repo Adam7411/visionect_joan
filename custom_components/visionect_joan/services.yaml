@@ -1,0 +1,126 @@
+# custom_components/visionect_joan/services.yaml
+# Opisuje usługi dostępne dla integracji Visionect Joan.
+
+set_url:
+  name: Ustaw URL
+  description: Zmienia adres URL wyświetlany na ekranie urządzenia.
+  fields:
+    device_id:
+      name: Urządzenie
+      description: Urządzenie Visionect, na którym ma być wykonana operacja.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+    url:
+      name: Adres URL
+      description: Nowy adres URL do wyświetlenia.
+      required: true
+      example: "https://example.com/dashboard.html"
+      selector:
+        text:
+
+set_orientation:
+  name: Ustaw orientację
+  description: Zmienia orientację wyświetlacza.
+  fields:
+    device_id:
+      name: Urządzenie
+      description: Urządzenie Visionect, na którym ma być wykonana operacja.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+    orientation:
+      name: Orientacja
+      description: Nowa orientacja ekranu.
+      required: true
+      selector:
+        select:
+          options:
+            - "portrait"
+            - "landscape"
+            - "portrait_flipped"
+            - "landscape_flipped"
+
+set_sleep_mode:
+  name: Ustaw tryb uśpienia
+  description: Zmienia tryb zarządzania energią urządzenia.
+  fields:
+    device_id:
+      name: Urządzenie
+      description: Urządzenie Visionect, na którym ma być wykonana operacja.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+    sleep_mode:
+      name: Tryb uśpienia
+      description: Nowy tryb uśpienia.
+      required: true
+      selector:
+        select:
+          options:
+            - "manual"
+            - "auto"
+            - "disabled"
+
+set_refresh_interval:
+  name: Ustaw interwał odświeżania
+  description: Zmienia, jak często urządzenie ma odświeżać treść.
+  fields:
+    device_id:
+      name: Urządzenie
+      description: Urządzenie Visionect, na którym ma być wykonana operacja.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+    refresh_interval:
+      name: Interwał (w sekundach)
+      description: Czas w sekundach pomiędzy odświeżeniami.
+      required: true
+      selector:
+        number:
+          min: 30
+          max: 86400
+          step: 1
+          unit_of_measurement: "s"
+
+clear_screen:
+  name: Wyczyść ekran
+  description: Czyści zawartość ekranu urządzenia.
+  fields:
+    device_id:
+      name: Urządzenie
+      description: Urządzenie Visionect, na którym ma być wykonana operacja.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+
+set_config:
+  name: Ustaw parametr konfiguracyjny (zaawansowane)
+  description: Pozwala na ustawienie dowolnego parametru w sekcji 'Config' urządzenia.
+  fields:
+    device_id:
+      name: Urządzenie
+      description: Urządzenie Visionect, na którym ma być wykonana operacja.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+    config_key:
+      name: Klucz konfiguracji
+      description: Nazwa klucza do zmiany (np. 'TimeZone', 'NTP_Server').
+      required: true
+      example: "TimeZone"
+      selector:
+        text:
+    config_value:
+      name: Wartość konfiguracji
+      description: Nowa wartość dla podanego klucza.
+      required: true
+      example: "Europe/Warsaw"
+      selector:
+        text:
