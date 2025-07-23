@@ -134,6 +134,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         update_method=async_update_data,
         update_interval=SCAN_INTERVAL,
     )
+    
+    # WAŻNE: Dodaj referencję do config_entry w coordinator
+    coordinator.config_entry = entry
 
     await coordinator.async_config_entry_first_refresh()
 
