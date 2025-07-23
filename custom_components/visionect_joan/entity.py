@@ -29,17 +29,44 @@ class VisionectEntity(CoordinatorEntity):
         if not device_name or str(device_name).lower() in UNKNOWN_STRINGS:
             device_name = self.uuid # Użyj pełnego UUID jako domyślnej nazwy
 
-        # Ensure configuration_url is None if IP is unknown or None
+        # Pobierz adres IP z statusu urządzenia
         ip_address = status.get('IPAddress')
         config_url = None
-        if ip_address and str(ip_address).lower() not in UNKNOWN_STRINGS:
+        
+        # Sprawdź czy IP jest prawidłowy i nie jest "unknown"
+        if ip_address and str(ip_address).lower() not in UNKNOWN_STRINGS and ip_address != IP_UNKNOWN:
             config_url = f"http://{ip_address}"
+            # Dodaj IP jako identyfikator połączenia dla lepszej identyfikacji
+            connections = {("ip", ip_address)}
+        else:
+            ip_address = None
+            connections = set()
 
-        return DeviceInfo(
+        # Przygotuj dodatkowe informacje o urządzeniu
+        device_info = DeviceInfo(
             identifiers={(DOMAIN, self.uuid)},
             name=device_name,
             manufacturer="Visionect",
             model=MODEL_JOAN6,
             sw_version=status.get("ApplicationVersion"),
-            configuration_url=config_url
+            configuration_url=config_url,
+            connections=connections
         )
+        
+        # Dodaj adres IP jako dodatkowy atrybut jeśli jest dostępny
+        if ip_address:
+            # Możemy dodać sugerowaną nazwę obszaru na podstawie IP
+            device_info["suggested_area"] = self._suggest_area_from_ip(ip_address)
+        
+        return device_info
+    
+    def _suggest_area_from_ip(self, ip_address: str) -> str:
+        """Sugeruje nazwę obszaru na podstawie adresu IP."""
+        try:
+            # Przykład: jeśli IP to 192.168.1.100, sugeruj "Network_192_168_1"
+            parts = ip_address.split('.')
+            if len(parts) == 4:
+                return f"Network_{parts[0]}_{parts[1]}_{parts[2]}"
+        except:
+            pass
+        return "Visionect Devices"

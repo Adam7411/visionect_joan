@@ -30,8 +30,18 @@ class VisionectJoanConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 )
                 
                 if await api.async_test_authentication():
+                    # Pobierz podstawowe informacje o serwerze/urządzeniach dla lepszego opisu
+                    devices = await api.async_get_all_devices()
+                    device_count = len(devices) if devices else 0
+                    
+                    # Przygotuj tytuł z informacją o IP i liczbie urządzeń
+                    host_ip = user_input[CONF_HOST].replace('http://', '').replace('https://', '').split(':')[0]
+                    title = f"Visionect Joan ({host_ip})"
+                    if device_count > 0:
+                        title += f" - {device_count} urządzeń"
+                    
                     return self.async_create_entry(
-                        title="Visionect Joan",
+                        title=title,
                         data=user_input
                     )
                 errors["base"] = "auth_failed"
@@ -40,8 +50,8 @@ class VisionectJoanConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 errors["base"] = "unknown"
 
         data_schema = vol.Schema({
-            vol.Required(CONF_HOST): str,
-            vol.Optional(CONF_USERNAME): str,
+            vol.Required(CONF_HOST, description={"suggested_value": "192.168.1.100"}): str,
+            vol.Optional(CONF_USERNAME, description={"suggested_value": "admin"}): str,
             vol.Optional(CONF_PASSWORD): str,
             vol.Optional(CONF_API_KEY): str,
             vol.Optional(CONF_API_SECRET): str,
@@ -52,6 +62,6 @@ class VisionectJoanConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             data_schema=data_schema,
             errors=errors,
             description_placeholders={
-                "info": "Podaj dane logowania lub klucze API"
+                "info": "Podaj adres IP serwera Visionect i dane logowania lub klucze API. Przykład IP: 192.168.1.100"
             }
         )

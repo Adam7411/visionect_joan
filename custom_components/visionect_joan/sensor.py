@@ -26,7 +26,7 @@ _LOGGER = logging.getLogger(__name__)
 
 
 SENSOR_TYPES = {
-    # Istniejące sensory
+    # Podstawowe sensory
     "state": ("Status", None, None, "mdi:tablet", None, True),
     "battery": ("Bateria", SensorDeviceClass.BATTERY, PERCENTAGE, "mdi:battery", SensorStateClass.MEASUREMENT, True),
     "temperature": ("Temperatura", SensorDeviceClass.TEMPERATURE, UnitOfTemperature.CELSIUS, "mdi:thermometer", SensorStateClass.MEASUREMENT, True),
@@ -37,7 +37,10 @@ SENSOR_TYPES = {
     "refresh_interval": ("Interwał odświeżania", SensorDeviceClass.DURATION, UnitOfTime.SECONDS, "mdi:timer-cog", SensorStateClass.MEASUREMENT, True),
     "uuid": ("UUID", None, None, "mdi:identifier", None, False),
     
-    # Sensory, które pozostały po usunięciu wskazanych
+    # NOWY SENSOR IP ADDRESS
+    "ip_address": ("Adres IP", None, None, "mdi:ip-network", None, True),
+    
+    # Pozostałe sensory
     "application_version": ("Wersja aplikacji", None, None, "mdi:package-variant", None, True),
     "storage_total": ("Całkowita pamięć", SensorDeviceClass.DATA_SIZE, UnitOfInformation.MEGABYTES, "mdi:harddisk", SensorStateClass.MEASUREMENT, False),
     "storage_used": ("Używana pamięć", SensorDeviceClass.DATA_SIZE, UnitOfInformation.MEGABYTES, "mdi:harddisk", SensorStateClass.MEASUREMENT, False),
@@ -100,6 +103,13 @@ class VisionectSensor(VisionectEntity, SensorEntity):
                     return None
                 return value
 
+            # NOWY SENSOR - ADRES IP
+            if self.sensor_type == "ip_address":
+                ip_value = status.get("IPAddress")
+                if ip_value and str(ip_value).lower() not in UNKNOWN_STRINGS and ip_value != IP_UNKNOWN:
+                    return ip_value
+                return None
+
             # Istniejące sensory
             if self.sensor_type == "battery":
                 return _get_value_or_none(status.get("Battery"))
@@ -153,9 +163,33 @@ class VisionectSensor(VisionectEntity, SensorEntity):
     @property
     def extra_state_attributes(self):
         """Zwraca dodatkowe atrybuty stanu."""
+        device_data = self.coordinator.data.get(self.uuid, {})
+        status = device_data.get("Status", {})
+        config = device_data.get("Config", {})
+        
         if self.sensor_type == "state":
-            config = self.coordinator.data.get(self.uuid, {}).get("Config", {})
             configured_url = config.get("Url")
-            # If configured_url is unknown, set it to None in attributes
-            return {"configured_url": configured_url if configured_url and configured_url.lower() not in UNKNOWN_STRINGS else None}
+            ip_address = status.get("IPAddress")
+            
+            attributes = {
+                "configured_url": configured_url if configured_url and configured_url.lower() not in UNKNOWN_STRINGS else None
+            }
+            
+            # Dodaj IP address jako atrybut sensora statusu
+            if ip_address and str(ip_address).lower() not in UNKNOWN_STRINGS and ip_address != IP_UNKNOWN:
+                attributes["ip_address"] = ip_address
+                attributes["web_interface"] = f"http://{ip_address}"
+                
+            return attributes
+            
+        elif self.sensor_type == "ip_address":
+            # Dodaj dodatkowe informacje sieciowe jako atrybuty sensora IP
+            ip_address = status.get("IPAddress")
+            if ip_address and str(ip_address).lower() not in UNKNOWN_STRINGS and ip_address != IP_UNKNOWN:
+                return {
+                    "web_interface": f"http://{ip_address}",
+                    "network_type": status.get("NetworkType", "unknown"),
+                    "mac_address": status.get("MacAddress", "unknown"),
+                }
+        
         return None
