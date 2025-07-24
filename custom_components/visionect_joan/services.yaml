@@ -1,0 +1,125 @@
+# Describes services available for the Visionect Joan integration.
+
+set_url:
+  name: Set URL
+  description: Changes the URL displayed on the device screen.
+  fields:
+    device_id:
+      name: Device
+      description: The Visionect device to perform the action on.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+    url:
+      name: URL
+      description: The new URL to display.
+      required: true
+      example: "https://example.com/dashboard.html"
+      selector:
+        text:
+
+set_orientation:
+  name: Set Orientation
+  description: Changes the display orientation.
+  fields:
+    device_id:
+      name: Device
+      description: The Visionect device to perform the action on.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+    orientation:
+      name: Orientation
+      description: The new screen orientation.
+      required: true
+      selector:
+        select:
+          options:
+            - "portrait"
+            - "landscape"
+            - "portrait_flipped"
+            - "landscape_flipped"
+
+set_sleep_mode:
+  name: Set Sleep Mode
+  description: Changes the device's power management mode.
+  fields:
+    device_id:
+      name: Device
+      description: The Visionect device to perform the action on.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+    sleep_mode:
+      name: Sleep Mode
+      description: The new sleep mode.
+      required: true
+      selector:
+        select:
+          options:
+            - "manual"
+            - "auto"
+            - "disabled"
+
+set_refresh_interval:
+  name: Set Refresh Interval
+  description: Changes how often the device refreshes its content.
+  fields:
+    device_id:
+      name: Device
+      description: The Visionect device to perform the action on.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+    refresh_interval:
+      name: Interval (in seconds)
+      description: Time in seconds between refreshes.
+      required: true
+      selector:
+        number:
+          min: 30
+          max: 86400
+          step: 1
+          unit_of_measurement: "s"
+
+clear_screen:
+  name: Clear Screen
+  description: Clears the content of the device's screen.
+  fields:
+    device_id:
+      name: Device
+      description: The Visionect device to perform the action on.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+
+set_config:
+  name: Set Config Parameter (Advanced)
+  description: Allows setting any parameter in the 'Config' section of the device.
+  fields:
+    device_id:
+      name: Device
+      description: The Visionect device to perform the action on.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+    config_key:
+      name: Config Key
+      description: The name of the key to change (e.g., 'TimeZone', 'NTP_Server').
+      required: true
+      example: "TimeZone"
+      selector:
+        text:
+    config_value:
+      name: Config Value
+      description: The new value for the given key.
+      required: true
+      example: "Europe/Warsaw"
+      selector:
+        text:
