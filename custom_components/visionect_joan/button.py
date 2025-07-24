@@ -1,4 +1,3 @@
-# custom_components/visionect_joan/button.py
 import logging
 
 from homeassistant.components.button import ButtonEntity
@@ -11,7 +10,6 @@ from .entity import VisionectEntity
 
 _LOGGER = logging.getLogger(__name__)
 
-# --- KLASA BAZOWA MUSI BYĆ ZDEFINIOWANA PRZED JEJ UŻYCIEM ---
 class VisionectButtonBase(VisionectEntity, ButtonEntity):
     """Bazowa klasa dla przycisków Visionect."""
 
@@ -38,7 +36,7 @@ async def async_setup_entry(
                 VisionectRebootButton(coordinator, uuid, api),
                 VisionectRestartSessionButton(coordinator, uuid, api),
                 VisionectForceRefreshButton(coordinator, uuid, api),
-                VisionectClearScreenButton(coordinator, uuid, api), # Dodany nowy przycisk
+                VisionectClearScreenButton(coordinator, uuid, api),
             ])
 
     async_add_entities(entities)
@@ -48,7 +46,7 @@ class VisionectRebootButton(VisionectButtonBase):
     """Przycisk do restartowania urządzenia Visionect."""
     
     _attr_icon = "mdi:restart"
-    _attr_name = "Restart"
+    _attr_translation_key = "reboot"
 
     def __init__(self, coordinator, uuid, api):
         """Inicjalizacja."""
@@ -69,7 +67,7 @@ class VisionectRestartSessionButton(VisionectButtonBase):
     """Przycisk do restartowania sesji na urządzeniu Visionect."""
 
     _attr_icon = "mdi:restart-alert"
-    _attr_name = "Restart Sesji"
+    _attr_translation_key = "restart_session"
 
     def __init__(self, coordinator, uuid, api):
         """Inicjalizacja."""
@@ -90,7 +88,7 @@ class VisionectForceRefreshButton(VisionectButtonBase):
     """Przycisk do wymuszenia odświeżenia ekranu na urządzeniu Visionect."""
 
     _attr_icon = "mdi:refresh"
-    _attr_name = "Wymuś odświeżenie"
+    _attr_translation_key = "force_refresh"
 
     def __init__(self, coordinator, uuid, api):
         """Inicjalizacja."""
@@ -111,7 +109,7 @@ class VisionectClearScreenButton(VisionectButtonBase):
     """Przycisk do czyszczenia ekranu urządzenia Visionect."""
 
     _attr_icon = "mdi:notification-clear-all"
-    _attr_name = "Wyczyść ekran"
+    _attr_translation_key = "clear_screen"
 
     def __init__(self, coordinator, uuid, api):
         """Inicjalizacja."""
@@ -123,7 +121,6 @@ class VisionectClearScreenButton(VisionectButtonBase):
         _LOGGER.info(f"Wysyłanie komendy czyszczenia ekranu do urządzenia: {self.uuid}")
         if await self._api.async_clear_screen(self.uuid):
             _LOGGER.info(f"Komenda czyszczenia ekranu wysłana pomyślnie do {self.uuid}")
-            # Po wyczyszczeniu ekranu warto odświeżyć dane
             await self.coordinator.async_request_refresh()
         else:
             _LOGGER.error(f"Nie udało się wysłać komendy czyszczenia ekranu do {self.uuid}")

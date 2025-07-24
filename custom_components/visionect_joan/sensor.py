@@ -1,4 +1,3 @@
-# custom_components/visionect_joan/sensor.py
 from homeassistant.components.sensor import (
     SensorEntity,
     SensorDeviceClass,
@@ -24,27 +23,40 @@ from .entity import VisionectEntity
 
 _LOGGER = logging.getLogger(__name__)
 
-
+# Słownik SENSOR_TYPES został uproszczony - nie zawiera już nazw
+# Klucz słownika (np. "state") będzie używany jako klucz tłumaczenia
 SENSOR_TYPES = {
     # Podstawowe sensory
-    "state": ("Status", None, None, "mdi:tablet", None, True),
-    "battery": ("Bateria", SensorDeviceClass.BATTERY, PERCENTAGE, "mdi:battery", SensorStateClass.MEASUREMENT, True),
-    "temperature": ("Temperatura", SensorDeviceClass.TEMPERATURE, UnitOfTemperature.CELSIUS, "mdi:thermometer", SensorStateClass.MEASUREMENT, True),
-    "rssi": ("Sygnał WiFi", SensorDeviceClass.SIGNAL_STRENGTH, "dBm", "mdi:wifi", SensorStateClass.MEASUREMENT, True),
-    "uptime": ("Czas pracy", SensorDeviceClass.DURATION, UnitOfTime.SECONDS, "mdi:timer", SensorStateClass.TOTAL_INCREASING, True),
-    "storage_free": ("Wolne miejsce", SensorDeviceClass.DATA_SIZE, UnitOfInformation.MEGABYTES, "mdi:harddisk", SensorStateClass.MEASUREMENT, False),
-    "battery_voltage": ("Napięcie baterii", SensorDeviceClass.VOLTAGE, UnitOfElectricPotential.VOLT, "mdi:flash", SensorStateClass.MEASUREMENT, False),
-    "refresh_interval": ("Interwał odświeżania", SensorDeviceClass.DURATION, UnitOfTime.SECONDS, "mdi:timer-cog", SensorStateClass.MEASUREMENT, True),
-    "uuid": ("UUID", None, None, "mdi:identifier", None, False),
+    "state": (None, "mdi:tablet", None, True),
+    "battery": (SensorDeviceClass.BATTERY, "mdi:battery", SensorStateClass.MEASUREMENT, True),
+    "temperature": (SensorDeviceClass.TEMPERATURE, "mdi:thermometer", SensorStateClass.MEASUREMENT, True),
+    "rssi": (SensorDeviceClass.SIGNAL_STRENGTH, "mdi:wifi", SensorStateClass.MEASUREMENT, True),
+    "uptime": (SensorDeviceClass.DURATION, "mdi:timer", SensorStateClass.TOTAL_INCREASING, True),
+    "storage_free": (SensorDeviceClass.DATA_SIZE, "mdi:harddisk", SensorStateClass.MEASUREMENT, False),
+    "battery_voltage": (SensorDeviceClass.VOLTAGE, "mdi:flash", SensorStateClass.MEASUREMENT, False),
+    "refresh_interval": (SensorDeviceClass.DURATION, "mdi:timer-cog", SensorStateClass.MEASUREMENT, True),
+    "uuid": (None, "mdi:identifier", None, False),
     
     # Pozostałe sensory
-    "application_version": ("Wersja aplikacji", None, None, "mdi:package-variant", None, True),
-    "storage_total": ("Całkowita pamięć", SensorDeviceClass.DATA_SIZE, UnitOfInformation.MEGABYTES, "mdi:harddisk", SensorStateClass.MEASUREMENT, False),
-    "storage_used": ("Używana pamięć", SensorDeviceClass.DATA_SIZE, UnitOfInformation.MEGABYTES, "mdi:harddisk", SensorStateClass.MEASUREMENT, False),
-    "error_count": ("Liczba błędów", None, None, "mdi:alert-circle", SensorStateClass.TOTAL_INCREASING, False),
-    "restart_count": ("Liczba restartów", None, None, "mdi:restart", SensorStateClass.TOTAL_INCREASING, False),
+    "application_version": (None, "mdi:package-variant", None, True),
+    "storage_total": (SensorDeviceClass.DATA_SIZE, "mdi:harddisk", SensorStateClass.MEASUREMENT, False),
+    "storage_used": (SensorDeviceClass.DATA_SIZE, "mdi:harddisk", SensorStateClass.MEASUREMENT, False),
+    "error_count": (None, "mdi:alert-circle", SensorStateClass.TOTAL_INCREASING, False),
+    "restart_count": (None, "mdi:restart", SensorStateClass.TOTAL_INCREASING, False),
 }
 
+# Słownik jednostek, aby uniknąć umieszczania ich w SENSOR_TYPES i zachować porządek
+SENSOR_UNITS = {
+    "battery": PERCENTAGE,
+    "temperature": UnitOfTemperature.CELSIUS,
+    "rssi": "dBm",
+    "uptime": UnitOfTime.SECONDS,
+    "storage_free": UnitOfInformation.MEGABYTES,
+    "storage_total": UnitOfInformation.MEGABYTES,
+    "storage_used": UnitOfInformation.MEGABYTES,
+    "battery_voltage": UnitOfElectricPotential.VOLT,
+    "refresh_interval": UnitOfTime.SECONDS,
+}
 
 async def async_setup_entry(
     hass: HomeAssistant, 
@@ -68,13 +80,14 @@ class VisionectSensor(VisionectEntity, SensorEntity):
         self.sensor_type = sensor_type
         
         sensor_config = SENSOR_TYPES[sensor_type]
-        self._attr_name = sensor_config[0]
+        self._attr_translation_key = sensor_type
         self._attr_unique_id = f"{uuid}_{sensor_type}"
-        self._attr_device_class = sensor_config[1]
-        self._attr_native_unit_of_measurement = sensor_config[2]
-        self._attr_icon = sensor_config[3]
-        self._attr_state_class = sensor_config[4]
-        self._attr_entity_registry_enabled_default = sensor_config[5]
+        
+        self._attr_device_class = sensor_config[0]
+        self._attr_icon = sensor_config[1]
+        self._attr_state_class = sensor_config[2]
+        self._attr_entity_registry_enabled_default = sensor_config[3]
+        self._attr_native_unit_of_measurement = SENSOR_UNITS.get(sensor_type)
 
     @property
     def native_value(self):
@@ -94,20 +107,11 @@ class VisionectSensor(VisionectEntity, SensorEntity):
             status = device_data.get("Status", {})
             config = device_data.get("Config", {})
 
-            # Helper function to check if a value should be considered None/Unknown
             def _get_value_or_none(value):
                 if value is None or (isinstance(value, str) and value.lower() in UNKNOWN_STRINGS):
                     return None
                 return value
 
-            # NOWY SENSOR - ADRES IP (USUNIĘTY - nie jest potrzebny)
-            # if self.sensor_type == "ip_address":
-            #     ip_value = status.get("IPAddress")
-            #     if ip_value and str(ip_value).lower() not in UNKNOWN_STRINGS and ip_value != IP_UNKNOWN:
-            #         return ip_value
-            #     return None
-
-            # Istniejące sensory
             if self.sensor_type == "battery":
                 return _get_value_or_none(status.get("Battery"))
             if self.sensor_type == "temperature":
@@ -119,34 +123,25 @@ class VisionectSensor(VisionectEntity, SensorEntity):
             if self.sensor_type == "storage_free":
                 free_str = _get_value_or_none(status.get("FsFreeSize"))
                 if free_str is None: return None
-                try:
-                    return round(float(free_str) / (1024 * 1024), 2)
-                except ValueError:
-                    return None
+                try: return round(float(free_str) / (1024 * 1024), 2)
+                except (ValueError, TypeError): return None
             if self.sensor_type == "battery_voltage":
                 return _get_value_or_none(status.get("BatteryVoltage"))
             if self.sensor_type == "refresh_interval":
                 return _get_value_or_none(config.get("RefreshInterval", DEFAULT_REFRESH_INTERVAL))
-                
-            # POZOSTAŁE SENSORY:
             if self.sensor_type == "application_version":
                 return _get_value_or_none(status.get("ApplicationVersion"))
             if self.sensor_type == "storage_total":
                 total_str = _get_value_or_none(status.get("FsTotalSize"))
                 if total_str is None: return None
-                try:
-                    return round(float(total_str) / (1024 * 1024), 2)
-                except ValueError:
-                    return None
+                try: return round(float(total_str) / (1024 * 1024), 2)
+                except (ValueError, TypeError): return None
             if self.sensor_type == "storage_used":
                 total_str = _get_value_or_none(status.get("FsTotalSize"))
                 free_str = _get_value_or_none(status.get("FsFreeSize"))
-                if total_str is None or free_str is None:
-                    return None
-                try:
-                    return round((float(total_str) - float(free_str)) / (1024 * 1024), 2)
-                except ValueError:
-                    return None
+                if total_str is None or free_str is None: return None
+                try: return round((float(total_str) - float(free_str)) / (1024 * 1024), 2)
+                except (ValueError, TypeError): return None
             if self.sensor_type == "error_count":
                 return _get_value_or_none(status.get("ErrorCount", 0))
             if self.sensor_type == "restart_count":

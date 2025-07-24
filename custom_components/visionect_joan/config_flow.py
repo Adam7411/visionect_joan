@@ -19,6 +19,10 @@ class VisionectJoanConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         """Krok konfiguracji użytkownika."""
         errors = {}
         if user_input is not None:
+            # Upewnij się, że host jest już unikalny
+            await self.async_set_unique_id(user_input[CONF_HOST])
+            self._abort_if_unique_id_configured()
+
             try:
                 api = VisionectAPI(
                     self.hass,
@@ -38,7 +42,7 @@ class VisionectJoanConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     host_ip = user_input[CONF_HOST].replace('http://', '').replace('https://', '').split(':')[0]
                     title = f"Visionect Joan ({host_ip})"
                     if device_count > 0:
-                        title += f" - {device_count} urządzeń"
+                        title += f" - {device_count} devices" # Użyj angielskiego, HA nie tłumaczy tytułów dynamicznie
                     
                     return self.async_create_entry(
                         title=title,
@@ -49,9 +53,10 @@ class VisionectJoanConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 _LOGGER.error("Error during setup: %s", str(ex))
                 errors["base"] = "unknown"
 
+        # Schemat danych teraz pobierze opisy z plików tłumaczeń
         data_schema = vol.Schema({
-            vol.Required(CONF_HOST, description={"suggested_value": "192.168.1.100"}): str,
-            vol.Optional(CONF_USERNAME, description={"suggested_value": "admin"}): str,
+            vol.Required(CONF_HOST): str,
+            vol.Optional(CONF_USERNAME): str,
             vol.Optional(CONF_PASSWORD): str,
             vol.Optional(CONF_API_KEY): str,
             vol.Optional(CONF_API_SECRET): str,
@@ -61,7 +66,4 @@ class VisionectJoanConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             step_id="user",
             data_schema=data_schema,
             errors=errors,
-            description_placeholders={
-                "info": "Podaj adres IP serwera Visionect i dane logowania lub klucze API. Przykład IP: 192.168.1.100"
-            }
         )
