@@ -54,13 +54,6 @@
         "refresh_interval": { "name": "Interval (in seconds)", "description": "Time in seconds between refreshes." }
       }
     },
-    "clear_screen": {
-      "name": "Clear Screen",
-      "description": "Clears the content of the device's screen.",
-      "fields": {
-        "device_id": { "name": "Device", "description": "The Visionect device to perform the action on." }
-      }
-    },
     "set_config": {
       "name": "Set Config Parameter (Advanced)",
       "description": "Allows setting any parameter in the 'Config' section of the device.",
@@ -72,12 +65,6 @@
     }
   },
   "entity": {
-    "button": {
-      "reboot": { "name": "Reboot" },
-      "restart_session": { "name": "Restart Session" },
-      "force_refresh": { "name": "Force Refresh" },
-      "clear_screen": { "name": "Clear Screen" }
-    },
     "sensor": {
       "state": { "name": "Status" },
       "battery": { "name": "Battery" },

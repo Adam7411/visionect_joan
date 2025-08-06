@@ -24,7 +24,7 @@ except ImportError as e:
     _LOGGER.critical(f"Krytyczny błąd importu w __init__.py: {e}")
     raise
 
-PLATFORMS = ["sensor", "button"]
+PLATFORMS = ["sensor"]
 
 # Definicje usług i atrybutów
 SERVICE_SET_URL = "set_url"

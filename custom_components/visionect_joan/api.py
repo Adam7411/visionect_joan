@@ -9,7 +9,7 @@ from requests.auth import HTTPBasicAuth
 
 from .const import (
     IP_UNKNOWN, BATTERY_VOLTAGE_DIVIDER, API_PING, API_DEVICES,
-    API_DEVICE_DETAIL, API_REBOOT, API_RESTART_SESSION, API_REFRESH, API_CLEAR,
+    API_DEVICE_DETAIL, API_RESTART_SESSION,
     MIN_REFRESH_INTERVAL, MAX_REFRESH_INTERVAL
 )
 
@@ -112,17 +112,8 @@ class VisionectAPI:
             return True
         return False
 
-    async def async_reboot_device(self, uuid: str) -> bool:
-        return await self._post_command(API_REBOOT, uuid, "Restart urządzenia")
-
     async def async_restart_session(self, uuid: str) -> bool:
         return await self._post_command(API_RESTART_SESSION, uuid, "Restart sesji")
-
-    async def async_force_refresh(self, uuid: str) -> bool:
-        return await self._post_command(API_REFRESH, uuid, "Wymuszenie odświeżenia")
-
-    async def async_clear_screen(self, uuid: str) -> bool:
-        return await self._post_command(API_CLEAR, uuid, "Czyszczenie ekranu")
 
     async def async_set_device_url(self, uuid: str, url: str) -> bool:
         """Ustawia URL urządzenia z dodatkowymi parametrami dla e-ink."""
