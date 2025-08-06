@@ -1,0 +1,27 @@
+# Describes services available for the Visionect Joan integration.
+
+set_url:
+  name: Set URL
+  description: Changes the URL displayed on the device screen.
+  fields:
+    device_id:
+      name: Device
+      description: The Visionect device to perform the action on.
+      required: true
+      selector:
+        device:
+          integration: visionect_joan
+    url:
+      name: URL
+      description: The new URL to display.
+      required: true
+      example: "https://www.google.com/"
+      selector:
+        text:
+    use_web:
+      name: Use Web Interface
+      description: Whether to use web interface (currently not functional - kept for future use).
+      required: false
+      default: false
+      selector:
+        boolean:
