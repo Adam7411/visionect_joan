@@ -1,11 +1,6 @@
 
 # Visionect Joan
 
-<img width="510" height="739" alt="3" src="https://github.com/user-attachments/assets/8f8c673d-8447-42ec-9d13-0bd4e9683437" />
-<img width="948" height="791" alt="2" src="https://github.com/user-attachments/assets/4a3c054a-e239-49c1-ab9d-037584cd7989" />
-<img width="607" height="893" alt="1" src="https://github.com/user-attachments/assets/1321cfe8-905d-44ef-b1b9-29d999559a04" />
-<img width="770" height="641" alt="4" src="https://github.com/user-attachments/assets/31e9bca1-d7c6-4245-b32f-4c909251bf2c" />
-
 
 Niestandardowy dodatek wyświetlający podstawowe informacje tableta **Joan 6** w Home Assistant.
 Główny zamiar kontrola poziomu baterii wyświetlacza Joan 6 
@@ -61,9 +56,10 @@ Po poprawnej instalacji i restarcie Home Assistant:
 
 ### Przykładowe zrzuty ekranu
 
-![image](https://github.com/user-attachments/assets/98a9c588-365c-47d1-bde6-532055221460)
-
-![image](https://github.com/user-attachments/assets/186c46f7-2b59-472d-aafc-bde40979baea)
+<img width="510" height="739" alt="3" src="https://github.com/user-attachments/assets/8f8c673d-8447-42ec-9d13-0bd4e9683437" />
+<img width="948" height="791" alt="2" src="https://github.com/user-attachments/assets/4a3c054a-e239-49c1-ab9d-037584cd7989" />
+<img width="607" height="893" alt="1" src="https://github.com/user-attachments/assets/1321cfe8-905d-44ef-b1b9-29d999559a04" />
+<img width="770" height="641" alt="4" src="https://github.com/user-attachments/assets/31e9bca1-d7c6-4245-b32f-4c909251bf2c" />
 
 ---
 
