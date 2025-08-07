@@ -14,9 +14,12 @@ Pozwoli to na tworzenie automatyzacji np. wysyłania powiadomienia o niskim stan
 - Status
 - Sygnał WiFi
 - Temperatura
+- Wysyłanie swojego tekstu (powiadomień z Home Assistant)
 - Wysyłanie adresu url np. ( https://www.wikipedia.org/ )  lub zdjęć ( przykład http://adresHA:8123/local/zdjecie_test.png ) (plik zdjecie_test.png umieszczamy w katalogu \\192.168.xxx.xxx\config\www\ )
 
 <img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
+<img width="290" height="407" alt="smie" src="https://github.com/user-attachments/assets/31b2c431-522c-413a-906e-1dbcc5d462f0" />
+
 
 
 ---
