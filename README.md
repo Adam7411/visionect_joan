@@ -18,7 +18,7 @@ Pozwoli to na tworzenie automatyzacji np. wysyłania powiadomienia o niskim stan
 - Wysyłanie adresu url np. ( https://www.wikipedia.org/ )  lub zdjęć ( przykład http://adresHA:8123/local/zdjecie_test.png ) (plik zdjecie_test.png umieszczamy w katalogu \\192.168.xxx.xxx\config\www\ )
 
 <img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
-<img width="290" height="407" alt="smie" src="https://github.com/user-attachments/assets/31b2c431-522c-413a-906e-1dbcc5d462f0" />
+
 
 
 
@@ -70,6 +70,7 @@ Po poprawnej instalacji i restarcie Home Assistant:
 <img width="948" height="791" alt="2" src="https://github.com/user-attachments/assets/4a3c054a-e239-49c1-ab9d-037584cd7989" />
 <img width="607" height="893" alt="1" src="https://github.com/user-attachments/assets/1321cfe8-905d-44ef-b1b9-29d999559a04" />
 <img width="770" height="641" alt="4" src="https://github.com/user-attachments/assets/31e9bca1-d7c6-4245-b32f-4c909251bf2c" />
+<img width="290" height="407" alt="smie" src="https://github.com/user-attachments/assets/ad0d3f54-fe5a-466a-8da6-a5d93a052944" />
 
 ---
 
