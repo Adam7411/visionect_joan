@@ -15,6 +15,7 @@ Niestandardowy dodatek wyświetlający podstawowe informacje tableta **Joan 6** 
 - Sygnał WiFi
 - Temperatura
 - Wysyłanie adresu url np. ( https://www.wikipedia.org/ )  lub zdjęć ( przykład http://adresHA:8123/local/zdjecie_test.png ) (plik zdjecie_test.png umieszczamy w katalogu \\192.168.xxx.xxx\config\www\ )
+<img width="1599" height="838" alt="screenshoteasy (2)" src="https://github.com/user-attachments/assets/ee8c7e95-1ad8-4ebe-9dd4-2189f273b13b" />
 
 ---
 
@@ -55,6 +56,8 @@ Po poprawnej instalacji i restarcie Home Assistant:
 
 <img width="1567" height="425" alt="5" src="https://github.com/user-attachments/assets/356a55f2-342d-43f4-bf64-3ef1c6522d4e" />
 <img width="575" height="615" alt="6" src="https://github.com/user-attachments/assets/c467a686-6e58-4b6a-9286-033fc45ddbcd" />
+
+
 
 ### Przykładowe zrzuty ekranu
 
