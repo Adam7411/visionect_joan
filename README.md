@@ -18,8 +18,8 @@ Pozwoli to na tworzenie automatyzacji np. wysyłania powiadomienia o niskim stan
 - Status
 - Sygnał WiFi
 - Temperatura
-- Wysyłanie swojego tekstu (powiadomień z Home Assistant)
-- Wysyłanie adresu url np. ( https://www.wikipedia.org/ )  lub zdjęć ( przykład http://adresHA:8123/local/zdjecie_test.png ) (plik zdjecie_test.png umieszczamy w katalogu \\192.168.xxx.xxx\config\www\ )
+- Wysyłanie swojego tekstu (powiadomień z Home Assistant)  (action: visionect_joan.send_text)
+- Wysyłanie adresu url (action: visionect_joan.set_url) np. (strony https://www.wikipedia.org/ ) lub zdjęć ( przykład http://adresHA:8123/local/zdjecie_test.png ) (plik zdjecie_test.png umieszczamy w katalogu \\192.168.xxx.xxx\config\www\ )
 
 <img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
 
