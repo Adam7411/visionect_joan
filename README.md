@@ -49,8 +49,8 @@ Po poprawnej instalacji i restarcie Home Assistant:
 3. Wyszukaj **„Visionect Joan”** i kliknij, aby rozpocząć konfigurację.
 4. Wprowadź dane logowania do Visionect Software Suite:
 - Adres URL (192.168.x.x:8081)
-- Login
-- Hasło
+- Login Visionect Software Suite
+- Hasło Visionect Software Suite
 - API Key i API Secret (tworzymy w Visionect Software Suite w zakładce Users przyciskiem Add new API key)
 
 <img width="1567" height="425" alt="5" src="https://github.com/user-attachments/assets/356a55f2-342d-43f4-bf64-3ef1c6522d4e" />
