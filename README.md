@@ -2,7 +2,7 @@
 # Visionect Joan
 
 
-Niestandardowy dodatek wyświetlający podstawowe informacje tableta **Joan 6** w Home Assistant oraz wysyłanie swojego adresu url.
+Niestandardowy dodatek wyświetlający podstawowe informacje tableta **Joan 6** w Home Assistant oraz wysyłanie swojego adresu url z poziomu HA.
 
 ## Wyświetlane informacje:
 
