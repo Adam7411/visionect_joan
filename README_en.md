@@ -13,6 +13,7 @@ This enables creating automations like low battery notifications or displaying b
 - Status
 - WiFi signal
 - Temperature
+- Sending your text (notifications from Home Assistant)
 - Sending URL addresses (e.g., https://www.wikipedia.org/) or images (example: http://HAaddress:8123/local/test_image.png) (place test_image.png file in the directory \\192.168.xxx.xxx\config\www\)
 
 <img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
