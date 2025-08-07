@@ -16,7 +16,7 @@ Główny zamiar kontrola poziomu baterii wyświetlacza Joan 6
 - Status
 - Sygnał WiFi
 - Temperatura
-- Wysyłanie adresu url ( https://www.google.com/)  lub zdjęć ( przykład http://adresHA:8123/local/zdjecie_test.png ) (plik zdjecie_test.png umieszczamy w katalogu \\192.168.xxx.xxx\config\www\ )
+- Wysyłanie adresu url np. ( https://www.google.com/)  lub zdjęć ( przykład http://adresHA:8123/local/zdjecie_test.png ) (plik zdjecie_test.png umieszczamy w katalogu \\192.168.xxx.xxx\config\www\ )
 
 ---
 
