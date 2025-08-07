@@ -15,7 +15,9 @@ Niestandardowy dodatek wyświetlający podstawowe informacje tableta **Joan 6** 
 - Sygnał WiFi
 - Temperatura
 - Wysyłanie adresu url np. ( https://www.wikipedia.org/ )  lub zdjęć ( przykład http://adresHA:8123/local/zdjecie_test.png ) (plik zdjecie_test.png umieszczamy w katalogu \\192.168.xxx.xxx\config\www\ )
-<img width="1599" height="838" alt="screenshoteasy (2)" src="https://github.com/user-attachments/assets/ee8c7e95-1ad8-4ebe-9dd4-2189f273b13b" />
+
+<img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
+
 
 ---
 
