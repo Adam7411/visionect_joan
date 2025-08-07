@@ -1,0 +1,31 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Konfiguracja Visionect Joan",
+        "description": "Skonfiguruj integrację Visionect Joan",
+        "data": {
+          "host": "Adres serwera (IP:Port lub URL)",
+          "username": "Nazwa użytkownika",
+          "password": "Hasło",
+          "api_key": "Klucz API",
+          "api_secret": "Sekret API"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Autentykacja nie powiodła się. Sprawdź dane logowania.",
+      "unknown": "Wystąpił nieznany błąd podczas konfiguracji."
+    }
+  },
+  "services": {
+    "set_url": {
+      "name": "Ustaw URL",
+      "description": "Zmienia URL wyświetlany na ekranie urządzenia."
+    },
+    "send_text": {
+      "name": "Wyślij wiadomość tekstową",
+      "description": "Wysyła wiadomość tekstową zoptymalizowaną dla wyświetlacza e-ink."
+    }
+  }
+}
