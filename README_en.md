@@ -3,6 +3,9 @@
 A custom Home Assistant integration that displays basic information about **Joan 6** tablets and allows sending URLs from Home Assistant.
 This enables creating automations like low battery notifications or displaying battery level entities on the tablet, as well as sending images to various notifications.
 
+<img width="636" height="399" alt="vision_en" src="https://github.com/user-attachments/assets/6c6a8cd3-c4a1-42dc-b9ba-dc4267e36b4e" />
+
+
 ## Displayed Information:
 
 - Battery
