@@ -3,7 +3,7 @@
 
 
 Niestandardowy dodatek wyświetlający podstawowe informacje tableta **Joan 6** w Home Assistant oraz wysyłanie swojego adresu url z poziomu HA.
-
+Pozwoli to na tworzenie automatyzacji np. wysyłania powiadomienia o niskim stanie baterii albo wyświetlenie encji z poziomem baterii na tablecie, czy wysyłanie zdjęć do różnych powiadomień poczym spowrotem powrót do dashboardu Appdaemon itp.
 ## Wyświetlane informacje:
 
 - Bateria
