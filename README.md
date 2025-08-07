@@ -53,6 +53,8 @@ Po poprawnej instalacji i restarcie Home Assistant:
 - Hasło
 - API Key i API Secret (tworzymy w Visionect Software Suite w zakładce Users przyciskiem Add new API key)
 
+<img width="1567" height="425" alt="5" src="https://github.com/user-attachments/assets/356a55f2-342d-43f4-bf64-3ef1c6522d4e" />
+<img width="575" height="615" alt="6" src="https://github.com/user-attachments/assets/c467a686-6e58-4b6a-9286-033fc45ddbcd" />
 
 ### Przykładowe zrzuty ekranu
 
