@@ -9,5 +9,5 @@
   "requirements": ["requests>=2.25.1"],
   "iot_class": "local_polling",
   "integration_type": "hub",
-  "icon": "mdi:tablet-dashboard"
+  "icon": "https://raw.githubusercontent.com/raw.githubusercontent.com/Adam7411/visionect_joan/main/icon.png"
 }
