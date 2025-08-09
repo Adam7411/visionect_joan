@@ -7,6 +7,7 @@ Pozwoli to na tworzenie automatyzacji np. wysyłania powiadomienia o niskim stan
 
 <img width="636" height="399" alt="vision" src="https://github.com/user-attachments/assets/6e30517f-c34a-443e-9e8f-5e02f59c80c7" />
 
+
 <img width="1920" height="1578" alt="aaaa" src="https://github.com/user-attachments/assets/c3e7cbff-4e94-4172-93e8-c688ca70a7d3" />
 
 ## Wyświetlane informacje:
