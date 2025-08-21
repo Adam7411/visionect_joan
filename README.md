@@ -2,7 +2,7 @@
 # Visionect Joan
 
 
-Niestandardowy dodatek wyświetlający podstawowe informacje tableta **Joan 6** w Home Assistant oraz wysyłanie swojego adresu url z poziomu HA.
+Niestandardowy dodatek wyświetlający podstawowe informacje tableta e-ink **Joan 6** firmy Visionect w Home Assistant oraz wysyłanie swojego adresu url z poziomu HA.
 Pozwoli to na tworzenie automatyzacji np. wysyłania powiadomienia o niskim stanie baterii albo wyświetlenie encji z poziomem baterii na tablecie, czy wysyłanie zdjęć do różnych powiadomień poczym spowrotem powrót do dashboardu Appdaemon itp.
 
 <img width="636" height="399" alt="vision" src="https://github.com/user-attachments/assets/6e30517f-c34a-443e-9e8f-5e02f59c80c7" />
