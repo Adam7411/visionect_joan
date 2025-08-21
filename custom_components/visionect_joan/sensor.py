@@ -17,35 +17,35 @@ import logging
 
 from .const import (
     DOMAIN, STATE_ONLINE, STATE_OFFLINE,
-    DEFAULT_REFRESH_INTERVAL, IP_UNKNOWN, UNKNOWN_STRINGS, DISPLAY_ROTATIONS
+    DEFAULT_REFRESH_INTERVAL, IP_UNKNOWN, UNKNOWN_STRINGS
 )
 from .entity import VisionectEntity
 
 _LOGGER = logging.getLogger(__name__)
 
-# Słownik SENSOR_TYPES z nazwami sensorów
+# Słownik SENSOR_TYPES został uproszczony - nie zawiera już nazw
+# Klucz słownika (np. "state") będzie używany jako klucz tłumaczenia
 SENSOR_TYPES = {
     # Podstawowe sensory
-    "state": (None, "mdi:tablet", None, True, "Stan"),
-    "battery": (SensorDeviceClass.BATTERY, "mdi:battery", SensorStateClass.MEASUREMENT, True, "Bateria"),
-    "temperature": (SensorDeviceClass.TEMPERATURE, "mdi:thermometer", SensorStateClass.MEASUREMENT, True, "Temperatura"),
-    "rssi": (SensorDeviceClass.SIGNAL_STRENGTH, "mdi:wifi", SensorStateClass.MEASUREMENT, True, "Siła sygnału WiFi"),
-    "uptime": (SensorDeviceClass.DURATION, "mdi:timer", SensorStateClass.TOTAL_INCREASING, True, "Czas pracy"),
-    "storage_free": (SensorDeviceClass.DATA_SIZE, "mdi:harddisk", SensorStateClass.MEASUREMENT, False, "Wolne miejsce"),
-    "battery_voltage": (SensorDeviceClass.VOLTAGE, "mdi:flash", SensorStateClass.MEASUREMENT, False, "Napięcie baterii"),
-    "refresh_interval": (SensorDeviceClass.DURATION, "mdi:timer-cog", SensorStateClass.MEASUREMENT, True, "Interwał odświeżania"),
-    "uuid": (None, "mdi:identifier", None, False, "UUID"),
-    "display_rotation": (None, "mdi:rotate-3d", None, True, "Orientacja"),
+    "state": (None, "mdi:tablet", None, True),
+    "battery": (SensorDeviceClass.BATTERY, "mdi:battery", SensorStateClass.MEASUREMENT, True),
+    "temperature": (SensorDeviceClass.TEMPERATURE, "mdi:thermometer", SensorStateClass.MEASUREMENT, True),
+    "rssi": (SensorDeviceClass.SIGNAL_STRENGTH, "mdi:wifi", SensorStateClass.MEASUREMENT, True),
+    "uptime": (SensorDeviceClass.DURATION, "mdi:timer", SensorStateClass.TOTAL_INCREASING, True),
+    "storage_free": (SensorDeviceClass.DATA_SIZE, "mdi:harddisk", SensorStateClass.MEASUREMENT, False),
+    "battery_voltage": (SensorDeviceClass.VOLTAGE, "mdi:flash", SensorStateClass.MEASUREMENT, False),
+    "refresh_interval": (SensorDeviceClass.DURATION, "mdi:timer-cog", SensorStateClass.MEASUREMENT, True),
+    "uuid": (None, "mdi:identifier", None, False),
     
     # Pozostałe sensory
-    "application_version": (None, "mdi:package-variant", None, True, "Wersja aplikacji"),
-    "storage_total": (SensorDeviceClass.DATA_SIZE, "mdi:harddisk", SensorStateClass.MEASUREMENT, False, "Całkowite miejsce"),
-    "storage_used": (SensorDeviceClass.DATA_SIZE, "mdi:harddisk", SensorStateClass.MEASUREMENT, False, "Zajęte miejsce"),
-    "error_count": (None, "mdi:alert-circle", SensorStateClass.TOTAL_INCREASING, False, "Liczba błędów"),
-    "restart_count": (None, "mdi:restart", SensorStateClass.TOTAL_INCREASING, False, "Liczba restartów"),
+    "application_version": (None, "mdi:package-variant", None, True),
+    "storage_total": (SensorDeviceClass.DATA_SIZE, "mdi:harddisk", SensorStateClass.MEASUREMENT, False),
+    "storage_used": (SensorDeviceClass.DATA_SIZE, "mdi:harddisk", SensorStateClass.MEASUREMENT, False),
+    "error_count": (None, "mdi:alert-circle", SensorStateClass.TOTAL_INCREASING, False),
+    "restart_count": (None, "mdi:restart", SensorStateClass.TOTAL_INCREASING, False),
 }
 
-# Słownik jednostek
+# Słownik jednostek, aby uniknąć umieszczania ich w SENSOR_TYPES i zachować porządek
 SENSOR_UNITS = {
     "battery": PERCENTAGE,
     "temperature": UnitOfTemperature.CELSIUS,
@@ -88,26 +88,6 @@ class VisionectSensor(VisionectEntity, SensorEntity):
         self._attr_state_class = sensor_config[2]
         self._attr_entity_registry_enabled_default = sensor_config[3]
         self._attr_native_unit_of_measurement = SENSOR_UNITS.get(sensor_type)
-        
-        # Zapisz nazwę sensora z konfiguracji
-        self._sensor_name = sensor_config[4] if len(sensor_config) > 4 else sensor_type.replace('_', ' ').title()
-
-    @property
-    def name(self):
-        """Zwraca nazwę sensora - nazwę opisową zamiast nazwy urządzenia."""
-        return self._sensor_name
-
-    def _get_device_name(self):
-        """Pobiera nazwę urządzenia z danych koordynatora."""
-        try:
-            device_data = self.coordinator.data.get(self.uuid, {})
-            config = device_data.get("Config", {})
-            name = config.get("Name")
-            if name and name.lower() not in UNKNOWN_STRINGS:
-                return name
-            return f"Urządzenie {self.uuid[-8:]}"  # Ostatnie 8 znaków UUID jako fallback
-        except:
-            return f"Urządzenie {self.uuid[-8:]}"
 
     @property
     def native_value(self):
@@ -149,11 +129,6 @@ class VisionectSensor(VisionectEntity, SensorEntity):
                 return _get_value_or_none(status.get("BatteryVoltage"))
             if self.sensor_type == "refresh_interval":
                 return _get_value_or_none(config.get("RefreshInterval", DEFAULT_REFRESH_INTERVAL))
-            if self.sensor_type == "display_rotation":
-                display_rotation = config.get("DisplayRotation")
-                if display_rotation is not None:
-                    return DISPLAY_ROTATIONS.get(str(display_rotation), f"Nieznana ({display_rotation})")
-                return None
             if self.sensor_type == "application_version":
                 return _get_value_or_none(status.get("ApplicationVersion"))
             if self.sensor_type == "storage_total":
@@ -180,30 +155,11 @@ class VisionectSensor(VisionectEntity, SensorEntity):
     @property
     def extra_state_attributes(self):
         """Zwraca dodatkowe atrybuty stanu."""
-        device_name = self._get_device_name()
-        
         if self.sensor_type == "state":
             device_data = self.coordinator.data.get(self.uuid, {})
             config = device_data.get("Config", {})
             configured_url = config.get("Url")
             
-            return {
-                "configured_url": configured_url if configured_url and configured_url.lower() not in UNKNOWN_STRINGS else None,
-                "device_name": device_name
-            }
-        elif self.sensor_type == "display_rotation":
-            device_data = self.coordinator.data.get(self.uuid, {})
-            config = device_data.get("Config", {})
-            display_rotation_raw = config.get("DisplayRotation")
-            
-            return {
-                "display_rotation_id": display_rotation_raw,
-                "available_rotations": list(DISPLAY_ROTATIONS.keys()),
-                "device_name": device_name,
-                "device_uuid": self.uuid
-            }
+            return {"configured_url": configured_url if configured_url and configured_url.lower() not in UNKNOWN_STRINGS else None}
         
-        # Dla wszystkich innych sensorów dodaj nazwę urządzenia jako atrybut
-        return {
-            "device_name": device_name
-        }
+        return None

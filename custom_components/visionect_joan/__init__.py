@@ -2,6 +2,7 @@
 import logging
 import time
 import urllib.parse
+import asyncio
 import voluptuous as vol
 
 _LOGGER = logging.getLogger(__name__)
@@ -17,18 +18,17 @@ try:
     from .api import VisionectAPI
     from .const import (
         DOMAIN, CONF_API_KEY, CONF_API_SECRET, SCAN_INTERVAL,
-        UNKNOWN_STRINGS, DISPLAY_ROTATIONS
+        UNKNOWN_STRINGS
     )
 except ImportError as e:
     _LOGGER.critical(f"Krytyczny błąd importu w __init__.py: {e}")
     raise
 
-PLATFORMS = ["sensor"]  # Usunięto button
+PLATFORMS = ["sensor"]
 
 # Definicje usług i atrybutów
 SERVICE_SET_URL = "set_url"
 SERVICE_SEND_TEXT = "send_text"
-SERVICE_SET_DISPLAY_ROTATION = "set_display_rotation"
 
 ATTR_URL = "url"
 ATTR_USE_WEB = "use_web"
@@ -38,23 +38,22 @@ ATTR_BACKGROUND_COLOR = "background_color"
 ATTR_TEXT_SIZE = "text_size"
 ATTR_TEXT_ALIGN = "text_align"
 ATTR_FONT_FAMILY = "font_family"
-ATTR_DISPLAY_ROTATION = "display_rotation"
 
 # Kolory dla e-ink (tylko czarny i biały)
 EINK_COLORS = ["black", "white"]
 
-# Czcionki zoptymalizowane dla e-ink - bardzo czytelne i różniące się
+# Czcionki zoptymalizowane dla e-ink
 PREDEFINED_FONTS = [
-    "Arial, Helvetica, sans-serif",                    # Standardowa, bardzo czytelna
-    "Georgia, 'Times New Roman', serif",               # Elegancka serif z szerokimi literami
-    "Verdana, Geneva, sans-serif",                     # Szeroka, bardzo czytelna sans-serif
-    "Tahoma, Geneva, sans-serif",                      # Kompaktowa ale czytelna
-    "'Trebuchet MS', Helvetica, sans-serif",          # Nowoczesna, zaokrąglona
-    "'Lucida Grande', 'Lucida Sans Unicode', sans-serif", # Okrągła, przyjazna
-    "Palatino, 'Palatino Linotype', serif",           # Klasyczna książkowa serif
-    "'Courier New', Courier, monospace",              # Monospace - jednakowa szerokość
-    "'Franklin Gothic Medium', Arial, sans-serif",     # Pogrubiona, wyrazista
-    "Garamond, 'Times New Roman', serif"              # Staroclasyczna, elegancka
+    "Arial, Helvetica, sans-serif",
+    "Georgia, 'Times New Roman', serif",
+    "Verdana, Geneva, sans-serif",
+    "Tahoma, Geneva, sans-serif",
+    "'Trebuchet MS', Helvetica, sans-serif",
+    "'Lucida Grande', 'Lucida Sans Unicode', sans-serif",
+    "Palatino, 'Palatino Linotype', serif",
+    "'Courier New', Courier, monospace",
+    "'Franklin Gothic Medium', Arial, sans-serif",
+    "Garamond, 'Times New Roman', serif"
 ]
 
 # Schematy walidacji
@@ -74,17 +73,17 @@ SERVICE_SEND_TEXT_SCHEMA = vol.Schema({
     vol.Optional(ATTR_FONT_FAMILY, default="Arial, Helvetica, sans-serif"): vol.In(PREDEFINED_FONTS),
 })
 
-SERVICE_SET_DISPLAY_ROTATION_SCHEMA = vol.Schema({
-    vol.Required(ATTR_DEVICE_ID): cv.string,
-    vol.Required(ATTR_DISPLAY_ROTATION): vol.In(list(DISPLAY_ROTATIONS.keys())),
-})
+def create_simple_cache_buster(url: str) -> str:
+    """Tworzy prosty cache buster."""
+    timestamp = int(time.time())
+    separator = "&" if "?" in url else "?"
+    return f"{url}{separator}cb={timestamp}"
 
 def create_text_message_url(message: str, text_color: str = "black", 
                            background_color: str = "white", text_size: str = "28px",
                            text_align: str = "center", font_family: str = "Arial, Helvetica, sans-serif") -> str:
-    """Tworzy Data URI z wiadomością tekstową zoptymalizowaną dla e-ink."""
+    """Tworzy Data URI z wiadomością tekstową."""
     
-    # Escapuj HTML w wiadomości
     import html
     escaped_message = html.escape(message).replace('\n', '<br>')
     
@@ -93,7 +92,7 @@ def create_text_message_url(message: str, text_color: str = "black",
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wiadomość E-ink</title>
+    <title>E-ink Message</title>
     <style>
         body {{ 
             font-family: {font_family}; 
@@ -111,7 +110,6 @@ def create_text_message_url(message: str, text_color: str = "black",
             box-sizing: border-box;
             line-height: 1.5;
             letter-spacing: 0.5px;
-            /* Optymalizacja dla e-ink */
             -webkit-font-smoothing: none;
             -moz-osx-font-smoothing: unset;
             font-smooth: never;
@@ -121,7 +119,6 @@ def create_text_message_url(message: str, text_color: str = "black",
             max-width: 90%;
             word-wrap: break-word;
             word-spacing: 2px;
-            /* Dodatkowe odstępy dla lepszej czytelności na e-ink */
         }}
         .timestamp {{
             position: absolute;
@@ -141,7 +138,6 @@ def create_text_message_url(message: str, text_color: str = "black",
 </body>
 </html>"""
     
-    # Koduj do Data URI
     encoded = urllib.parse.quote(html_content, safe='')
     return f"data:text/html,{encoded}"
 
@@ -185,7 +181,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             final_data = device_details
             if "Config" not in final_data: final_data["Config"] = {}
             
-            # Preferuj nazwę z "Options" w podsumowaniu, jeśli dostępna i nie jest "nieznana"
             device_name_from_summary = device_summary.get("Options", {}).get("Name")
             if device_name_from_summary and device_name_from_summary.lower() not in UNKNOWN_STRINGS:
                 final_data["Config"]["Name"] = device_name_from_summary
@@ -202,9 +197,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         update_interval=SCAN_INTERVAL,
     )
     
-    # WAŻNE: Dodaj referencję do config_entry w coordinator
     coordinator.config_entry = entry
-
     await coordinator.async_config_entry_first_refresh()
 
     hass.data[DOMAIN][entry.entry_id] = {
@@ -227,32 +220,42 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         return uuids
 
     async def handle_set_url(call: ServiceCall):
-        """Obsługuje zmianę URL - tylko przez API."""
+        """Obsługuje zmianę URL na czystym serwerze Visionect."""
         uuids = await get_uuids_from_call(call)
         original_url = call.data[ATTR_URL]
         
-        # Dodaj cache buster
-        timestamp = int(time.time())
-        separator = "&" if "?" in original_url else "?"
-        url_with_buster = f"{original_url}{separator}timestamp={timestamp}"
-        _LOGGER.info(f"Oryginalny URL: {original_url}, URL z cache buster: {url_with_buster}")
+        # Prosty cache buster
+        url_with_buster = create_simple_cache_buster(original_url)
+        
+        _LOGGER.info(f"🧹 CZYSTY SERWER - ustawianie URL")
+        _LOGGER.info(f"Oryginalny URL: {original_url}")
+        _LOGGER.info(f"URL z cache buster: {url_with_buster}")
         
         for uuid in uuids:
-            _LOGGER.info(f"Ustawianie URL przez API dla {uuid}")
-            success = await api.async_set_device_url(uuid, url_with_buster)
+            try:
+                _LOGGER.info(f"📡 Ustawianie URL dla {uuid} na czystym serwerze")
                 
-            if success:
-                # Restart sesji po udanej zmianie URL
-                await api.async_restart_session(uuid)
-                _LOGGER.info(f"Sesja urządzenia {uuid} została zrestartowana")
-            else:
-                _LOGGER.error(f"Nie udało się zmienić URL urządzenia {uuid}")
+                success = await api.async_set_device_url_clean_server(uuid, url_with_buster)
+                    
+                if success:
+                    _LOGGER.info(f"✅ URL ustawiony pomyślnie dla {uuid}")
+                    
+                    # Krótkie opóźnienie przed restartem sesji
+                    await asyncio.sleep(1)
+                    await api.async_restart_session(uuid)
+                    _LOGGER.info(f"🔄 Sesja zrestartowana dla {uuid}")
+                else:
+                    _LOGGER.error(f"❌ Nie udało się ustawić URL dla {uuid}")
+                    
+            except Exception as e:
+                _LOGGER.error(f"❌ Błąd dla {uuid}: {e}")
                 
-        # Odśwież dane po zmianie
+        # Odśwież dane
+        await asyncio.sleep(2)
         await coordinator.async_request_refresh()
 
     async def handle_send_text(call: ServiceCall):
-        """Obsługuje wysyłanie wiadomości tekstowej na urządzenie e-ink."""
+        """Obsługuje wysyłanie wiadomości tekstowej."""
         uuids = await get_uuids_from_call(call)
         message = call.data[ATTR_MESSAGE]
         text_color = call.data.get(ATTR_TEXT_COLOR, "black")
@@ -261,73 +264,44 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         text_align = call.data.get(ATTR_TEXT_ALIGN, "center")
         font_family = call.data.get(ATTR_FONT_FAMILY, "Arial, Helvetica, sans-serif")
         
-        _LOGGER.info(f"Wysyłanie wiadomości tekstowej e-ink: '{message}' do {len(uuids)} urządzeń")
+        _LOGGER.info(f"📝 Wysyłanie tekstu: '{message}' do {len(uuids)} urządzeń")
         
-        # Utwórz Data URI z wiadomością
         data_url = create_text_message_url(
             message, text_color, background_color, 
             text_size, text_align, font_family
         )
         
         for uuid in uuids:
-            _LOGGER.info(f"Wysyłanie wiadomości tekstowej do urządzenia e-ink {uuid}")
-            success = await api.async_set_device_url(uuid, data_url)
-            
-            if success:
-                # Restart sesji po udanej zmianie
-                await api.async_restart_session(uuid)
-                _LOGGER.info(f"Wiadomość tekstowa wysłana pomyślnie do {uuid}")
-            else:
-                _LOGGER.error(f"Nie udało się wysłać wiadomości tekstowej do {uuid}")
+            try:
+                _LOGGER.info(f"📡 Wysyłanie tekstu do {uuid}")
+                success = await api.async_set_device_url_clean_server(uuid, data_url)
+                
+                if success:
+                    _LOGGER.info(f"✅ Tekst wysłany pomyślnie do {uuid}")
+                    await asyncio.sleep(1)
+                    await api.async_restart_session(uuid)
+                else:
+                    _LOGGER.error(f"❌ Nie udało się wysłać tekstu do {uuid}")
+                    
+            except Exception as e:
+                _LOGGER.error(f"❌ Błąd wysyłania tekstu do {uuid}: {e}")
         
-        # Odśwież dane po zmianie
+        await asyncio.sleep(2)
         await coordinator.async_request_refresh()
 
-    async def handle_set_display_rotation(call: ServiceCall):
-        """Obsługuje zmianę rotacji ekranu Joan."""
-        uuids = await get_uuids_from_call(call)
-        display_rotation = call.data[ATTR_DISPLAY_ROTATION]
-        
-        _LOGGER.info(f"Ustawianie rotacji ekranu na '{display_rotation}' dla {len(uuids)} urządzeń")
-        
-        for uuid in uuids:
-            _LOGGER.info(f"Ustawianie rotacji ekranu dla urządzenia {uuid} na: {DISPLAY_ROTATIONS[display_rotation]}")
-            success = await api.async_set_display_rotation(uuid, display_rotation)
-            
-            if success:
-                # Restart urządzenia po udanej zmianie rotacji ekranu
-                await api.async_reboot_device(uuid)
-                _LOGGER.info(f"Rotacja ekranu urządzenia {uuid} została zmieniona i urządzenie zostało zrestartowane")
-            else:
-                _LOGGER.error(f"Nie udało się zmienić rotacji ekranu urządzenia {uuid}")
-        
-        # Odśwież dane po zmianie
-        await coordinator.async_request_refresh()
-
-    # Rejestracja usług z dodatkowymi logami
-    _LOGGER.info(f"Rejestrowanie usługi {DOMAIN}.{SERVICE_SET_URL}")
+    # Rejestracja usług
     hass.services.async_register(DOMAIN, SERVICE_SET_URL, handle_set_url, schema=SERVICE_SET_URL_SCHEMA)
-    
-    _LOGGER.info(f"Rejestrowanie usługi {DOMAIN}.{SERVICE_SEND_TEXT}")
     hass.services.async_register(DOMAIN, SERVICE_SEND_TEXT, handle_send_text, schema=SERVICE_SEND_TEXT_SCHEMA)
-    
-    _LOGGER.info(f"Rejestrowanie usługi {DOMAIN}.{SERVICE_SET_DISPLAY_ROTATION}")
-    hass.services.async_register(DOMAIN, SERVICE_SET_DISPLAY_ROTATION, handle_set_display_rotation, schema=SERVICE_SET_DISPLAY_ROTATION_SCHEMA)
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     
     _LOGGER.info("Integracja Visionect Joan została pomyślnie zainicjalizowana.")
-    _LOGGER.info(f"Zarejestrowane usługi: {SERVICE_SET_URL}, {SERVICE_SEND_TEXT}, {SERVICE_SET_DISPLAY_ROTATION}")
-    
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Usuwa wpis konfiguracyjny."""
-    # Usuń zarejestrowane usługi
-    _LOGGER.info(f"Usuwanie usług: {SERVICE_SET_URL}, {SERVICE_SEND_TEXT}, {SERVICE_SET_DISPLAY_ROTATION}")
     hass.services.async_remove(DOMAIN, SERVICE_SET_URL)
     hass.services.async_remove(DOMAIN, SERVICE_SEND_TEXT)
-    hass.services.async_remove(DOMAIN, SERVICE_SET_DISPLAY_ROTATION)
 
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
         hass.data[DOMAIN].pop(entry.entry_id)

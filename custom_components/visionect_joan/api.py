@@ -2,8 +2,9 @@
 import logging
 import ipaddress
 import functools
-from typing import Optional, Dict, List
+import asyncio
 import json
+from typing import Optional, Dict, List
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -11,7 +12,7 @@ from requests.auth import HTTPBasicAuth
 from .const import (
     IP_UNKNOWN, BATTERY_VOLTAGE_DIVIDER, API_PING, API_DEVICES,
     API_DEVICE_DETAIL, API_REBOOT, API_RESTART_SESSION, API_REFRESH, API_CLEAR,
-    API_SESSION, DISPLAY_ROTATIONS
+    API_SESSION
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -35,17 +36,6 @@ class VisionectAPI:
         self.api_key = api_key
         self.api_secret = api_secret
         self.authenticated_by = None
-        
-        # Web controller zostanie zainicjalizowany przy pierwszym użyciu
-        self._web_controller = None
-
-    @property
-    def web_controller(self):
-        """Lazy initialization of web controller to avoid circular import."""
-        if self._web_controller is None:
-            from .web_controller import VisionectWebController
-            self._web_controller = VisionectWebController(self.hass, self.base_url, self.username, self.password)
-        return self._web_controller
 
     def _execute_request(self, method, endpoint, silent=False, **kwargs):
         """Wykonywanie synchronicznego żądania HTTP."""
@@ -116,13 +106,6 @@ class VisionectAPI:
                 device_data["Config"]["Url"] = session_data["Backend"]["Fields"].get("url", "")
                 device_data["Config"]["ReloadTimeout"] = session_data["Backend"]["Fields"].get("ReloadTimeout", "0")
         
-        # Dodaj informację o rotacji z Displays
-        if "Displays" in device_data and len(device_data["Displays"]) > 0:
-            rotation = device_data["Displays"][0].get("Rotation", 0)
-            if "Config" not in device_data:
-                device_data["Config"] = {}
-            device_data["Config"]["DisplayRotation"] = rotation
-        
         # Standardowe przetwarzanie danych
         if "Status" not in device_data:
             device_data["Status"] = {}
@@ -155,6 +138,10 @@ class VisionectAPI:
                     return session
         return None
 
+    async def async_get_all_sessions(self) -> Optional[List[Dict]]:
+        """Pobiera wszystkie sesje."""
+        return await self._request("get", API_SESSION)
+
     async def async_get_all_devices(self) -> Optional[List[Dict]]:
         return await self._request("get", API_DEVICES)
 
@@ -177,100 +164,119 @@ class VisionectAPI:
     async def async_clear_screen(self, uuid: str) -> bool:
         return await self._post_command(API_CLEAR, uuid, "Czyszczenie ekranu")
 
-    async def async_set_device_url(self, uuid: str, url: str) -> bool:
-        """Ustawia URL urządzenia przez API."""
-        _LOGGER.info(f"Ustawianie URL dla {uuid}: {url}")
-        
-        # Pobierz aktualne dane sesji
-        session_data = await self.async_get_session_data(uuid)
-        if not session_data:
-            _LOGGER.error(f"Nie można pobrać danych sesji dla urządzenia {uuid}")
-            return False
-            
-        # Zaktualizuj URL w danych sesji
-        if "Backend" not in session_data:
-            session_data["Backend"] = {"Name": "HTML", "Fields": {}}
-        if "Fields" not in session_data["Backend"]:
-            session_data["Backend"]["Fields"] = {}
-            
-        session_data["Backend"]["Fields"]["url"] = url
-        
-        # Wyślij zaktualizowane dane
-        endpoint = f"/api/session/{uuid}"
-        response = await self._request("put", endpoint, json=session_data)
-        if response is not None:
-            _LOGGER.info(f"URL urządzenia {uuid} zmieniony przez API na: {url}")
-            return True
-        else:
-            _LOGGER.error(f"Nie udało się zmienić URL urządzenia {uuid} przez API")
-            return False
-
-    async def async_set_display_rotation(self, uuid: str, display_rotation: str) -> bool:
-        """Ustawia rotację ekranu urządzenia Joan przez API."""
-        _LOGGER.info(f"Ustawianie rotacji ekranu dla {uuid}: {display_rotation} ({DISPLAY_ROTATIONS.get(display_rotation, 'Nieznana')})")
+    async def async_set_device_url_clean_server(self, uuid: str, url: str) -> bool:
+        """
+        Ustawia URL urządzenia na CZYSTYM serwerze Visionect.
+        Naśladuje dokładnie to co robi manual w przeglądarce po resecie.
+        """
+        _LOGGER.info(f"🧹 USTAWIENIE URL NA CZYSTYM SERWERZE dla {uuid}")
+        _LOGGER.info(f"URL: {url}")
         
         try:
-            # Pobierz wszystkie urządzenia (API oczekuje tablicy)
-            all_devices = await self._request("get", API_DEVICES)
-            if not all_devices or not isinstance(all_devices, list):
-                _LOGGER.error("Nie można pobrać listy wszystkich urządzeń")
+            # KROK 1: Pobierz wszystkie sesje (clean server approach)
+            _LOGGER.debug("Pobieranie wszystkich sesji...")
+            all_sessions = await self.async_get_all_sessions()
+            if not all_sessions or not isinstance(all_sessions, list):
+                _LOGGER.error("Nie można pobrać listy sesji")
                 return False
             
-            # Znajdź docelowe urządzenie w liście
-            target_device = None
+            _LOGGER.debug(f"Znaleziono {len(all_sessions)} sesji")
+            
+            # KROK 2: Znajdź sesję dla naszego urządzenia
+            target_session = None
             target_index = -1
-            for i, device in enumerate(all_devices):
-                if device.get("Uuid") == uuid:
-                    target_device = device.copy()  # Skopiuj dane urządzenia
+            for i, session in enumerate(all_sessions):
+                if session.get("Uuid") == uuid:
+                    target_session = session.copy()  # Skopiuj całą sesję
                     target_index = i
                     break
             
-            if not target_device:
-                _LOGGER.error(f"Nie znaleziono urządzenia {uuid} w liście urządzeń")
+            if not target_session:
+                _LOGGER.error(f"Nie znaleziono sesji dla urządzenia {uuid}")
                 return False
             
-            # Sprawdź czy urządzenie ma sekcję Displays
-            if "Displays" not in target_device or not target_device["Displays"]:
-                _LOGGER.error(f"Urządzenie {uuid} nie ma sekcji Displays")
-                return False
+            _LOGGER.debug(f"Znaleziono sesję dla {uuid} na pozycji {target_index}")
             
-            # Zaktualizuj rotację w pierwszym (głównym) displayu
-            old_rotation = target_device["Displays"][0].get("Rotation", 0)
-            target_device["Displays"][0]["Rotation"] = int(display_rotation)
+            # KROK 3: Przygotuj zmianę - TYLKO URL (clean server style)
+            original_url = target_session.get("Backend", {}).get("Fields", {}).get("url", "")
+            _LOGGER.debug(f"Oryginalny URL: {original_url}")
             
-            _LOGGER.info(f"Zmiana rotacji z {old_rotation} na {display_rotation} dla urządzenia {uuid}")
+            # Upewnij się że struktura backend istnieje (jak robi clean server)
+            if "Backend" not in target_session:
+                target_session["Backend"] = {"Name": "HTML", "Fields": {}}
+            if "Fields" not in target_session["Backend"]:
+                target_session["Backend"]["Fields"] = {}
             
-            # Zaktualizuj urządzenie w liście wszystkich urządzeń
-            all_devices[target_index] = target_device
+            # NA CZYSTYM SERWERZE: zmień TYLKO URL, pozostaw resztę jak jest
+            target_session["Backend"]["Fields"]["url"] = url
             
-            _LOGGER.debug(f"Wysyłanie tablicy {len(all_devices)} urządzeń do API")
+            # NIE ZMIENIAJ INNYCH USTAWIEŃ! Clean server prawdopodobnie ma prawidłową konfigurację
+            _LOGGER.debug("Zmieniam tylko URL, pozostawiam inne ustawienia niezmienione")
             
-            # Wyślij całą zaktualizowaną tablicę urządzeń przez API
-            def _put_devices_data():
+            # KROK 4: Zaktualizuj sesję w tablicy
+            all_sessions[target_index] = target_session
+            
+            # KROK 5: Wyślij PUT request (dokładnie jak robi web interface)
+            _LOGGER.debug("Wysyłanie PUT request na /api/session...")
+            
+            def _put_sessions():
                 headers = {
                     'Content-Type': 'application/json',
-                    'Accept': 'application/json',
+                    'Accept': 'application/json, text/javascript, */*; q=0.01',
                     'X-Requested-With': 'XMLHttpRequest'
                 }
                 
-                url = f"{self.base_url}/api/device/"
+                url_endpoint = f"{self.base_url}/api/session"
                 response = self.session.put(
-                    url, 
-                    json=all_devices,  # Wyślij całą tablicę urządzeń
+                    url_endpoint, 
+                    json=all_sessions,
                     headers=headers,
                     timeout=30
                 )
                 return response
             
-            response = await self.hass.async_add_executor_job(_put_devices_data)
+            response = await self.hass.async_add_executor_job(_put_sessions)
             
             if response.status_code in [200, 204]:
-                _LOGGER.info(f"Rotacja ekranu urządzenia {uuid} zmieniona na: {DISPLAY_ROTATIONS.get(display_rotation, display_rotation)} przez API")
+                _LOGGER.info(f"✅ SUKCES: URL zmieniony na czystym serwerze")
+                _LOGGER.debug(f"Response status: {response.status_code}")
+                
+                # KROK 6: Opcjonalna weryfikacja
+                await asyncio.sleep(1)
+                updated_session = await self.async_get_session_data(uuid)
+                if updated_session:
+                    saved_url = updated_session.get("Backend", {}).get("Fields", {}).get("url", "")
+                    if saved_url == url:
+                        _LOGGER.info(f"✅ Weryfikacja: URL poprawnie zapisany")
+                    else:
+                        _LOGGER.warning(f"⚠️ Weryfikacja: URL może być niepoprawny")
+                        _LOGGER.warning(f"   Oczekiwano: {url}")
+                        _LOGGER.warning(f"   Otrzymano: {saved_url}")
+                
                 return True
             else:
-                _LOGGER.error(f"Błąd API przy zmianie rotacji: {response.status_code} - {response.text}")
+                _LOGGER.error(f"❌ Błąd PUT /api/session: {response.status_code}")
+                try:
+                    _LOGGER.error(f"Response text: {response.text}")
+                except:
+                    pass
                 return False
                 
         except Exception as e:
-            _LOGGER.error(f"Wyjątek podczas zmiany rotacji przez API: {e}")
+            _LOGGER.error(f"❌ WYJĄTEK podczas ustawiania URL na czystym serwerze: {e}")
+            import traceback
+            _LOGGER.error(f"Stack trace: {traceback.format_exc()}")
             return False
+
+    # Główne metody - używają nowej implementacji dla czystego serwera
+    async def async_set_device_url(self, uuid: str, url: str) -> bool:
+        """Główna metoda ustawiania URL - dla czystego serwera."""
+        return await self.async_set_device_url_clean_server(uuid, url)
+
+    async def async_set_device_url_enhanced(self, uuid: str, url: str) -> bool:
+        """Alias dla kompatybilności."""
+        return await self.async_set_device_url_clean_server(uuid, url)
+
+    async def async_set_device_url_like_web_interface(self, uuid: str, url: str) -> bool:
+        """Alias dla kompatybilności."""
+        return await self.async_set_device_url_clean_server(uuid, url)

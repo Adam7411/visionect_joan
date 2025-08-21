@@ -10,14 +10,6 @@ CONF_USE_WEB_INTERFACE = "use_web_interface"
 # Common phrases to treat as 'unknown' or 'None' in data
 UNKNOWN_STRINGS = {"unknown", "nieznany", "none", "", "n/a", "na", "unknown_value"}
 
-# Rotacje ekranu Joan - POPRAWIONE
-DISPLAY_ROTATIONS = {
-    "0": "Landscape",
-    "1": "Portrait, 90°", 
-    "2": "Landscape, 180°",
-    "3": "Portrait, 270°"
-}
-
 # Statusy
 IP_UNKNOWN = "unknown" # Used internally by API, but sensor converts to None if it matches UNKNOWN_STRINGS
 STATE_ONLINE = "online"
@@ -110,3 +102,11 @@ STORAGE_WARNING_THRESHOLD = 90  # Próg ostrzeżenia o miejscu na dysku w %
 # Kody błędów
 ERROR_CODE_NETWORK = "network_error"
 ERROR_CODE_AUTHENTICATION = "authentication_error"
+
+# Rotacje ekranu Joan
+DISPLAY_ROTATIONS = {
+    "0": 0,      # Normalna orientacja
+    "90": 90,    # Obrót o 90 stopni
+    "180": 180,  # Obrót o 180 stopni
+    "270": 270   # Obrót o 270 stopni
+}

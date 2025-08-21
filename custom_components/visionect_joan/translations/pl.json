@@ -5,7 +5,7 @@
         "title": "Konfiguracja Visionect Joan",
         "description": "Skonfiguruj integrację Visionect Joan",
         "data": {
-          "host": "Adres serwera (IP:Port lub URL)",
+          "host": "Adres serwera (IP:Port)",
           "username": "Nazwa użytkownika",
           "password": "Hasło",
           "api_key": "Klucz API",
@@ -20,7 +20,7 @@
   },
   "services": {
     "set_url": {
-      "name": "Ustaw URL",
+      "name": "Ustaw URL, lub lokalny adres zdjęcia",
       "description": "Zmienia URL wyświetlany na ekranie urządzenia."
     },
     "send_text": {

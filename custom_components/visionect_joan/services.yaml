@@ -13,9 +13,9 @@ set_url:
           integration: visionect_joan
     url:
       name: URL
-      description: The new URL to display.
+      description: New URL for display or local photo address.
       required: true
-      example: "https://www.google.com/"
+      example: "URL (https://www.google.com) / local photo address (http://ipHA:8123/local/photo.png) "
       selector:
         text:
     use_web:
@@ -41,7 +41,7 @@ send_text:
       name: Message
       description: The text message to display on the e-ink screen.
       required: true
-      example: "Spotkanie o 14:00 w sali konferencyjnej"
+      example: "Spotkanie o 14:00"
       selector:
         text:
           multiline: true
@@ -119,30 +119,3 @@ send_text:
               value: "'Franklin Gothic Medium', Arial, sans-serif"
             - label: "Garamond - Staroclasyczna elegancka"
               value: "Garamond, 'Times New Roman', serif"
-
-set_display_rotation:
-  name: Set Display Rotation
-  description: Changes the display rotation of the Joan tablet screen.
-  fields:
-    device_id:
-      name: Device
-      description: The Joan device to change display rotation for.
-      required: true
-      selector:
-        device:
-          integration: visionect_joan
-    display_rotation:
-      name: Display Rotation
-      description: The display rotation to set on the Joan tablet.
-      required: true
-      selector:
-        select:
-          options:
-            - label: "Landscape"
-              value: "0"
-            - label: "Portrait, 90°"
-              value: "1"
-            - label: "Landscape, 180°"
-              value: "2"
-            - label: "Portrait, 270°"
-              value: "3"
