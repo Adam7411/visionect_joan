@@ -74,7 +74,7 @@ Po poprawnej instalacji i restarcie Home Assistant:
 
 
 
-### Przykładowe zrzuty ekranu z serwera Visionect które są wyświetlane na Joan 6
+### Przykładowe zrzuty ekranu z serwera Visionect które są wyświetlane na tablecie Joan 6
 
 <img width="510" height="739" alt="3" src="https://github.com/user-attachments/assets/8f8c673d-8447-42ec-9d13-0bd4e9683437" />
 <img width="948" height="791" alt="2" src="https://github.com/user-attachments/assets/4a3c054a-e239-49c1-ab9d-037584cd7989" />
