@@ -4,7 +4,9 @@
 
 Niestandardowy dodatek wyświetlający podstawowe informacje tableta e-ink **Joan 6** firmy Visionect w Home Assistant oraz wysyłanie swojego adresu url www, tekstu, zdjęć z poziomu HA.
 Pozwoli to na tworzenie automatyzacji np. wysyłania powiadomienia o niskim stanie baterii albo wyświetlenie encji z poziomem baterii na tablecie, czy wysyłanie zdjęć do różnych powiadomień poczym spowrotem powrót do dashboardu Appdaemon itp.
-- [Chcesz kupić nowy Joan 6 kliknij](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink).
+
+- [Chcesz kupić Joan 6 kliknij](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink).
+  
 <img width="636" height="399" alt="vision" src="https://github.com/user-attachments/assets/6e30517f-c34a-443e-9e8f-5e02f59c80c7" />
 
 <img width="1920" height="848" alt="ada" src="https://github.com/user-attachments/assets/9dce230b-c149-49df-b1be-2802cf761cbe" />
