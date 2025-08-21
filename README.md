@@ -90,7 +90,7 @@ Po poprawnej instalacji i restarcie Home Assistant:
 - Działa z urządzeniem **Joan 6**, inne modele nie zostały przetestowane.
 - Użyłem AI aby szybko napisać ten dodatek.
 - [Opis krok po kroku wykorzystania tabletu Joan 6 jako panel sterowania Home Assistant](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant).
-
+- [Chcesz kupić nowy Joan 6](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink).
 ## Licencja
 
 Projekt udostępniany na licencji MIT.
