@@ -24,6 +24,14 @@ Pozwoli to na tworzenie automatyzacji np. wysyłania powiadomienia o niskim stan
 - Status
 - Sygnał WiFi
 - Temperatura
+- Pełne wsparcie dla szablonów Jinja2 w usłudze send_text
+  Usługa visionect_joan.send_text potrafi teraz renderować szablony Jinja2. Dzięki temu Twój tablet Joan może stać się prawdziwym, dynamicznym wyświetlaczem informacji!
+  Co to oznacza dla Ciebie?
+  Możesz tworzyć wiadomości, które zawierają:
+  Stany innych urządzeń i sensorów.
+  Aktualną datę i godzinę.
+  Powitania zależne od pory dnia.
+  Złożone warunki logiczne.
 - Wysyłanie swojego tekstu (powiadomień z Home Assistant)  (action: visionect_joan.send_text)
 - Wysyłanie adresu url (action: visionect_joan.set_url) np. (strony https://www.wikipedia.org/ ) lub zdjęć ( przykład http://adresHA:8123/local/zdjecie_test.png ) (plik zdjecie_test.png umieszczamy w katalogu \\192.168.xxx.xxx\config\www\ )
 
