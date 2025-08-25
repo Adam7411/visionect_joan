@@ -1,0 +1,31 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Visionect Joan Configuration",
+        "description": "Configure your Visionect Joan integration",
+        "data": {
+          "host": "Server Address (IP:Port)",
+          "username": "Username",
+          "password": "Password",
+          "api_key": "API Key",
+          "api_secret": "API Secret"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Authentication failed. Check your credentials.",
+      "unknown": "Unknown error occurred during setup."
+    }
+  },
+  "services": {
+    "set_url": {
+      "name": "Set URL or local photo address",
+      "description": "Changes the URL displayed on the device screen."
+    },
+    "send_text": {
+      "name": "Send Text Message",
+      "description": "Sends a text message optimized for e-ink display."
+    }
+  }
+}
