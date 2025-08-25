@@ -1,0 +1,72 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Visionect Joan",
+        "data": {
+          "host": "Adres serwera (IP:Port)",
+          "username": "Nazwa użytkownika",
+          "password": "Hasło",
+          "api_key": "Klucz API",
+          "api_secret": "Sekret API"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Autentykacja nie powiodła się. Sprawdź dane logowania.",
+      "unknown": "Wystąpił nieznany błąd."
+    },
+    "abort": {
+      "already_configured": "Urządzenie jest już skonfigurowane"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "state": {
+        "name": "Stan"
+      },
+      "battery": {
+        "name": "Bateria"
+      },
+      "temperature": {
+        "name": "Temperatura"
+      },
+      "rssi": {
+        "name": "Siła sygnału Wi-Fi"
+      },
+      "uptime": {
+        "name": "Czas pracy"
+      },
+      "storage_free": {
+        "name": "Wolne miejsce"
+      },
+      "battery_voltage": {
+        "name": "Napięcie baterii"
+      },
+      "refresh_interval": {
+        "name": "Interwał odświeżania"
+      },
+      "uuid": {
+        "name": "UUID"
+      },
+      "display_rotation": {
+        "name": "Orientacja"
+      },
+      "application_version": {
+        "name": "Wersja aplikacji"
+      },
+      "storage_total": {
+        "name": "Całkowite miejsce"
+      },
+      "storage_used": {
+        "name": "Zajęte miejsce"
+      },
+      "error_count": {
+        "name": "Liczba błędów"
+      },
+      "restart_count": {
+        "name": "Liczba restartów"
+      }
+    }
+  }
+}
