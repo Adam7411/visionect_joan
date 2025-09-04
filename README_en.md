@@ -2,7 +2,9 @@
 <div align="right">
 <a href="README_en.md">English</a> | <a href="README.md">Polski</a>
 </div>
+
 # Visionect Joan for Home Assistant
+
 <img width="636" height="399" alt="vision" src="https://github.com/user-attachments/assets/6e30517f-c34a-443e-9e8f-5e02f59c80c7" />
 <img width="447" height="355" alt="image" src="https://github.com/user-attachments/assets/27b23199-e4c1-4f69-8c45-2e06cd290f3a" />
 
