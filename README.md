@@ -35,6 +35,7 @@ Integracja dostarcza następujące encje i usługi:
 - `visionect_joan.set_url`: Wyświetlanie dowolnego adresu URL (np. strony `https://www.wikipedia.org/` lub lokalnego obrazka `http://<adres_ip_ha>:8123/local/zdjecie.png`).
 - `visionect_joan.clear_display`: Czyszczenie ekranu.
 - `visionect_joan.force_refresh`: Natychmiastowe przeładowanie zawartości z ustawionego adresu URL.
+- `visionect_joan.set_display_rotation`: Rotacja ekranu.
 
 <img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
 
