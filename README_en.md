@@ -11,23 +11,7 @@ A custom integration that displays essential information from the **Joan 6** e-i
 
 This enables powerful automations, such as sending low battery notifications, displaying sensor states on the tablet, or pushing images for alerts before returning to your Appdaemon dashboard.
 
----
 
-## ✨ What's New in v1.8.0
-
-This is a significant feature update! You can now send messages with images, have more direct control over the device, and monitor its status in greater detail.
-
-*   **🖼️ Rich Text Messages:** The `send_text` service now supports adding an image with layout options (top, left, right).
-*   **⚪ New `clear_display` Service:** A dedicated service to easily clear the device screen to a blank white page.
-*   **🔄 New `force_refresh` Service:** Instantly force the device to reload its currently configured URL on demand.
-*   **📊 New Entities:**
-    *   **Screen Refresh Control:** A new number entity to set the device's refresh interval.
-    *   **Charging Status:** A binary sensor to see if the device is currently charging.
-    *   **Configured URL Sensor:** Shows the current URL displayed on the device.
-    *   **Last Seen Sensor:** A timestamp for when the device was last active.
-*   **🔧 Other:** Minor bug fixes and performance improvements.
-
----
 
 ## Features
 
