@@ -7,27 +7,11 @@
 # Visionect Joan dla Home Assistant
 <img width="636" height="399" alt="vision" src="https://github.com/user-attachments/assets/6e30517f-c34a-443e-9e8f-5e02f59c80c7" />
 <img width="447" height="355" alt="image" src="https://github.com/user-attachments/assets/27b23199-e4c1-4f69-8c45-2e06cd290f3a" />
+
 Niestandardowy dodatek wyświetlający podstawowe informacje tableta e-ink **Joan 6** firmy Visionect w Home Assistant oraz umożliwiający wysyłanie własnego adresu URL, tekstu i zdjęć z poziomu HA.
 
 Pozwoli to na tworzenie zaawansowanych automatyzacji, np. wysyłania powiadomienia o niskim stanie baterii, wyświetlanie encji z poziomem baterii na tablecie, czy wysyłanie zdjęć do różnych powiadomień, po czym automatyczny powrót do dashboardu Appdaemon.
 
----
-
-## ✨ Co nowego w wersji 1.8.0
-
-To duża aktualizacja wprowadzająca nowe funkcje! Możesz teraz wysyłać wiadomości z obrazkami, masz większą kontrolę nad urządzeniem i możesz monitorować jego status z większą szczegółowością.
-
-*   **🖼️ Wiadomości z obrazkami:** Usługa `send_text` obsługuje teraz dodawanie obrazka z opcjami układu (nad, po lewej, po prawej).
-*   **⚪ Nowa usługa `clear_display`:** Dedykowana usługa do łatwego czyszczenia ekranu do białej strony.
-*   **🔄 Nowa usługa `force_refresh`:** Natychmiastowe wymuszenie ponownego załadowania aktualnego adresu URL na urządzeniu.
-*   **📊 Nowe encje:**
-    *   **Kontrola odświeżania ekranu:** Nowa encja typu `number` do ustawiania interwału odświeżania.
-    *   **Status ładowania:** Sensor binarny informujący, czy urządzenie jest w trakcie ładowania.
-    *   **Sensor skonfigurowanego URL:** Pokazuje aktualny adres URL wyświetlany na urządzeniu.
-    *   **Sensor "Ostatnio widziany":** Znacznik czasu ostatniej aktywności urządzenia.
-*   **🔧 Inne:** Drobne poprawki błędów i ulepszenia wydajności.
-
----
 
 ## Funkcjonalności
 
