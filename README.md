@@ -1,6 +1,6 @@
 <!-- README_PL.md -->
 <div align="right">
-<a href="README.md">English</a> | <a href="README_PL.md">Polski</a>
+<a href="README_en.md">English</a> | <a href="README.md">Polski</a>
 </div>
 
 
