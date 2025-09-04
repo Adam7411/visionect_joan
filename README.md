@@ -2,7 +2,7 @@
 <div align="right">
 <a href="README.md">English</a> | <a href="README_PL.md">Polski</a>
 </div>
-
+<img width="636" height="399" alt="vision" src="https://github.com/user-attachments/assets/6e30517f-c34a-443e-9e8f-5e02f59c80c7" />
 <img width="447" height="355" alt="image" src="https://github.com/user-attachments/assets/27b23199-e4c1-4f69-8c45-2e06cd290f3a" />
 
 # Visionect Joan dla Home Assistant
@@ -99,7 +99,7 @@ Po poprawnej instalacji i restarcie Home Assistant:
 
 Przykładowe ekrany, które można wyświetlić na tablecie Joan 6 za pomocą serwera Visionect:
 
-<img width="636" height="399" alt="vision" src="https://github.com/user-attachments/assets/6e30517f-c34a-443e-9e8f-5e02f59c80c7" />
+
 <img width="1920" height="848" alt="ada" src="https://github.com/user-attachments/assets/9dce230b-c149-49df-b1be-2802cf761cbe" />
 <img width="1920" height="1578" alt="aaaa" src="https://github.com/user-attachments/assets/c3e7cbff-4e94-4172-93e8-c688ca70a7d3" />
 
