@@ -1,101 +1,100 @@
-<!-- README_PL.md -->
+<!-- README.md -->
 <div align="right">
 <a href="README_en.md">English</a> | <a href="README.md">Polski</a>
 </div>
+
+# Visionect Joan for Home Assistant
+
+<img width="636" height="399" alt="vision" src="https://github.com/user-attachments/assets/6e30517f-c34a-443e-9e8f-5e02f59c80c7" />
 <img width="447" height="355" alt="image" src="https://github.com/user-attachments/assets/27b23199-e4c1-4f69-8c45-2e06cd290f3a" />
 
-# Visionect Joan dla Home Assistant
-<img width="636" height="399" alt="vision" src="https://github.com/user-attachments/assets/6e30517f-c34a-443e-9e8f-5e02f59c80c7" />
+
+
+A custom integration that displays essential information from the **Joan 6** e-ink tablet by Visionect in Home Assistant. It also allows you to send custom URLs, text, and images directly from HA.
+
+This enables powerful automations, such as sending low battery notifications, displaying sensor states on the tablet, or pushing images for alerts before returning to your Appdaemon dashboard.
 
 
 
-<img width="381" height="570" alt="Bez tytułu" src="https://github.com/user-attachments/assets/993bbcaf-5ee9-47d8-80b4-b886ef897b69" />
+## Features
 
-Niestandardowy dodatek wyświetlający podstawowe informacje tableta e-ink **Joan 6** firmy Visionect w Home Assistant oraz umożliwiający wysyłanie własnego adresu URL, tekstu i zdjęć z poziomu HA.
+This integration provides the following entities and services:
 
-Pozwoli to na tworzenie zaawansowanych automatyzacji, np. wysyłania powiadomienia o niskim stanie baterii, wyświetlanie encji z poziomem baterii na tablecie, czy wysyłanie zdjęć do różnych powiadomień, po czym automatyczny powrót do dashboardu Appdaemon.
+**Sensors:**
+- Battery Level
+- Total & Used Storage
+- Uptime
+- Charging Status (Binary Sensor)
+- Screen Refresh Interval (Number)
+- Battery Voltage
+- Device Status (Online/Offline)
+- Wi-Fi Signal Strength
+- Temperature
+- Configured URL
+- Last Seen Timestamp
 
-
-## Funkcjonalności
-
-Integracja dostarcza następujące encje i usługi:
-
-**Sensory:**
-- Poziom baterii
-- Całkowita i zajęta pamięć
-- Czas pracy
-- Status ładowania (Sensor binarny)
-- Interwał odświeżania (Liczba)
-- Napięcie baterii
-- Status urządzenia (Online/Offline)
-- Siła sygnału Wi-Fi
-- Temperatura
-- Skonfigurowany URL
-- Czas ostatniej aktywności
-
-**Usługi:**
-- `visionect_joan.send_text`: Wysyłanie wiadomości tekstowych, teraz z obsługą obrazków i układów. Wspiera szablony Jinja2 do dynamicznej treści.
-- `visionect_joan.set_url`: Wyświetlanie dowolnego adresu URL (np. strony `https://www.wikipedia.org/` lub lokalnego obrazka `http://<adres_ip_ha>:8123/local/zdjecie.png`).
-- `visionect_joan.clear_display`: Czyszczenie ekranu.
-- `visionect_joan.force_refresh`: Natychmiastowe przeładowanie zawartości z ustawionego adresu URL.
-- `visionect_joan.set_display_rotation`: Rotacja ekranu.
+**Services:**
+- `visionect_joan.send_text`: Send text messages, now with image support and layout options. Supports Jinja2 templates for dynamic content.
+- `visionect_joan.set_url`: Display a custom URL (e.g., a website like `https://www.wikipedia.org/` or a local image like `http://<your_ha_ip>:8123/local/test_image.png`).
+- `visionect_joan.clear_display`: Wipes the screen.
+- `visionect_joan.force_refresh`: Immediately reloads the content from the configured URL.
 
 <img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
 
 ---
 
-## Instalacja
+## Installation
 
-Integrację można zainstalować na dwa sposoby: przez **HACS** (zalecane) lub **manualnie**.
+You can install this integration via **HACS** (recommended) or **manually**.
 
-### Instalacja przez HACS (zalecana)
+### Installation via HACS (Recommended)
 
-1.  Upewnij się, że w Twoim Home Assistant jest zainstalowany [HACS](https://hacs.xyz/).
-2.  Przejdź do `HACS -> Integracje`.
-3.  Kliknij menu z trzema kropkami w prawym górnym rogu i wybierz **„Niestandardowe repozytoria”**.
-4.  Wklej adres URL tego repozytorium, wybierz kategorię **„Integracja”** i kliknij **„Dodaj”**.
-5.  Wyszukaj na liście integrację **„Visionect Joan”** i kliknij **„Zainstaluj”**.
-6.  Uruchom ponownie Home Assistant, aby zastosować zmiany.
+1.  Ensure you have [HACS](https://hacs.xyz/) installed in your Home Assistant.
+2.  Go to `HACS -> Integrations`.
+3.  Click the three-dots menu in the top right corner and select **"Custom repositories"**.
+4.  Paste the URL of this repository, select the category **"Integration"**, and click **"Add"**.
+5.  Find the **"Visionect Joan"** integration in the list and click **"Install"**.
+6.  Restart Home Assistant to apply the changes.
 
-### Instalacja manualna
+### Manual Installation
 
-1.  Pobierz najnowsze wydanie, klikając na `visionect-joan.zip` (lub `Source code (zip)`).
-2.  Rozpakuj pobrane archiwum do katalogu `/config/custom_components/`.
-3.  Uruchom ponownie Home Assistant.
+1.  Download the latest release by clicking on `visionect-joan.zip` (or `Source code (zip)`).
+2.  Unpack the downloaded archive into your `/config/custom_components/` directory.
+3.  Restart Home Assistant.
 
 ---
 
-## Konfiguracja
+## Configuration
 
-Po poprawnej instalacji i restarcie Home Assistant:
+After a successful installation and restart of Home Assistant:
 
-1.  Przejdź do `Ustawienia > Urządzenia i usługi`.
-2.  Kliknij **„+ Dodaj integrację”** w prawym dolnym rogu.
-3.  Wyszukaj **„Visionect Joan”** i kliknij, aby rozpocząć konfigurację.
-4.  Wprowadź dane logowania do Visionect Software Suite:
-    -   Adres serwera (np. `192.168.x.x:8081`)
-    -   Nazwa użytkownika (np. `admin`)
-    -   Hasło
-    -   Klucz API i Sekret API (można je wygenerować w Visionect Software Suite w zakładce "Users" klikając "Add new API key").
+1.  Go to `Settings > Devices & Services`.
+2.  Click **"+ Add Integration"** in the bottom right corner.
+3.  Search for **"Visionect Joan"** and click it to start the configuration.
+4.  Enter your Visionect Software Suite credentials:
+    -   Server Address (e.g., `192.168.x.x:8081`)
+    -   Username (e.g., `admin`)
+    -   Password
+    -   API Key and API Secret (You can generate these in the Visionect Software Suite under the "Users" tab by clicking "Add new API key").
 
 <img width="1567" height="425" alt="5" src="https://github.com/user-attachments/assets/356a55f2-342d-43f4-bf64-3ef1c6522d4e" />
 <img width="575" height="615" alt="6" src="https://github.com/user-attachments/assets/c467a686-6e58-4b6a-9286-033fc45ddbcd" />
 
 ---
 
-## Przykłady użycia
+## Showcase
 
-Przykładowe ekrany, które można wyświetlić na tablecie Joan 6 za pomocą serwera Visionect:
+Here are some examples of what can be displayed on the Joan 6 tablet using the Visionect server:
 
 
 <img width="1920" height="848" alt="ada" src="https://github.com/user-attachments/assets/9dce230b-c149-49df-b1be-2802cf761cbe" />
 <img width="1920" height="1578" alt="aaaa" src="https://github.com/user-attachments/assets/c3e7cbff-4e94-4172-93e8-c688ca70a7d3" />
 
-**Więcej przykładów:**
+**More Examples:**
 
 <details>
-  <summary>Kliknij, aby zobaczyć więcej zrzutów ekranu</summary>
-  <img width="381" height="570" alt="Bez tytułu" src="https://github.com/user-attachments/assets/e1f32a48-0277-42ce-9018-837aeba1b6a8" />
+  <summary>Click to see more screenshots</summary>
+  <img width="381" height="570" alt="Bez tytułu" src="https://github.com/user-attachments/assets/4c7c518f-a0be-42c8-9c28-7cee58a04329" />
   <img width="510" height="739" alt="3" src="https://github.com/user-attachments/assets/8f8c673d-8447-42ec-9d13-0bd4e9683437" />
   <img width="948" height="791" alt="2" src="https://github.com/user-attachments/assets/4a3c054a-e239-49c1-ab9d-037584cd7989" />
   <img width="607" height="893" alt="1" src="https://github.com/user-attachments/assets/1321cfe8-905d-44ef-b1b9-29d999559a04" />
@@ -108,14 +107,14 @@ Przykładowe ekrany, które można wyświetlić na tablecie Joan 6 za pomocą se
 
 ---
 
-## Uwagi
+## Notes
 
--   Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
--   Działa z urządzeniem **Joan 6**, inne modele nie zostały przetestowane.
--   Do szybkiego napisania tego dodatku wykorzystano AI.
--   [Chcesz kupić nowy Joan 6?](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink).
--   [Opis krok po kroku wykorzystania tabletu Joan 6 jako panel sterowania Home Assistant](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant).
+-   This project is not an official Visionect or Home Assistant integration.
+-   It is confirmed to work with the **Joan 6** device; other models have not been tested.
+-   This integration was rapidly developed with the assistance of AI.
+-   [Interested in buying a new Joan 6? (Polish offer)](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink).
+-   [Step-by-step guide to using the Joan 6 tablet as a Home Assistant control panel (Polish)](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant).
 
-## Licencja
+## License
 
-Projekt udostępniany na licencji MIT.
+This project is licensed under the MIT License.
