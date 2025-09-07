@@ -1,6 +1,6 @@
 <!-- README_PL.md -->
 <div align="right">
-<a href="README_en.md">English</a> | <a href="README.md">Polski</a>
+<a href="README.md">English</a> | <a href="README_pl.md">Polski</a>
 </div>
 <img width="447" height="355" alt="image" src="https://github.com/user-attachments/assets/27b23199-e4c1-4f69-8c45-2e06cd290f3a" />
 
