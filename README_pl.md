@@ -41,6 +41,7 @@ Integracja dostarcza następujące encje i usługi:
 - `visionect_joan.set_display_rotation`: Rotacja ekranu.
 
 <img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
+<img width="1875" height="1786" alt="a" src="https://github.com/user-attachments/assets/2d29acfa-8655-467c-ba11-4fd391b1766f" />
 
 ---
 
