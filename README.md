@@ -32,6 +32,8 @@ This integration provides the following entities and services:
 - Temperature
 - Configured URL
 - Last Seen Timestamp
+- <img width="646" height="860" alt="aaaau" src="https://github.com/user-attachments/assets/8059678d-ee25-4177-9673-4f7e97514d5b" />
+
 
 **Services:**
 - `visionect_joan.send_text`: Send text messages, now with image support and layout options. Supports Jinja2 templates for dynamic content.
