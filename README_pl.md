@@ -32,6 +32,7 @@ Integracja dostarcza następujące encje i usługi:
 - Temperatura
 - Skonfigurowany URL
 - Czas ostatniej aktywności
+<img width="646" height="860" alt="aaaau" src="https://github.com/user-attachments/assets/140837dd-0434-40a8-8352-753e3cc50f16" />
 
 **Usługi:**
 - `visionect_joan.send_text`: Wysyłanie wiadomości tekstowych, teraz z obsługą obrazków i układów. Wspiera szablony Jinja2 do dynamicznej treści.
