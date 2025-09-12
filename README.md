@@ -40,7 +40,10 @@ This integration provides the following entities and services:
 - `visionect_joan.set_url`: Display a custom URL (e.g., a website like `https://www.wikipedia.org/` or a local image like `http://<your_ha_ip>:8123/local/test_image.png`).
 - `visionect_joan.clear_display`: Wipes the screen.
 - `visionect_joan.force_refresh`: Immediately reloads the content from the configured URL.
-
+- `visionect_joan.send_qr_code`: Generating QR codes (Send_qr_Code): display custom QR codes directly on the Joan screen. Perfect for Wi-Fi networks for guests, links and more
+- `action: visionect_joan.sleep_device END visionect_joan.wake_device`: Energy management services: drastically extend the battery life of your tablet, sleeping and waking it with automation.
+- `visionect_joan.set_display_rotation`:
+- 
 <img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
 <img width="1875" height="1786" alt="a" src="https://github.com/user-attachments/assets/012744ab-3052-4ad0-97cb-7a798a992f7d" />
 
@@ -97,6 +100,7 @@ Here are some examples of what can be displayed on the Joan 6 tablet using the V
 
 <details>
   <summary>Click to see more screenshots</summary>
+  <img width="302" height="460" alt="QR" src="https://github.com/user-attachments/assets/5b0061bb-0968-43c4-bc06-ed63d02e0f77" />
   <img width="381" height="570" alt="Bez tytułu" src="https://github.com/user-attachments/assets/4c7c518f-a0be-42c8-9c28-7cee58a04329" />
   <img width="510" height="739" alt="3" src="https://github.com/user-attachments/assets/8f8c673d-8447-42ec-9d13-0bd4e9683437" />
   <img width="948" height="791" alt="2" src="https://github.com/user-attachments/assets/4a3c054a-e239-49c1-ab9d-037584cd7989" />
