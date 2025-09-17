@@ -43,6 +43,11 @@ Integracja dostarcza następujące encje i usługi:
 - `visionect_joan.set_display_rotation`: Rotacja ekranu.
 - `visionect_joan.send_qr_code`: Generowanie Kodów QR: Wyświetlaj niestandardowe kody QR bezpośrednio na ekranie Joan. Idealne dla sieci Wi-Fi dla gości, linków i nie tylko.
 - `action: visionect_joan.sleep_device END visionect_joan.wake_device`: Usługi Zarządzania Energią: Drastycznie wydłuż żywotność baterii swojego tabletu, usypiając go i wybudzając za pomocą automatyzacji.
+- `visionect_joan.send_energy_panel`: Wyświetla panel zużycia i produkcji energii.
+- `visionect_joan.send_weather`: Pokazuje szczegółową, powiększoną prognozę pogody.
+- `visionect_joan.send_calendar`: Renderuje ulepszony, czytelny kalendarz miesięczny.
+- `visionect_joan.send_todo_list`: Wysyła dowolną listę zadań, w tym listę zakupów (todo.shopping_list).
+- `visionect_joan.send_qr_code`: Generuje i wyświetla kody QR (np. do Wi-Fi).
 - 
 <img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
 <img width="1875" height="1786" alt="a" src="https://github.com/user-attachments/assets/2d29acfa-8655-467c-ba11-4fd391b1766f" />
