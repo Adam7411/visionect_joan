@@ -42,8 +42,12 @@ This integration provides the following entities and services:
 - `visionect_joan.force_refresh`: Immediately reloads the content from the configured URL.
 - `visionect_joan.send_qr_code`: Generating QR codes (Send_qr_Code): display custom QR codes directly on the Joan screen. Perfect for Wi-Fi networks for guests, links and more
 - `action: visionect_joan.sleep_device END visionect_joan.wake_device`: Energy management services: drastically extend the battery life of your tablet, sleeping and waking it with automation.
-- `visionect_joan.set_display_rotation`:
-- 
+- `visionect_joan.set_display_rotation`: Screen rotation
+- `visionect_joan.send_energy_panel`: Displays an energy consumption and production panel
+- `visionect_joan.send_weather`: Shows a detailed, full-screen weather forecast
+- `visionect_joan.send_calendar`: Renders an improved, easy-to-read monthly calendar
+- `visionect_joan.send_todo_list`: Sends any to-do list, including the Shopping List (todo.shopping_list)
+- `visionect_joan.send_qr_code`: Generates and displays QR codes (e.g., for Wi-Fi)
 <img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
 <img width="1875" height="1786" alt="a" src="https://github.com/user-attachments/assets/012744ab-3052-4ad0-97cb-7a798a992f7d" />
 
