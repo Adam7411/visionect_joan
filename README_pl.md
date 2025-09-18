@@ -49,7 +49,7 @@ Integracja dostarcza następujące encje i usługi:
 - `visionect_joan.send_weather`: Pokazuje szczegółową, powiększoną prognozę pogody.
 - `visionect_joan.send_calendar`: Renderuje ulepszony, czytelny kalendarz miesięczny.
 - `visionect_joan.send_todo_list`: Wysyła dowolną listę zadań, w tym listę zakupów (todo.shopping_list).
-
+- `visionect_joan.send_camera_snapshot`: Wyślij zrzut ekranu dowolnej kamery z Home Assistant
 - 
 <img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
 <img width="1875" height="1786" alt="a" src="https://github.com/user-attachments/assets/2d29acfa-8655-467c-ba11-4fd391b1766f" />
