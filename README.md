@@ -2,7 +2,7 @@
 <div align="right">
 <a href="README.md">English</a> | <a href="README_pl.md">Polski</a>
 </div>
-https://my.home-assistant.io/redirect/hacs_repository/?owner=Adam7411&repository=visionect_joan&category=integration
+
 # Visionect Joan for Home Assistant
 
 <img width="636" height="399" alt="vision" src="https://github.com/user-attachments/assets/6e30517f-c34a-443e-9e8f-5e02f59c80c7" />
