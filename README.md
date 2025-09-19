@@ -28,6 +28,7 @@ This enables powerful automations, such as sending low battery notifications, di
 This integration provides the following entities and services:
 
 **Sensors:**
+- Integration automatically creates Camera's ENCY for each Joan tablet, giving you a preview of the screen live in Home Assistant
 - Battery Level
 - Total & Used Storage
 - Uptime
