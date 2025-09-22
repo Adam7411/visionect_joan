@@ -133,7 +133,7 @@ Here are some examples of what can be displayed on the Joan 6 tablet using the V
 -   This project is not an official Visionect or Home Assistant integration.
 -   It is confirmed to work with the **Joan 6** device; other models have not been tested.
 -   This integration was rapidly developed with the assistance of AI.
--   [Interested in buying a new Joan 6? (Polish offer)](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink).
+
 -   [Step-by-step guide to using the Joan 6 tablet as a Home Assistant control panel (Polish)](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant).
 
 ## License
