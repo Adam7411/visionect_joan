@@ -3,6 +3,7 @@
 <a href="README.md">English</a> | <a href="README_pl.md">Polski</a>
 </div>
 
+<img width="1280" height="800" alt="7ca451b4-393c-44c8-99e3-c9e0f88db77b" src="https://github.com/user-attachments/assets/32214988-dc0e-44ce-af14-2d7f71fb8e6c" />
 
 
 <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Adam7411&repository=visionect_joan&category=integration" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open a repository inside the Home Assistant Community Store." /></a>
