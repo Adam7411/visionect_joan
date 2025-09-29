@@ -7,55 +7,55 @@
 <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Adam7411&repository=visionect_joan&category=integration" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and open a repository inside the Home Assistant Community Store." /></a>
 
 # Visionect Joan dla Home Assistant
-<img width="1280" height="800" alt="7ca451b4-393c-44c8-99e3-c9e0f88db77b" src="https://github.com/user-attachments/assets/32214988-dc0e-44ce-af14-2d7f71fb8e6c" />
 
+<img width="1280" height="800" alt="Przykładowy ekran główny na tablecie Joan 6" src="https://github.com/user-attachments/assets/32214988-dc0e-44ce-af14-2d7f71fb8e6c" />
 
+<p align="center">
+<img width="24%" alt="Widok pogody" src="https://github.com/user-attachments/assets/993bbcaf-5ee9-47d8-80b4-b886ef897b69" />
+<img width="24%" alt="Kod QR do Wi-Fi" src="https://github.com/user-attachments/assets/d165cd67-79cf-402a-b595-905e3c5cb809" />
+<img width="24%" alt="Panel statusu" src="https://github.com/user-attachments/assets/1594ae1f-0a95-44cb-8edc-cad3b0879c88" />
+<img width="24%" alt="Panel energii" src="https://github.com/user-attachments/assets/5ad26dae-dc77-408f-bf55-0a33ce2601ba" />
+<br>
+<img width="35%" alt="Wykres temperatury" src="https://github.com/user-attachments/assets/27b23199-e4c1-4f69-8c45-2e06cd290f3a" />
+</p>
 
-<img width="381" height="570" alt="Bez tytułu" src="https://github.com/user-attachments/assets/993bbcaf-5ee9-47d8-80b4-b886ef897b69" /> <img width="302" height="460" alt="QR" src="https://github.com/user-attachments/assets/d165cd67-79cf-402a-b595-905e3c5cb809" /> <img width="301" height="456" alt="aaaa" src="https://github.com/user-attachments/assets/1594ae1f-0a95-44cb-8edc-cad3b0879c88" /> <img width="301" height="457" alt="cccc" src="https://github.com/user-attachments/assets/5ad26dae-dc77-408f-bf55-0a33ce2601ba" />
-<img width="447" height="355" alt="image" src="https://github.com/user-attachments/assets/27b23199-e4c1-4f69-8c45-2e06cd290f3a" />
+Integracja `visionect_joan` transformuje Twój energooszczędny tablet e-ink **Joan 6** w potężne, w pełni konfigurowalne centrum informacji dla Twojego inteligentnego domu. Zamiast statycznego kalendarza, zyskujesz dynamiczny, dotykowy ekran, na którym możesz wyświetlać dowolne dane z Home Assistant – od paneli kontrolnych, przez prognozę pogody, aż po zrzuty z kamer.
 
+Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje, np. wyświetlić panel energii po powrocie do domu, pokazać listę zakupów po wejściu do kuchni, czy wysłać powiadomienie ze zdjęciem z kamery, a następnie automatycznie powrócić do głównego dashboardu.
 
+## Kluczowe Możliwości
 
-Niestandardowy dodatek wyświetlający podstawowe informacje tableta e-ink **Joan 6** firmy Visionect w Home Assistant oraz umożliwiający wysyłanie własnego adresu URL, tekstu i zdjęć z poziomu HA.
+- **Pełna kontrola nad ekranem:** Wysyłaj dowolne strony internetowe, lokalne dashboardy (np. z AppDaemon) lub pojedyncze obrazy.
+- **Dynamicznie generowane widoki:** Integracja potrafi tworzyć zoptymalizowane pod e-ink panele, takie jak prognoza pogody, kalendarz, lista zadań, panel energii czy statusy encji.
+- **Interaktywność:** Dodaj przycisk "wstecz" do tymczasowych widoków lub spraw, by cały ekran był klikalny, umożliwiając łatwy powrót do głównego menu.
+- **Zarządzanie energią:** Maksymalizuj czas pracy na baterii dzięki usługom usypiania i wybudzania urządzenia w ramach automatyzacji.
+- **Podgląd na żywo:** Wbudowana encja `camera` pozwala na bieżąco sprawdzać, co jest wyświetlane na tablecie, bezpośrednio z interfejsu Home Assistant.
 
-Pozwoli to na tworzenie zaawansowanych automatyzacji, np. wysyłania powiadomienia o niskim stanie baterii, wyświetlanie encji z poziomem baterii na tablecie, czy wysyłanie zdjęć do różnych powiadomień, po czym automatyczny powrót do dashboardu Appdaemon.
+### Dostępne encje i usługi
 
-
-## Funkcjonalności
-
-Integracja dostarcza następujące encje i usługi:
-
-**Sensory:**
-- Integracja automatycznie tworzy encję camera dla każdego tabletu Joan, dając Ci podgląd ekranu na żywo w Home Assistant
-- Podgląd na żywo (aktualny podgląd z tabletu)
-- Poziom baterii
-- Całkowita i zajęta pamięć
-- Czas pracy
-- Status ładowania (Sensor binarny)
-- Interwał odświeżania (Liczba)
-- Napięcie baterii
-- Status urządzenia (Online/Offline)
-- Siła sygnału Wi-Fi
-- Temperatura
-- Skonfigurowany URL
-- Czas ostatniej aktywności
-<img width="646" height="860" alt="aaaau" src="https://github.com/user-attachments/assets/140837dd-0434-40a8-8352-753e3cc50f16" />
+**Sensory i encje:**
+- **Podgląd na żywo (`camera`):** Zobacz aktualny obraz z ekranu tabletu.
+- **Bateria (`sensor`):** Monitoruj poziom naładowania.
+- **Status ładowania (`binary_sensor`):** Sprawdź, czy urządzenie jest podłączone do ładowarki.
+- **Status urządzenia (`sensor`):** Weryfikuj, czy tablet jest online.
+- **Nazwa urządzenia (`text`):** Zmieniaj nazwę tabletu bezpośrednio z HA.
+- **Interwał odświeżania (`number`):** Dostosuj, jak często tablet ma odświeżać zawartość.
+- Oraz wiele innych: temperatura, siła sygnału Wi-Fi, napięcie baterii, czas pracy, zajęte miejsce, skonfigurowany URL i czas ostatniej aktywności.
+<img width="646" height="860" alt="Lista encji dla urządzenia" src="https://github.com/user-attachments/assets/140837dd-0434-40a8-8352-753e3cc50f16" />
 
 **Usługi:**
-- `visionect_joan.send_text`: Wysyłanie wiadomości tekstowych, teraz z obsługą obrazków i układów. Wspiera szablony Jinja2 do dynamicznej treści.
-- `visionect_joan.set_url`: Wyświetlanie dowolnego adresu URL (np. strony `https://www.wikipedia.org/` lub lokalnego obrazka `http://<adres_ip_ha>:8123/local/zdjecie.png`).
-- `visionect_joan.clear_display`: Czyszczenie ekranu.
-- `visionect_joan.force_refresh`: Natychmiastowe przeładowanie zawartości z ustawionego adresu URL.
-- `visionect_joan.set_display_rotation`: Rotacja ekranu.
-- `visionect_joan.send_qr_code`: Generowanie Kodów QR: Wyświetlaj niestandardowe kody QR bezpośrednio na ekranie Joan. Idealne dla sieci Wi-Fi dla gości, linków i nie tylko.
-- `action: visionect_joan.sleep_device` & `visionect_joan.wake_device`: Usługi Zarządzania Energią: Drastycznie wydłuż żywotność baterii swojego tabletu, usypiając go i wybudzając za pomocą automatyzacji.
-- `visionect_joan.send_energy_panel`: Wyświetla panel zużycia i produkcji energii.
-- `visionect_joan.send_weather`: Pokazuje szczegółową, powiększoną prognozę pogody.
-- `visionect_joan.send_calendar`: Renderuje ulepszony, czytelny kalendarz miesięczny.
-- `visionect_joan.send_todo_list`: Wysyła dowolną listę zadań, w tym listę zakupów (todo.shopping_list).
-- `visionect_joan.send_camera_snapshot`: Wyślij zrzut ekranu dowolnej kamery z Home Assistant.
-- `visionect_joan.send_status_panel`: Wyświetla niestandardowy panel ze stanem wybranych encji, idealny do szybkiego podglądu statusu domu.
-- `visionect_joan.send_sensor_graph`: Generuje i wyświetla wykres historii dla jednego lub więcej sensorów. Wykres automatycznie dostosowuje się do orientacji ekranu (pionowej lub poziomej).
+- `visionect_joan.set_url`: Wyświetl dowolny adres URL.
+- `visionect_joan.send_text`: Wyślij formatowaną wiadomość tekstową z opcjonalnym obrazkiem.
+- `visionect_joan.send_camera_snapshot`: Wyślij zrzut ekranu z dowolnej kamery w Home Assistant.
+- `visionect_joan.send_weather`: Pokaż estetyczny i czytelny panel pogodowy.
+- `visionect_joan.send_calendar`: Wyświetl wydarzenia z kalendarza w formie listy lub siatki miesięcznej.
+- `visionect_joan.send_energy_panel`: Pokaż podsumowanie zużycia i produkcji energii.
+- `visionect_joan.send_status_panel`: Wyświetl panel z aktualnym stanem wybranych encji.
+- `visionect_joan.send_sensor_graph`: Generuj wykres historii dla sensorów, dopasowany do orientacji ekranu.
+- `visionect_joan.send_todo_list`: Wyświetl listę zadań (np. listę zakupów).
+- `visionect_joan.send_qr_code`: Pokaż kod QR (np. do sieci Wi-Fi dla gości).
+- `visionect_joan.sleep_device` & `wake_device`: Usypiaj i wybudzaj urządzenie.
+- `visionect_joan.clear_display`, `force_refresh`, `set_display_rotation`: Narzędzia do zarządzania ekranem.
 
 ### Przycisk "Wstecz" i interaktywność
 
@@ -66,8 +66,8 @@ visionect_joan:
   main_menu_url: "http://<IP_TWOJEGO_HA>:5050/nazwa_dashboardu"
 
 Następnie, podczas wywoływania usługi, możesz użyć opcji add_back_button: true, aby dodać widoczny przycisk powrotu, lub click_anywhere_to_return: true, aby cały ekran stał się klikalny i prowadził z powrotem do menu.
-<img width="1470" height="678" alt="Screenshot" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
-<img width="1875" height="1786" alt="a" src="https://github.com/user-attachments/assets/2d29acfa-8655-467c-ba11-4fd391b1766f" />
+<img width="1470" height="678" alt="Przykład wywołania usługi z opcją przycisku powrotu" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
+<img width="1875" height="1786" alt="Przykładowa automatyzacja z użyciem usług Visionect Joan" src="https://github.com/user-attachments/assets/2d29acfa-8655-467c-ba11-4fd391b1766f" />
 Instalacja
 Integrację można zainstalować na dwa sposoby: przez HACS (zalecane) lub manualnie.
 Instalacja przez HACS (zalecana)
@@ -91,12 +91,12 @@ Adres serwera (np. 192.168.x.x:8081)
 Nazwa użytkownika (np. admin)
 Hasło
 Klucz API i Sekret API (można je wygenerować w Visionect Software Suite w zakładce "Users" klikając "Add new API key").
-<img width="1567" height="425" alt="5" src="https://github.com/user-attachments/assets/356a55f2-342d-43f4-bf64-3ef1c6522d4e" />
-<img width="575" height="615" alt="6" src="https://github.com/user-attachments/assets/c467a686-6e58-4b6a-9286-033fc45ddbcd" />
+<img width="1567" height="425" alt="Konfiguracja integracji" src="https://github.com/user-attachments/assets/356a55f2-342d-43f4-bf64-3ef1c6522d4e" />
+<img width="575" height="615" alt="Dodawanie klucza API w Visionect Software Suite" src="https://github.com/user-attachments/assets/c467a686-6e58-4b6a-9286-033fc45ddbcd" />
 Przykłady użycia
 Przykładowe ekrany, które można wyświetlić na tablecie Joan 6 za pomocą serwera Visionect:
-<img width="1920" height="848" alt="ada" src="https://github.com/user-attachments/assets/9dce230b-c149-49df-b1be-2802cf761cbe" />
-<img width="1920" height="1578" alt="aaaa" src="https://github.com/user-attachments/assets/c3e7cbff-4e94-4172-93e8-c688ca70a7d3" />
+<img width="1920" height="848" alt="Dashboard AppDaemon na ekranie Joan 6" src="https://github.com/user-attachments/assets/9dce230b-c149-49df-b1be-2802cf761cbe" />
+<img width="1920" height="1578" alt="Dashboard AppDaemon - wersja ciemna" src="https://github.com/user-attachments/assets/c3e7cbff-4e94-4172-93e8-c688ca70a7d3" />
 Więcej przykładów:
 <details>
 <summary>Kliknij, aby zobaczyć więcej zrzutów ekranu</summary>
@@ -111,11 +111,14 @@ Więcej przykładów:
 <img width="306" height="456" alt="Bez tytułu" src="https://github.com/user-attachments/assets/e3f248bb-f2c8-4e32-b41d-09cbf24a02bf" />
 <img width="569" height="808" alt="Bez tytułuss" src="https://github.com/user-attachments/assets/f746301e-d0fa-4993-aa7f-b7b4d5c2e15d" />
 </details>
-Uwagi
-Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
-Działa z urządzeniem Joan 6, inne modele nie zostały przetestowane.
-Do szybkiego napisania tego dodatku wykorzystano AI.
-Chcesz kupić nowy Joan 6?.
-Opis krok po kroku wykorzystania tabletu Joan 6 jako panel sterowania Home Assistant.
-Licencja
+## Uwagi
+
+-   Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
+-   Działa z urządzeniem **Joan 6**, inne modele nie zostały przetestowane.
+-   Do szybkiego napisania tego dodatku wykorzystano AI.
+-   [Chcesz kupić nowy Joan 6?](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink).
+-   [Opis krok po kroku wykorzystania tabletu Joan 6 jako panel sterowania Home Assistant](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant).
+
+## Licencja
+
 Projekt udostępniany na licencji MIT.
