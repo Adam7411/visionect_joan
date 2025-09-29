@@ -64,3 +64,7 @@ Wiele usług (takich jak `send_weather`, `send_calendar`, czy `send_sensor_graph
 ```yaml
 visionect_joan:
   main_menu_url: "http://<IP_TWOJEGO_HA>:5050/nazwa_dashboardu"
+```
+Następnie, podczas wywoływania usługi, możesz użyć opcji add_back_button: true, aby dodać widoczny przycisk powrotu, lub click_anywhere_to_return: true, aby cały ekran stał się klikalny i prowadził z powrotem do menu.
+<img width="1470" height="678" alt="Przykład wywołania usługi z opcją przycisku powrotu" src="https://github.com/user-attachments/assets/18474371-8779-48aa-8a46-a2270dc120fa" />
+<img width="1875" height="1786" alt="Przykładowa automatyzacja z użyciem usług Visionect Joan" src="https://github.com/user-attachments/assets/2d29acfa-8655-467c-ba11-4fd391b1766f" />
