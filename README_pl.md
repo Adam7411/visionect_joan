@@ -27,6 +27,7 @@ Integracja dostarcza następujące encje i usługi:
 
 **Sensory:**
 - Integracja automatycznie tworzy encję camera dla każdego tabletu Joan, dając Ci podgląd ekranu na żywo w Home Assistant
+- Podgląd na żywo (aktualny podgląd z tabletu)
 - Poziom baterii
 - Całkowita i zajęta pamięć
 - Czas pracy
