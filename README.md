@@ -256,6 +256,7 @@ Here are some examples of what can be displayed on the Joan 6 tablet using the V
 
 <details>
   <summary>Click to see more screenshots</summary>
+  <img width="566" height="814" alt="temp" src="https://github.com/user-attachments/assets/1ee7e4b4-04ea-4728-bff9-318d2685391f" />
   <img width="302" height="460" alt="QR" src="https://github.com/user-attachments/assets/5b0061bb-0968-43c4-bc06-ed63d02e0f77" />
   <img width="381" height="570" alt="Bez tytułu" src="https://github.com/user-attachments/assets/4c7c518f-a0be-42c8-9c28-7cee58a04329" />
   <img width="510" height="739" alt="3" src="https://github.com/user-attachments/assets/8f8c673d-8447-42ec-9d13-0bd4e9683437" />
