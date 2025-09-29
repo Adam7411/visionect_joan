@@ -67,6 +67,7 @@ visionect_joan:
   main_menu_url: "http://<YOUR_HA_IP>:5050/dashboard_name" #Example of the Appdaemon Menu panel
 ```
 Then, when calling a service, you can use the option `add_back_button: true` to display a visible back button, or `click_anywhere_to_return: true` to make the entire screen clickable, leading back to your main menu.
+<img width="309" height="467" alt="Bez tytułu" src="https://github.com/user-attachments/assets/8d13bc78-2aa6-45de-819b-53b1ba0f8619" />
 
 
 ---
