@@ -64,6 +64,3 @@ Wiele usług (takich jak `send_weather`, `send_calendar`, czy `send_sensor_graph
 ```yaml
 visionect_joan:
   main_menu_url: "http://<IP_TWOJEGO_HA>:5050/nazwa_dashboardu"
-
-
-
