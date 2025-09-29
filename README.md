@@ -64,8 +64,8 @@ Many services (like `send_weather`, `send_calendar`, or `send_sensor_graph`) all
 
 ```yaml
 visionect_joan:
-  main_menu_url: "http://<YOUR_HA_IP>:5050/dashboard_name"```
-
+  main_menu_url: "http://<YOUR_HA_IP>:5050/dashboard_name" #Example of the Appdaemon Menu panel
+```
 Then, when calling a service, you can use the option `add_back_button: true` to display a visible back button, or `click_anywhere_to_return: true` to make the entire screen clickable, leading back to your main menu.
 
 
