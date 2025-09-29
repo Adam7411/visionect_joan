@@ -41,7 +41,8 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje, np. w
 - **Nazwa urządzenia (`text`):** Zmieniaj nazwę tabletu bezpośrednio z HA.
 - **Interwał odświeżania (`number`):** Dostosuj, jak często tablet ma odświeżać zawartość.
 - Oraz wiele innych: temperatura, siła sygnału Wi-Fi, napięcie baterii, czas pracy, zajęte miejsce, skonfigurowany URL i czas ostatniej aktywności.
-<img width="646" height="860" alt="Lista encji dla urządzenia" src="https://github.com/user-attachments/assets/140837dd-0434-40a8-8352-753e3cc50f16" />
+<img width="921" height="812" alt="joan" src="https://github.com/user-attachments/assets/08e62c01-7a96-4145-b038-4d4bdf39d9bb" />
+
 
 **Usługi:**
 - `visionect_joan.set_url`: Wyświetl dowolny adres URL.
