@@ -97,7 +97,7 @@ Po poprawnej instalacji i restarcie Home Assistant:
 1.  Przejdź do `Ustawienia > Urządzenia i usługi`.
 2.  Kliknij **„+ Dodaj integrację”** w prawym dolnym rogu.
 3.  Wyszukaj **„Visionect Joan”** i kliknij, aby rozpocząć konfigurację.
-4.  Wprowadź dane logowania do Visionect Software Suite:
+4.  Wprowadź dane logowania do Visionect Software Suite: ( [Jeśli niemasz Visionect Software Suite kliknij ](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)).
     -   Adres serwera (np. `192.168.x.x:8081`)
     -   Nazwa użytkownika (np. `admin`)
     -   Hasło
