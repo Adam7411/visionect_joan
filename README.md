@@ -57,6 +57,9 @@ With extensive services, you can create advanced automations, such as displaying
 - `visionect_joan.send_qr_code`: Show a QR code (e.g., for guest Wi-Fi).
 - `visionect_joan.sleep_device` & `wake_device`: Put the device to sleep and wake it up.
 - `visionect_joan.clear_display`, `force_refresh`, `set_display_rotation`: Screen management tools.
+- Integration fully supports Jinja2 templates in Home Assistant. You can use templates to dynamically generate content in the following fields of services:
+Message in the `visionect_joan.send_text` and caption in the` visionect_joan.send_camera_snapshot '
+Thanks to this, you can easily insert entities and attributes directly into the message sent to the tablet.
 
 ### Back Button and Interactivity
 
