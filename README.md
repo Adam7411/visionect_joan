@@ -101,7 +101,7 @@ After a successful installation and restart of Home Assistant:
 1.  Go to `Settings > Devices & Services`.
 2.  Click **"+ Add Integration"** in the bottom right corner.
 3.  Search for **"Visionect Joan"** and click it to start the configuration.
-4.  Enter your Visionect Software Suite credentials:
+4.  Enter your Visionect Software Suite credentials: [Installation Software Suite credentials ]([https://hacs.xyz/](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant_EN))
     -   Server Address (e.g., `192.168.x.x:8081`)
     -   Username (e.g., `admin`)
     -   Password
