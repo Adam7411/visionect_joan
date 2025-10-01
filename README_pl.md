@@ -57,6 +57,10 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje, np. w
 - `visionect_joan.send_qr_code`: Pokaż kod QR (np. do sieci Wi-Fi dla gości).
 - `visionect_joan.sleep_device` & `wake_device`: Usypiaj i wybudzaj urządzenie.
 - `visionect_joan.clear_display`, `force_refresh`, `set_display_rotation`: Narzędzia do zarządzania ekranem.
+- integracja w pełni obsługuje szablony Jinja2 w Home Assistant. Możesz używać szablonów do dynamicznego generowania treści w następujących polach usług:
+message w usłudze `visionect_joan.send_text`
+caption w usłudze `visionect_joan.send_camera_snapshot`
+Dzięki temu możesz łatwo wstawiać stany encji i atrybuty bezpośrednio do wiadomości wysyłanych na tablet.
 
 ### Przycisk "Wstecz" i interaktywność
 
