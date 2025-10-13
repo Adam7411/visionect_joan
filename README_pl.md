@@ -64,13 +64,18 @@ Dzięki temu możesz łatwo wstawiać stany encji i atrybuty bezpośrednio do wi
 
 ### Przycisk "Wstecz" i Przycisk Action Webhook
 
-Przycisk "Wstecz" - Wiele usług (takich jak `send_weather`, `send_calendar`, czy `send_sensor_graph`) pozwala na tymczasowe wyświetlenie informacji z możliwością łatwego powrotu do głównego ekranu. Aby z tego skorzystać, zdefiniuj swój główny pulpit w pliku `configuration.yaml`:
+Przycisk Action Webhook - umożliwia dodanie interaktywnego przycisku "Actions ✔" do treści wyświetlanej na ekranie urządzenia Visionect.
+Po naciśnięciu tego przycisku na wyświetlaczu, urządzenie wysyła żądanie (POST) do zdefiniowanego w Home Assistant webhooka. Pozwala to na zdalne uruchamianie automatyzacji i akcji, takich jak włączanie świateł czy zmiana scen, bezpośrednio z ekranu e-ink.
+
+Przycisk "Wstecz" - powrotu do głównego dashboardu AppDaemon . Aby z tego skorzystać, zdefiniuj swój główny pulpit w pliku `configuration.yaml`:
 
 ```yaml
 visionect_joan:
   main_menu_url: "http://<IP_TWOJEGO_HA>:5050/nazwa_dashboardu" #przykład panelu menu Appdaemon
 ```
-Następnie, podczas wywoływania usługi, możesz użyć opcji add_back_button: true, aby dodać widoczny przycisk powrotu do ustawionego menu, lub click_anywhere_to_return: true, aby cały ekran stał się klikalny i prowadził z powrotem do menu. <img width="309" height="467" alt="Bez tytułu" src="https://github.com/user-attachments/assets/8a74f4ff-1863-4f24-9a2a-4e599589da3c" />
+Następnie, podczas wywoływania usługi, możesz użyć opcji add_back_button: true, aby dodać widoczny przycisk powrotu do ustawionego menu, lub click_anywhere_to_return: true, aby cały ekran stał się klikalny i prowadził z powrotem do menu. 
+<img width="430" height="588" alt="2" src="https://github.com/user-attachments/assets/5716f6cf-980e-4d7f-a69b-9b7e2e5f9f61" />
+
 
 
 ## Instalacja
