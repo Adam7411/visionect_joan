@@ -30,6 +30,9 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje, np. w
 - **Interaktywność:** Dodaj przycisk "wstecz" do tymczasowych widoków lub spraw, by cały ekran był klikalny, umożliwiając łatwy powrót do głównego menu.
 - **Zarządzanie energią:** Maksymalizuj czas pracy na baterii dzięki usługom usypiania i wybudzania urządzenia w ramach automatyzacji.
 - **Podgląd na żywo:** Wbudowana encja `camera` pozwala na bieżąco sprawdzać, co jest wyświetlane na tablecie, bezpośrednio z interfejsu Home Assistant.
+- **Głębia bitowa: Ustawia liczbę odcieni szarości. 1-bit to tylko czerń i biel (szybciej), 4-bity to 16 odcieni (lepsza jakość).
+- **Metoda ditheringu: Poprawia jakość obrazu, tworząc iluzję większej liczby odcieni. Wygładza przejścia między kolorami.
+- **Wyczyść pamięć podręczną: Usuwa zapamiętane dane stron (np. obrazy). Użyj tej funkcji, jeśli ekran wyświetla nieaktualną treść.
 
 ### Dostępne encje i usługi
 
