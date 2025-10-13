@@ -62,17 +62,22 @@ With extensive services, you can create advanced automations, such as displaying
 Message in the `visionect_joan.send_text` and caption in the `visionect_joan.send_camera_snapshot`
 Thanks to this, you can easily insert entities and attributes directly into the message sent to the tablet.
 
-### Back Button and Interactivity
+### Back Button and Action Webhook Button
 
-Many services (like `send_weather`, `send_calendar`, or `send_sensor_graph`) allow you to temporarily display information with an easy way to return to your main screen. To use this feature, define your main dashboard URL in `configuration.yaml`:
+Action Webhook - allows you to add an interactive "Actions ✔" button to the content displayed on the Visionect device screen.
+After pressing this button on the display, the device sends a request (POST) to the webhook defined in Home Assistant. This allows you to remotely trigger automation and actions, such as turning on the lights or changing scenes, directly from the e-ink screen.
+<img width="1365" height="531" alt="3)" src="https://github.com/user-attachments/assets/7f5d3268-b5d4-4d14-a0e3-47878f173e52" />
+
+
+"Back" button - return to the main AppDaemon dashboard. To use this, define your main desktop in a file `configuration.yaml`:
 
 ```yaml
 visionect_joan:
-  main_menu_url: "http://<YOUR_HA_IP>:5050/dashboard_name" #Example of the Appdaemon Menu panel
+  main_menu_url: "http://<IP_TWOJEGO_HA>:5050/nazwa_dashboardu" #przykład panelu menu Appdaemon
 ```
-Then, when calling a service, you can use the option `add_back_button: true` to display a visible back button, or `click_anywhere_to_return: true` to make the entire screen clickable, leading back to your main menu.
+Then, when invoking the service, you can use add_back_button: true to add a visible return button to the set menu, or click_anywhere_to_return: true to make the entire screen clickable and lead back to the menu. 
+<img width="430" height="588" alt="2" src="https://github.com/user-attachments/assets/5716f6cf-980e-4d7f-a69b-9b7e2e5f9f61" />
 
-<img width="309" height="467" alt="Bez tytułu" src="https://github.com/user-attachments/assets/8d13bc78-2aa6-45de-819b-53b1ba0f8619" />
 
 
 ---
