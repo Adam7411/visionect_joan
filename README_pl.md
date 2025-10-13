@@ -62,9 +62,9 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje, np. w
 message w usłudze `visionect_joan.send_text` oraz caption w usłudze `visionect_joan.send_camera_snapshot`
 Dzięki temu możesz łatwo wstawiać stany encji i atrybuty bezpośrednio do wiadomości wysyłanych na tablet.
 
-### Przycisk "Wstecz" i interaktywność
+### Przycisk "Wstecz" i Przycisk Action Webhook
 
-Wiele usług (takich jak `send_weather`, `send_calendar`, czy `send_sensor_graph`) pozwala na tymczasowe wyświetlenie informacji z możliwością łatwego powrotu do głównego ekranu. Aby z tego skorzystać, zdefiniuj swój główny pulpit w pliku `configuration.yaml`:
+Przycisk "Wstecz" - Wiele usług (takich jak `send_weather`, `send_calendar`, czy `send_sensor_graph`) pozwala na tymczasowe wyświetlenie informacji z możliwością łatwego powrotu do głównego ekranu. Aby z tego skorzystać, zdefiniuj swój główny pulpit w pliku `configuration.yaml`:
 
 ```yaml
 visionect_joan:
