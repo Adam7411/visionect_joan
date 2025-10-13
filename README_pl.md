@@ -69,6 +69,7 @@ Dzięki temu możesz łatwo wstawiać stany encji i atrybuty bezpośrednio do wi
 
 Przycisk Action Webhook - umożliwia dodanie interaktywnego przycisku "Actions ✔" do treści wyświetlanej na ekranie urządzenia Visionect.
 Po naciśnięciu tego przycisku na wyświetlaczu, urządzenie wysyła żądanie (POST) do zdefiniowanego w Home Assistant webhooka. Pozwala to na zdalne uruchamianie automatyzacji i akcji, takich jak włączanie świateł czy zmiana scen, bezpośrednio z ekranu e-ink.
+Ta funkcja działa gdy serwer Visionect Server v3 (All-in-One) jest zainstalowany jako dodatek Home Assistant. Integracja ma na celu automatyczne użycie prawidłowego adresu wewnętrznego (http://homeassistant:8123).
 <img width="1365" height="531" alt="3)" src="https://github.com/user-attachments/assets/7f5d3268-b5d4-4d14-a0e3-47878f173e52" />
 
 
