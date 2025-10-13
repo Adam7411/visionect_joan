@@ -70,6 +70,7 @@ Thanks to this, you can easily insert entities and attributes directly into the 
 
 Action Webhook - allows you to add an interactive "Actions ✔" button to the content displayed on the Visionect device screen.
 After pressing this button on the display, the device sends a request (POST) to the webhook defined in Home Assistant. This allows you to remotely trigger automation and actions, such as turning on the lights or changing scenes, directly from the e-ink screen.
+ This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123).
 <img width="1365" height="531" alt="3)" src="https://github.com/user-attachments/assets/7f5d3268-b5d4-4d14-a0e3-47878f173e52" />
 
 
