@@ -41,7 +41,8 @@ With extensive services, you can create advanced automations, such as displaying
 - **Device Name (`text`):** Change the tablet's name directly from HA.
 - **Refresh Interval (`number`):** Adjust how often the tablet refreshes its content.
 - And many more: temperature, Wi-Fi signal strength, battery voltage, uptime, storage used, configured URL, and last seen time.
-<img width="921" height="812" alt="joan" src="https://github.com/user-attachments/assets/1ca6ecb8-499b-46bc-ab2c-8e2987211f42" />
+<img width="596" height="829" alt="1" src="https://github.com/user-attachments/assets/86666d82-45d1-4f5f-82b2-43fdeb889c46" />
+
 
 
 **Services:**
