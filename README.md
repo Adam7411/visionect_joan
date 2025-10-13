@@ -30,7 +30,10 @@ With extensive services, you can create advanced automations, such as displaying
 - **Interactivity:** Add a "back" button to temporary views or make the entire screen clickable for an easy return to your main menu.
 - **Power Management:** Maximize battery life with services to put the device to sleep and wake it up as part of your automations.
 - **Live View:** A built-in `camera` entity allows you to see what’s currently displayed on the tablet directly from the Home Assistant interface.
-
+- **Bit Depth:** Sets the number of shades of gray. 1-bit is only black and white (faster), 4-bit is 16 shades (better quality).
+- **Dither method:** Improves image quality by creating the illusion of more shades. Smoothes the transitions between colors.
+- **Clear cache:** Deletes stored page data (e.g. images). Use this feature if your screen displays outdated content
+- 
 ### Available Entities and Services
 
 **Sensors and Entities:**
