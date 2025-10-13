@@ -41,7 +41,8 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje, np. w
 - **Nazwa urządzenia (`text`):** Zmieniaj nazwę tabletu bezpośrednio z HA.
 - **Interwał odświeżania (`number`):** Dostosuj, jak często tablet ma odświeżać zawartość.
 - Oraz wiele innych: temperatura, siła sygnału Wi-Fi, napięcie baterii, czas pracy, zajęte miejsce, skonfigurowany URL i czas ostatniej aktywności.
-<img width="921" height="812" alt="joan" src="https://github.com/user-attachments/assets/8b2dd9ab-4abb-4f64-9663-a3e24dccb8cf" />
+<img width="596" height="829" alt="1" src="https://github.com/user-attachments/assets/d55340c3-3058-41b4-b8a4-46cf81cc4040" />
+
 
 
 **Usługi:**
