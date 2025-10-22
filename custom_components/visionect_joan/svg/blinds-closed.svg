@@ -1,5 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20,19V3H4V19H2V21H22V19H20M18,5V19H6V5H18Z" /></svg>```
-
-**Plik: `blinds-open.svg`**
-```xml
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 19V3H4V19H2V21H22V19H20M18 5H6V7H18V5M18 9H6V11H18V9M18 13H6V15H18V13M18 17H6V19H18V17Z" /></svg>
