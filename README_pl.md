@@ -55,6 +55,7 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje, np. p
 
 <img width="663" height="987" alt="1" src="https://github.com/user-attachments/assets/03f7ec1a-784d-4400-93e1-add56af0bc49" />
 
+<img width="561" height="705" alt="bac" src="https://github.com/user-attachments/assets/c7d2f579-759e-48dd-8046-5b0606f5de9e" />
 
 **Usługi:**
 - `visionect_joan.set_url`: wyświetl dowolny URL lub nazwę zapisanego widoku (predefined).
