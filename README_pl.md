@@ -53,7 +53,8 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje, np. p
 - Czyszczenie cache: usuwa zapisaną zawartość (np. obrazy) przy problemach ze starymi treściami.
 - I inne: temperatura, siła sygnału Wi‑Fi, napięcie baterii, czas pracy, zajętość pamięci, skonfigurowany URL, ostatnio widziany itp.
 
-<img width="596" height="829" alt="Przykładowe encje integracji" src="https://github.com/user-attachments/assets/86666d82-45d1-4f5f-82b2-43fdeb889c46" />
+<img width="663" height="987" alt="1" src="https://github.com/user-attachments/assets/03f7ec1a-784d-4400-93e1-add56af0bc49" />
+
 
 **Usługi:**
 - `visionect_joan.set_url`: wyświetl dowolny URL lub nazwę zapisanego widoku (predefined).
