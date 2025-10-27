@@ -33,6 +33,7 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje, np. p
 - Zarządzanie energią: usługi usypiania i wybudzania urządzenia pomagają wydłużyć czas pracy na baterii.
 - Podgląd na żywo: wbudowana encja `camera` pozwala podejrzeć aktualny obraz wyświetlany na tablecie.
 - Łatwiejsza konfiguracja widoków i opcji: wszystko ustawisz w interfejsie Home Assistant. Konfiguracja przez `configuration.yaml` nie jest już używana.
+<img width="838" height="566" alt="bac2" src="https://github.com/user-attachments/assets/3d86ce11-44b9-4a65-aa2d-9c4379b77fd3" />
 
 ### Dostępne encje i usługi
 
