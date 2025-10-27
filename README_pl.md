@@ -4,11 +4,6 @@
 </div>
 
 
-<!-- README.md -->
-<div align="right">
-<a href="README_en.md">English</a> | <a href="README.md">Polski</a>
-</div>
-
 <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Adam7411&repository=visionect_joan&category=integration" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Otwórz swoją instancję Home Assistant i przejdź do repozytorium w HACS." /></a>
 
 # Visionect Joan dla Home Assistant
