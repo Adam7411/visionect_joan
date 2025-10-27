@@ -78,11 +78,12 @@ Integracja obsługuje szablony Jinja2. Możesz dynamicznie tworzyć treści m.in
 
 - Przycisk akcji (webhook) — umożliwia dodanie interaktywnych przycisków „Akcja” (→) oraz drugiego przycisku (✔). Po naciśnięciu wysyłane jest żądanie POST do webhooka w Home Assistant, co pozwala wyzwalać automatyzacje (np. włącz światło, zmień scenę) bezpośrednio z ekranu e‑ink.
 - Pasek przycisków znajduje się na dole ekranu, co ułatwia obsługę.
+- Przycisk „Wstecz” — powrót do głównego panelu (np. AppDaemon). Główne menu ustawisz w opcjach integracji (Konfiguruj).
 
 <img width="1237" height="639" alt="image" src="https://github.com/user-attachments/assets/c1246088-77e0-4be7-8a51-ac49b9d8cd46" />
 
 
-- Przycisk „Wstecz” — powrót do głównego panelu (np. AppDaemon). Główne menu ustawisz w opcjach integracji (Konfiguruj).
+
 
 ---
 
