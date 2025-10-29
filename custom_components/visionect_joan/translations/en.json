@@ -1,0 +1,123 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Visionect Joan Server",
+        "description": "Please enter the connection details for your Visionect server. You can use either Username/Password or API Key/Secret.",
+        "data": {
+          "host": "Server Address (IP:8081)",
+          "username": "Username",
+          "password": "Password",
+          "api_key": "API Key",
+          "api_secret": "API Secret"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Authentication failed. Please check your credentials.",
+      "unknown": "An unknown error occurred."
+    },
+    "abort": {
+      "already_configured": "This Visionect server is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "menu": {
+        "title": "Visionect Joan – Views",
+        "description": "Add, remove or edit predefined views used by selectors."
+      },
+      "add_view": {
+        "title": "Add view",
+        "data": {
+          "view_name": "View name",
+          "view_url": "View URL"
+        }
+      },
+      "delete_view": {
+        "title": "Remove view",
+        "data": {
+          "view_to_delete": "View to remove"
+        }
+      },
+      "edit_view": {
+        "title": "Select view to edit",
+        "data": {
+          "view_to_edit": "View to edit"
+        }
+      },
+      "edit_view_form": {
+        "title": "Edit view",
+        "data": {
+          "new_view_name": "New name",
+          "new_view_url": "New URL"
+        }
+      }
+    },
+    "error": {
+      "invalid_format": "Failed to save options. Please check the views format.",
+      "name_exists": "A view with this name already exists.",
+      "invalid_data": "Please fill in both name and URL."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "state": { "name": "State" },
+      "battery": { "name": "Battery" },
+      "temperature": { "name": "Temperature" },
+      "rssi": { "name": "Wi-Fi Signal Strength" },
+      "uptime": { "name": "Uptime" },
+      "storage_free": { "name": "Free Storage" },
+      "battery_voltage": { "name": "Battery Voltage" },
+      "uuid": { "name": "UUID" },
+      "display_rotation": { "name": "Orientation" },
+      "application_version": { "name": "Application Version" },
+      "storage_total": { "name": "Total Storage" },
+      "storage_used": { "name": "Used Storage" },
+      "last_seen": { "name": "Last Seen" },
+      "configured_url": { "name": "URL" },
+      "connect_reason": { "name": "Last Connect Reason" },
+      "error_code": { "name": "Last Error Code" }
+    },
+    "binary_sensor": {
+      "is_charging": { "name": "Charging" }
+    },
+    "number": {
+      "reload_interval": { "name": "Screen Refresh" }
+    },
+    "text": {
+      "device_name": { "name": "Device Name" }
+    },
+    "button": {
+      "force_refresh": { "name": "Force Refresh" },
+      "reboot_device": { "name": "Reboot Device" },
+      "clear_web_cache": { "name": "Clear Web Cache" }
+    },
+    "camera": {
+      "live_view": { "name": "Live View" }
+    },
+    "select": {
+      "view_select": {
+        "name": "Choose view",
+        "state": {
+          "unconfigured_state": "Not configured",
+          "[Configuration]": "Configuration"
+        }
+      },
+      "dithering_select": { "name": "Dithering Method" },
+      "encoding_select": {
+        "name": "Bit Depth",
+        "state": {
+          "1": "1-bit (Black & White)",
+          "4": "4-bit (Greyscale)"
+        }
+      },
+      "back_view_select": {
+        "name": "Back button target",
+        "state": {
+          "[Configuration]": "Configuration"
+        }
+      }
+    }
+  }
+}
