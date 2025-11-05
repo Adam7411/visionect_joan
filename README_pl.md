@@ -89,7 +89,8 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
   <details>
   <summary>Pokaż zrzut ekranu</summary>
 
-  <img width="1920" height="2252" alt="image" src="https://github.com/user-attachments/assets/d3b785db-9725-4f83-90d0-6b2458336fca" />
+  <img width="1225" height="2066" alt="image" src="https://github.com/user-attachments/assets/9912da53-becf-4932-ab7e-7f0a17a681d7" />
+
 
 </details>
 
