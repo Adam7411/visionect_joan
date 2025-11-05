@@ -552,7 +552,7 @@ Screens you can display on a Joan 6 tablet:
 - This is not an official Visionect or Home Assistant integration.
 - Tested with **Joan 6**; other models have not been verified.
 - AI was used for faster development.
-- [Want to buy a new Joan 6?](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink)
+
 - [Guide: Visionect Software Suite - Installation](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
 
 ---
