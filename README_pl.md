@@ -76,9 +76,9 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
   - Wskazówka: nazwy widoków dopasowywane są bez rozróżniania wielkości liter. Dodawaj/edytuj widoki w: Ustawienia → Urządzenia i usługi → Visionect Joan → Konfiguruj.
 
 <details>
-  <summary>Pokaż zrzut ekranu</summary>   
-  
-<img width="1231" height="575" alt="image" src="https://github.com/user-attachments/assets/c38501ac-9328-449f-897f-22c3c6ac4aad" />
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1220" height="595" alt="image" src="https://github.com/user-attachments/assets/bfdf8101-1b45-45e0-ab1a-46c7ab79d96b" />
 </details>
 
 - `visionect_joan.send_text`
