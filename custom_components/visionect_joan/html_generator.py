@@ -303,7 +303,7 @@ async def _add_interactive_layer_to_url(
              interactive_scripts += "function navigate(e,u){try{if(e)e.stopPropagation();window.location.href=u;}catch(err){}}"
         
         if js_needs_webhook:
-            interactive_scripts += "function triggerWebhook(e,u){try{if(e)e.stopPropagation();fetch(u,{method:'POST',body:'{}'}).catch(function(err){});}catch(err){}}"
+            interactive_scripts += "function triggerWebhook(e,u){try{if(e)e.stopPropagation();fetch(u,{method:'POST',body:'{}'}).catch(function(){{}});}catch(err){}}"
 
         overlay_html = ""
         if click_anywhere_to_action and webhook_url_1:
@@ -519,7 +519,8 @@ async def create_todo_list_url(
                     headers: {{ 'Content-Type': 'application/json' }},
                     body: JSON.stringify(data)
                 }}).catch(function(){{}});
-            }} catch (e) {{}}
+            }} catch (e) {{
+            }}
         }}
 
         function toggleItem(el) {{
@@ -609,7 +610,7 @@ async def create_rss_feed_url(hass, title: str, items: list, lang: str, small_sc
 
     li_html_list: list[str] = []
     if not items:
-        li_html_list.append(f"<li style='text-align:center; color:#888;'>{error_text}</li>")
+        li_html_list.append(f"<li style='text-align:center;color:#888;'>{error_text}</li>")
     else:
         for item in items:
             summary = html.escape(item.get('title', 'Brak tytułu' if lang == 'pl' else 'No title'))
@@ -621,7 +622,7 @@ async def create_rss_feed_url(hass, title: str, items: list, lang: str, small_sc
     for i in range(0, len(li_html_list), per_page):
         pages.append(li_html_list[i:i+per_page])
     if not pages:
-        pages = [[f"<li style='text-align:center; color:#888;'>{error_text}</li>"]]
+        pages = [[f"<li style='text-align:center;color:#888;'>{error_text}</li>"]]
 
     total_pages = len(pages)
 
@@ -832,7 +833,7 @@ def create_calendar_list_view_html(events: list, style: str = "modern", add_back
         events_by_day[event_date].append(event)
     
     day_html_blocks = []
-    for event_date, day_events in events_by_day.items():
+    for event_date, day_events in events_by_day:
         day_html = f'<div class="date-header">{_format_long_date(event_date, lang)}</div>'
         for event in day_events:
             day_html += _generate_event_html(event, no_title_text)
@@ -1432,7 +1433,10 @@ def _generate_graph_image(
 
 async def create_keypad_url(hass, title: str, webhook_url: str) -> str:
     """Generates a data URL for a full-screen numeric keypad view."""
-    
+    import urllib.parse
+    import html
+    import json
+
     icon_backspace = await async_get_icon_as_base64(hass, "backspace-outline.svg")
     icon_enter = await async_get_icon_as_base64(hass, "keyboard-return.svg")
 
@@ -1464,7 +1468,7 @@ async def create_keypad_url(hass, title: str, webhook_url: str) -> str:
             flex-shrink: 0;
         }}
         .keypad-grid {{
-            flex-grow: 1; /* Make grid take up remaining space */
+            flex-grow: 1;
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(4, 1fr);
@@ -1503,7 +1507,7 @@ async def create_keypad_url(hass, title: str, webhook_url: str) -> str:
         </div>
     </div>
     """
-    
+
     script_js = f"""
         const webhook = {json.dumps(webhook_url)};
         let pin = '';
