@@ -12,7 +12,9 @@
 <p align="center">
 
 <br>
-<img width="35%" alt="Wykres temperatury" src="https://github.com/user-attachments/assets/27b23199-e4c1-4f69-8c45-2e06cd290f3a" />
+ Visionect Joan 6
+<img width="421" height="328" alt="image" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
+
 </p>
 
 Integracja `visionect_joan` zmienia energooszczędny tablet e‑ink **Joan 6** w potężne, w pełni konfigurowalne centrum informacji dla Twojego inteligentnego domu.
