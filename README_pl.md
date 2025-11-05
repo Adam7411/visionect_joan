@@ -214,20 +214,34 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 - `visionect_joan.send_qr_code`
   - Generuje kod QR (np. gościnne Wi‑Fi) z opcjonalnym podpisem (pozycja nad/po QR).
     
-  <details>
+<details>
   <summary>Pokaż zrzut ekranu</summary>
 
-  <img width="1223" height="1765" alt="image" src="https://github.com/user-attachments/assets/83c4c7d9-6bc8-41e8-98f3-557cb9b09301" />
+  <img width="1223" height="1765" alt="image" src="https://github.com/user-attachments/assets/a55360c9-9f17-4b81-baf9-b990692bc2a0" />
 
 </details>
 
 - `visionect_joan.start_slideshow` ➌
   - Odtwarza listę widoków (nazwy predefined lub pełne URL) w pętli, z czasem wyświetlania slajdu.
   - Wskazówka: krótki interwał = częstsze odświeżenia e‑ink i większe zużycie baterii. Zalecane ≥ 30 s.
+ 
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1228" height="1457" alt="image" src="https://github.com/user-attachments/assets/106d5ae9-8d8a-4b3f-8f5e-206aab76e0c8" />
+
+</details>
 
 - `visionect_joan.send_keypad` ➍
   - Pełnoekranowa klawiatura numeryczna. Wpisany PIN wysyłany jest POST‑em do wskazanego webhooka w HA (`trigger.json.pin`).
   - Wskazówka: idealne do prostego rozbrajania alarmu, otwierania furtki itp.
+
+  <details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1220" height="632" alt="image" src="https://github.com/user-attachments/assets/5df2b9d9-ae6e-4a60-9f9f-c787f7658135" />
+
+</details>
 
 ### Parametry renderingu i zarządzanie
 
