@@ -80,19 +80,19 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 
   <img width="1220" height="595" alt="image" src="https://github.com/user-attachments/assets/bfdf8101-1b45-45e0-ab1a-46c7ab79d96b" />
 </details>
-
+---
 
 - `visionect_joan.send_text`
   - Wysyła sformatowany tekst (obsługuje Jinja2), opcjonalnie z obrazem i różnymi układami (text only, text + image).
   - Wskazówki: używaj czcionek o dobrej czytelności na e‑ink; dla obrazów steruj `image_zoom` i `image_rotation`.
  
-  <details>
+<details>
   <summary>Pokaż zrzut ekranu</summary>
 
   <img width="1225" height="2066" alt="image" src="https://github.com/user-attachments/assets/9912da53-becf-4932-ab7e-7f0a17a681d7" />
 
-
 </details>
+---
 
 - `visionect_joan.send_image_url` ➊
   - Wyświetla obraz z podanego URL (obsługa m.in. PNG/JPG/SVG/WebP).
