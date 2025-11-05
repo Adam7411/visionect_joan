@@ -263,7 +263,80 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 
 - `visionect_joan.send_keypad` ➍
   - Pełnoekranowa klawiatura numeryczna. Wpisany PIN wysyłany jest POST‑em do wskazanego webhooka w HA (`trigger.json.pin`).
-  - Wskazówka: idealne do prostego rozbrajania alarmu, otwierania furtki itp.
+  - Wskazówka: potrzebna automatyzacja do rozpoznania pinu
+
+  <details>
+  <summary><strong>Przykład: Automatyzacja PIN (webhook + keypad) dla Visionect Joan</strong></summary>
+
+Ten przykład pokazuje, jak użyć usługi `visionect_joan.send_keypad` do wprowadzania PIN-u na ekranie Joan i sprawdzania go w automatyzacji z wyzwalaczem webhook. Jeśli PIN jest poprawny — urządzenie przechodzi do wskazanego widoku; jeśli błędny — pojawia się komunikat i klawiatura wraca po chwili.
+
+— Wymagania:
+- Zainstalowana integracja Visionect Joan oraz dodane urządzenie (Joan 6).
+- Znany `device_id` Twojego tabletu (Ustawienia → Urządzenia i usługi → urządzenie → trzy kropki → Kopiuj identyfikator urządzenia).
+- Zdefiniowany widok w opcjach integracji (albo pełny URL, jeśli wolisz).
+
+— Jak uruchomić keypad po raz pierwszy:
+- Jednorazowo wywołaj usługę: `visionect_joan.send_keypad` z:
+  - device_id: Twój tablet
+  - title: np. “Wprowadź PIN”
+  - action_webhook_id: np. “joan_pin” (musi się zgadzać z webhookiem w automatyzacji)
+
+— YAML automatyzacji (skopiuj do edytora YAML automatyzacji w HA i podmień wartości w komentarzach):
+
+```
+alias: Automatyzacja kodu PIN dla urządzenia Visionect Joan
+mode: single
+
+trigger:
+  - platform: webhook
+    # USTAW SWÓJ WEBHOOK ID (musi być taki sam jak w visionect_joan.send_keypad → action_webhook_id):
+    webhook_id: joan_pin
+
+action:
+  - choose:
+      # Warunek: poprawny PIN?
+      - conditions:
+          - condition: template
+            # USTAW SWÓJ PIN:
+            value_template: "{{ trigger.json.pin == '321' }}"
+        sequence:
+          # SUKCES: przejdź do widoku (nazwa predefiniowanego widoku lub pełny URL)
+          - action: visionect_joan.set_url
+            target:
+              # USTAW SWOJE DEVICE_ID:
+              device_id: 266a72218733bb9a056aff49bf6f8e2d
+            data:
+              # Zmień na nazwę widoku (np. KuchniaGóra) lub wpisz pełny URL
+              url: KuchniaGóra
+    default:
+      # BŁĘDNY PIN: pokaż komunikat
+      - action: visionect_joan.send_text
+        target:
+          device_id: 266a72218733bb9a056aff49bf6f8e2d
+        data:
+          message: "Błędny Kod!"
+          text_size: 48
+          # (opcjonalnie) możesz dodać nakładkę z przyciskiem Wstecz/akcją:
+          # add_back_button: true
+          # back_button_url: "NazwaWidokuLubURL"
+      # krótka pauza
+      - delay: "00:00:03"
+      # Pokaż keypad ponownie (ten sam webhook_id co w triggerze)
+      - action: visionect_joan.send_keypad
+        target:
+          device_id: 266a72218733bb9a056aff49bf6f8e2d
+        data:
+          title: "Spróbuj ponownie"
+          action_webhook_id: joan_pin
+```
+
+— Wskazówki i bezpieczeństwo:
+- Webhook nie wymaga tokenu — najlepiej używać w sieci lokalnej lub za reverse proxy/ACL.
+- PIN możesz przechowywać w helperze (`input_text`) lub jako sekret i porównywać w szablonie.
+- Zamiast nazwy widoku w `data.url` możesz wpisać pełny URL (np. panel AppDaemon).
+
+</details>
+ 
 
 <details>
   <summary>Pokaż zrzut ekranu</summary>
