@@ -18,9 +18,9 @@
 <img width="421" height="328" alt="image" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
 
 ***
-
+👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇
 <details>
-  <summary>Pokaż zrzut ekranu</summary>  👈
+  <summary>Pokaż zrzut ekranu</summary> 
   
   <img width="758" height="1024" alt="joan" src="https://github.com/user-attachments/assets/fd78c164-6691-477e-84e1-e47a1f70a8cc" />
   <img width="758" height="1024" alt="rss" src="https://github.com/user-attachments/assets/f5a1f528-8201-47a0-9f7a-15b435f9152c" />
