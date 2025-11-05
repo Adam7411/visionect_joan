@@ -17,6 +17,27 @@
  
 <img width="421" height="328" alt="image" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
 
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="758" height="1024" alt="rss" src="https://github.com/user-attachments/assets/f5a1f528-8201-47a0-9f7a-15b435f9152c" />
+  <img width="758" height="1024" alt="pog" src="https://github.com/user-attachments/assets/2aca216e-e0d2-454e-b089-ee1eb04e947b" />
+  <img width="758" height="1024" alt="pin" src="https://github.com/user-attachments/assets/c765b34f-ed4e-48d7-a59d-ff8ecd67aa7c" />
+  <img width="758" height="1024" alt="kalenda" src="https://github.com/user-attachments/assets/a5f3b53e-1b33-414b-8173-3fac794cbd46" />
+  <img width="758" height="1024" alt="cam" src="https://github.com/user-attachments/assets/9c087661-69b0-463b-937e-19b2567cab6b" />
+  <img width="758" height="1024" alt="qr5, 12_49_37" src="https://github.com/user-attachments/assets/f3c19b37-0dad-4bd9-89ac-271c016d4211" />
+  <img width="758" height="1024" alt="graf0_57" src="https://github.com/user-attachments/assets/7819468a-c33b-409f-9845-2256def6a134" />
+  <img width="758" height="1024" alt="txt5" src="https://github.com/user-attachments/assets/0d735375-caf9-4e8c-a4c8-6b5008a88f9b" />
+  <img width="758" height="1024" alt="pog23" src="https://github.com/user-attachments/assets/6267ae6c-0263-4fb0-8189-c638cc5d685d" />
+  <img width="758" height="1024" alt="sta2" src="https://github.com/user-attachments/assets/8e35f996-26a3-4e4f-9951-1938530a9028" />
+  <img width="758" height="1024" alt="ener56_34" src="https://github.com/user-attachments/assets/acb78d0e-ca38-451e-8fc2-f64f479d1c78" />
+  <img width="758" height="1024" alt="_58_20" src="https://github.com/user-attachments/assets/3bd6d185-33ae-4407-98c5-9b70821c27b9" />
+  <img width="758" height="1024" alt="bat0" src="https://github.com/user-attachments/assets/fe7eb843-a6f1-4ef7-a3a4-e006b93c528f" />
+  <img width="758" height="1024" alt="joan" src="https://github.com/user-attachments/assets/fd78c164-6691-477e-84e1-e47a1f70a8cc" />
+  
+</details>
+
+
 </p>
 
 Integracja `visionect_joan` zmienia energooszczędny tablet e‑ink **Joan 6** w potężne, w pełni konfigurowalne centrum informacji dla Twojego inteligentnego domu.
