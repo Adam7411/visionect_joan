@@ -59,6 +59,14 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje: po po
 - Zarządzanie energią: usypianie/wybudzanie urządzenia, możliwość ustawienia interwału odświeżania sesji.
 - Podgląd na żywo: encja `camera` zwraca aktualny obraz z ekranu.
 - Konfiguracja w UI: widoki predefiniowane i adres głównego menu ustawiasz w opcjach integracji (bez YAML).
+  
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="789" height="493" alt="Bez tytułu" src="https://github.com/user-attachments/assets/6a26c64b-e250-46e7-bc34-3ba0331e701a" />
+
+</details>
+
 
 ***
 
