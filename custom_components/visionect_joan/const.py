@@ -67,12 +67,11 @@ SERVICE_CLEAR_DISPLAY = "clear_display"
 SERVICE_SLEEP_DEVICE = "sleep_device"
 SERVICE_WAKE_DEVICE = "wake_device"
 SERVICE_SEND_QR_CODE = "send_qr_code"
-SERVICE_SEND_KEYPAD = "send_keypad" # NOWA USŁUGA
-SERVICE_SEND_KEYPAD = "send_keypad
+SERVICE_SEND_KEYPAD = "send_keypad"  # poprawny zapis
+
 # Image format validation
 SUPPORTED_IMAGE_FORMATS = ['png', 'jpg', 'jpeg', 'gif', 'svg', 'webp']
 
 # Network retry configuration
 NETWORK_RETRY_DELAY = 60  # seconds
-
 MAX_RETRY_ATTEMPTS = 3
