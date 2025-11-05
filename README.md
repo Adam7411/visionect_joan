@@ -268,14 +268,13 @@ Below is the full list of services available in the integration (many can be com
 - `visionect_joan.start_slideshow`
   - Plays a list of views (predefined names or full local URLs) in a loop with a per‑slide display time.
   - Tip: shorter intervals = more frequent e‑ink refreshes and higher battery use. 
-Displays a list of views (predefined names or full URLs) in a loop with a specified time per slide. Important: This slideshow renders pages inside an iframe. Many external websites (e.g., google.com, wp.pl) block embedding via X-Frame-Options/Content-Security-Policy and will NOT display. Use only local addresses (Home Assistant/AppDaemon/local files) or predefined views configured in the Visionect Joan integration for reliable results.
+Displays a list of views (predefined names or full URLs) in a loop with a specified time per slide. Important: This slideshow renders pages inside an iframe. Many external websites (e.g., google.com, home-assistant.io) block embedding via X-Frame-Options/Content-Security-Policy and will NOT display. Use only local addresses (Home Assistant/AppDaemon/local files) or predefined views configured in the Visionect Joan integration for reliable results.
 
 <details>
  
   <summary>Show screenshot</summary>
 
-  <img width="611" height="729" alt="510095682-106d5ae9-8d8a-4b3f-8f5e-206aab76e0c8" src="https://github.com/user-attachments/assets/39a48891-942a-41ad-9dd6-98bb5f990464" />
-
+  <img width="606" height="729" alt="510095682-106d5ae9-8d8a-4b3f-8f5e-206aab76e0c8" src="https://github.com/user-attachments/assets/907859fd-2ecd-43a2-a56f-2cd3a278ad69" />
 
 </details>
 
