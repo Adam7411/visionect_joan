@@ -221,6 +221,8 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 
 </details>
 
+***
+
 - `visionect_joan.start_slideshow` ➌
   - Odtwarza listę widoków (nazwy predefined lub pełne URL) w pętli, z czasem wyświetlania slajdu.
   - Wskazówka: krótki interwał = częstsze odświeżenia e‑ink i większe zużycie baterii. Zalecane ≥ 30 s.
@@ -232,6 +234,8 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 
 </details>
 
+***
+
 - `visionect_joan.send_keypad` ➍
   - Pełnoekranowa klawiatura numeryczna. Wpisany PIN wysyłany jest POST‑em do wskazanego webhooka w HA (`trigger.json.pin`).
   - Wskazówka: idealne do prostego rozbrajania alarmu, otwierania furtki itp.
@@ -242,6 +246,8 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
   <img width="1220" height="632" alt="image" src="https://github.com/user-attachments/assets/5df2b9d9-ae6e-4a60-9f9f-c787f7658135" />
 
 </details>
+
+***
 
 ### Parametry renderingu i zarządzanie
 
