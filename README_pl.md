@@ -98,10 +98,29 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 
 - `visionect_joan.send_image_url` ➊
   - Wyświetla obraz z podanego URL (obsługa m.in. PNG/JPG/SVG/WebP).
-  - Wskazówki: dla obrazów lokalnych użyj `http://<HA_IP>:8123/local/...`; zadbaj o dostępność z serwera Visionect (CORS/certyfikat).
+  - Wskazówki: dla obrazów lokalnych użyj `http://<HA_IP>:8123/local/...`;
+ 
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1234" height="1448" alt="image" src="https://github.com/user-attachments/assets/9da6769f-668a-4adb-9edf-b5fdc5851d55" />
+
+
+</details>
+
+***
 
 - `visionect_joan.send_camera_snapshot`
   - Tworzy snapshot z encji `camera` i wyświetla go na ekranie (z podpisem i rotacją obrazu).
+ 
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1223" height="1472" alt="image" src="https://github.com/user-attachments/assets/6cec8748-a586-46c2-8f2b-2bcf25237e08" />
+
+</details>
+
+***
 
 - `visionect_joan.send_status_panel`
   - Panel statusów dowolnych encji: ikony + nazwy + wartości (z tłumaczeniem stanów on/off/open/…).
