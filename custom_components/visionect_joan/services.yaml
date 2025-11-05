@@ -1426,7 +1426,7 @@ send_keypad:
         text:
     action_webhook_id:
       name: "Webhook ID"
-      description: "The webhook ID to which the entered PIN will be sent. Create an automation with a Webhook trigger using this ID; the payload is JSON: {\"pin\": \"1234\"}."
+      description: "The webhook ID to which the entered PIN will be sent. Create an automation with a Webhook trigger using this ID"
       required: true
       example: "joan_keypad_webhook"
       selector:
