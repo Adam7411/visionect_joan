@@ -1222,6 +1222,7 @@ html,body{{margin:0;height:100%;background:#fff}}
     hass.services.async_register(DOMAIN, SERVICE_SEND_STATUS_PANEL, handle_send_status_panel, schema=SERVICE_SEND_STATUS_PANEL_SCHEMA)
     hass.services.async_register(DOMAIN, SERVICE_SEND_SENSOR_GRAPH, handle_send_sensor_graph, schema=SERVICE_SEND_SENSOR_GRAPH_SCHEMA)
     hass.services.async_register(DOMAIN, SERVICE_SEND_RSS_FEED, handle_send_rss_feed, schema=SERVICE_SEND_RSS_FEED_SCHEMA)
+    hass.services.async_register(DOMAIN, SERVICE_SEND_KEYPAD, handle_send_keypad, schema=SERVICE_SEND_KEYPAD_SCHEMA)
 
     # NEW services
     hass.services.async_register(DOMAIN, SERVICE_CLEAR_WEB_CACHE, handle_clear_web_cache, schema=SERVICE_CLEAR_WEB_CACHE_SCHEMA)
@@ -1253,4 +1254,5 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER.info("Visionect Joan integration successfully unloaded.")
     else:
         _LOGGER.error("Error while unloading Visionect Joan integration.")
+
     return unload_ok
