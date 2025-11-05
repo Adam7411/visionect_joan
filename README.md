@@ -265,8 +265,8 @@ Below is the full list of services available in the integration (many can be com
 
 ***
 
-- `visionect_joan.start_slideshow` ➌
-  - Plays a list of views (predefined names or full URLs) in a loop with a per‑slide display time.
+- `visionect_joan.start_slideshow`
+  - Plays a list of views (predefined names or full local URLs) in a loop with a per‑slide display time.
   - Tip: shorter intervals = more frequent e‑ink refreshes and higher battery use. Recommended ≥ 30 s.
  
 <details>
