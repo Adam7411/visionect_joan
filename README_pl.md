@@ -318,19 +318,15 @@ Wskazówki:
 
 ## Konfiguracja
 
-Po restarcie:
-1. Ustawienia → Urządzenia i usługi → + Dodaj integrację → „Visionect Joan”.
-2. Wprowadź dane do Visionect Software Suite:
-   - Host: adres serwera VSS (zwykle `192.168.x.x:8081` lub host dodatku),
-   - Username/Password (np. `admin` / własne hasło),
-   - API Key i Secret (Visionect → Users → Add new API key).
-3. W opcjach integracji (Konfiguruj) dodaj:
-   - Widoki (nazwa + URL) – będą dostępne w selektorze „Choose view” oraz w usługach przez `predefined_url`,
-   - Globalny „Main menu URL”.
 
-Wskazówki:
-- Obrazy lokalne – umieszczaj w `/config/www` i odwołuj jako `http://<HA_IP>:8123/local/plik.png`.
-- Jeżeli używasz automatyzacji z webhookami – sprawdź w Podglądzie zdarzeń czy webhook przychodzi oraz czy `trigger.json` zawiera oczekiwane pola (np. `pin`).
+1. Przejdź do `Ustawienia → Urządzenia i usługi`.
+2. Kliknij **„+ Dodaj integrację”**.
+3. Wyszukaj **„Visionect Joan”** i rozpocznij konfigurację.
+4. Wprowadź dane do Visionect Software Suite: [Instalacja Visionect Software Suite](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant_EN)
+   - Adres serwera (np. `192.168.x.x:8081`)(adres Home Assistant)
+   - Nazwa użytkownika (`admin`)
+   - Hasło (`należy sutawić swoje`)
+   - API Key oraz API Secret (dodasz w Visionect Software Suite → Users → Add new API key)
 
 ---
 
@@ -338,8 +334,6 @@ Wskazówki:
 
 Ekrany, które możesz wyświetlić na tablecie Joan 6:
 
-<img width="1920" height="848" alt="Panel AppDaemon na ekranie Joan 6" src="https://github.com/user-attachments/assets/9dce230b-c149-49df-b1be-2802cf761cbe" />
-<img width="1920" height="1578" alt="AppDaemon — motyw ciemny" src="https://github.com/user-attachments/assets/c3e7cbff-4e4-4172-93e8-c688ca70a7d3" />
 
 <details>
   <summary>Kliknij, aby zobaczyć więcej zrzutów ekranu</summary>
@@ -357,14 +351,6 @@ Ekrany, które możesz wyświetlić na tablecie Joan 6:
 
 ---
 
-## Wskazówki i dobre praktyki
-
-- Slideshow: im krótszy „seconds_per_slide”, tym częściej odświeża się ekran e‑ink (większe zużycie baterii).
-- „Klik anywhere” i przyciski akcji: w środowisku rozproszonym użyj adresów, które Visionect „widzi” (DNS/SSL).
-- To‑Do (Shopping List): aby odhaczanie pozycji działało naprawdę (a nie tylko wizualnie), skonfiguruj webhook w HA i podaj `action_webhook_id` – integracja wyśle JSON z `uid` i nowym `status`.
-- Bit Depth i Dithering: w razie wątpliwości użyj 4 bpp i „floyd‑steinberg” do zdjęć/wykresów; 1 bpp i „none” do maksymalnego kontrastu tekstu.
-
----
 
 ## Uwagi
 
