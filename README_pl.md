@@ -3,7 +3,6 @@
 <a href="README.md">English</a> | <a href="README_pl.md">Polski</a>
 </div>
 
-
 <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Adam7411&repository=visionect_joan&category=integration" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Otwórz swoją instancję Home Assistant i przejdź do repozytorium w HACS." /></a>
 
 # Visionect Joan dla Home Assistant
@@ -23,64 +22,102 @@ Integracja `visionect_joan` zmienia energooszczędny tablet e‑ink **Joan 6** w
 
 Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje, np. po powrocie do domu pokazać panel energii, po wejściu do kuchni wyświetlić listę zakupów, a przy wykryciu ruchu wysłać zdjęcie z kamery i automatycznie wrócić do głównego pulpitu.
 
+---
+
+## Co nowego
+
+- Nowa usługa: send_menu — szybkie „menu główne” z kafelkami (przyciskami), które otwierają zapisane widoki lub podane URL‑e. Wspiera small_screen, liczbę kolumn, zegar i nakładkę (Back/webhook).
+- Nowa usługa: set_reload_timeout — ustawiasz czas automatycznego przeładowania sesji (0–86400 s) bezpośrednio z HA.
+- Nowa usługa: stop_slideshow — zatrzymuje pokaz slajdów i wraca do wskazanego/konfigurowanego ekranu.
+- Diagnostyka (Diagnostics): przycisk „Pobierz diagnostykę” w UI generuje bezpieczny zrzut danych o urządzeniach i konfiguracji (wygodne przy zgłaszaniu problemów).
+- Poprawiona stabilność usług interaktywnych: brak błędów przy braku opcjonalnych parametrów (np. action_webhook_id).
+- Lepsza obsługa adresów wewnętrznych HA przy obrazach i webhookach (preferowane Internal URL, jeśli ustawione).
+
+---
+
 ## Najważniejsze funkcje
 
-- Pełna kontrola ekranu: wyślij dowolny adres WWW, lokalne panele (np. z AppDaemon) lub pojedyncze obrazy.
+- Pełna kontrola ekranu: wyślij dowolny adres WWW, lokalne panele (np. AppDaemon) lub pojedyncze obrazy.
 - Dynamicznie generowane widoki: integracja tworzy zoptymalizowane pod e‑ink panele pogody, kalendarza, zadań (to‑do), energii oraz statusów encji.
 - Interaktywność: dodaj przycisk „Wstecz” do widoków tymczasowych lub ustaw, aby cały ekran był klikalny i wracał do głównego menu.
 - Dwa przyciski akcji (webhook): prawy (→) i środkowy (✔) mogą wywoływać różne automatyzacje w Home Assistant.
 - Pasek przycisków przeniesiony na dół ekranu: wygodniejszy dostęp do „Wstecz” (←), „Akcja” (→) i przycisku środkowego (✔).
 - Zarządzanie energią: usługi usypiania i wybudzania urządzenia pomagają wydłużyć czas pracy na baterii.
 - Podgląd na żywo: wbudowana encja `camera` pozwala podejrzeć aktualny obraz wyświetlany na tablecie.
-- Łatwiejsza konfiguracja widoków i opcji: wszystko ustawisz w interfejsie Home Assistant. Konfiguracja przez `configuration.yaml` nie jest już używana.
+- Łatwiejsza konfiguracja: widoki, menu główne i opcje ustawisz w interfejsie Home Assistant (Options Flow).
+
 <img width="838" height="566" alt="bac2" src="https://github.com/user-attachments/assets/3d86ce11-44b9-4a65-aa2d-9c4379b77fd3" />
 
-### Dostępne encje i usługi
+---
 
-**Encje i czujniki:**
+## Wymagania
+
+- Visionect Software Suite (serwer zarządzający Joan), np. jako Add-on dla HA lub na osobnej maszynie.
+- Dostęp sieciowy HA ⇄ Visionect (domyślnie port 8081).
+- Zalecane: skonfigurowany Internal URL w Home Assistant (Ustawienia → System → Sieć), aby webhooki i lokalne obrazki były osiągalne z tabletu.
+
+---
+
+## Dostępne encje i usługi
+
+### Encje i czujniki
+
 - Podgląd ekranu (`camera`): aktualny obraz z tabletu.
 - Bateria (`sensor`): poziom naładowania.
 - Status ładowania (`binary_sensor`): czy urządzenie jest podłączone.
-- Status urządzenia (`sensor`): czy tablet jest online.
+- Status urządzenia (`sensor`): online/offline.
 - Nazwa urządzenia (`text`): zmiana nazwy bezpośrednio z HA.
-- Interwał odświeżania (`number`): jak często tablet odświeża zawartość.
-- Głębia bitowa: liczba odcieni szarości (1‑bit = czerń/biel; 4‑bit = 16 odcieni — lepsza jakość obrazu).
-- Metoda ditheringu: poprawa jakości obrazu przez „doszumianie” przejść tonalnych.
-- Czyszczenie cache: usuwa zapisaną zawartość (np. obrazy) przy problemach ze starymi treściami.
-- I inne: temperatura, siła sygnału Wi‑Fi, napięcie baterii, czas pracy, zajętość pamięci, skonfigurowany URL, ostatnio widziany itp.
+- Interwał odświeżania (`number`): `ReloadTimeout` (0–86400 s).
+- Głębia bitowa i dithering (`select`): parametry renderingu sesji.
+- „Back button target” (`select`): domyślne miejsce powrotu dla przycisku Wstecz.
+- Dodatkowe sensory diagnostyczne: temperatura, RSSI, napięcie baterii, uptime, pamięć, skonfigurowany URL (z bezpiecznym skróceniem), ostatnio widziany itp.
 
-<img width="663" height="987" alt="1" src="https://github.com/user-attachments/assets/03f7ec1a-784d-4400-93e1-add56af0bc49" />
+<img width="663" height="987" alt="1" src="https://github.com/user-attachments/assets/03f7eca1-784d-4400-93e1-add56af0bc49" />
 
+### Usługi (skrót)
 
+- Wyświetlanie treści:
+  - `visionect_joan.set_url`: wyświetl dowolny URL lub nazwę zapisanego widoku.
+  - `visionect_joan.send_menu` (nowość): siatka kafelków z widokami/URL‑ami (menu główne).
+  - `visionect_joan.send_text`: sformatowany tekst z opcjonalnym obrazem.
+  - `visionect_joan.send_image_url`: wyświetl obraz z URL (PNG/JPG/SVG/…).
+  - `visionect_joan.send_camera_snapshot`: migawka z wybranej kamery w HA.
+  - `visionect_joan.send_weather`: czytelny panel pogody (różne layouty).
+  - `visionect_joan.send_calendar`: lista wydarzeń lub miesięczna siatka z widokiem dnia.
+  - `visionect_joan.send_energy_panel`: podsumowanie zużycia/produkcji energii.
+  - `visionect_joan.send_status_panel`: panel ze stanami wybranych encji.
+  - `visionect_joan.send_sensor_graph`: wykres historii sensorów.
 
-**Usługi:**
-- `visionect_joan.set_url`: wyświetl dowolny URL lub nazwę zapisanego widoku (predefined).
-- `visionect_joan.send_text`: sformatowany tekst z opcjonalnym obrazem.
-- `visionect_joan.send_camera_snapshot`: migawka z dowolnej kamery w HA.
-- `visionect_joan.send_weather`: czytelny panel pogody (różne layouty).
-- `visionect_joan.send_calendar`: lista wydarzeń lub miesięczna siatka z widokiem dnia.
-- `visionect_joan.send_energy_panel`: podsumowanie zużycia/produkcji energii.
-- `visionect_joan.send_status_panel`: panel ze stanami wybranych encji.
-- `visionect_joan.send_sensor_graph`: wykres historii sensorów, dopasowany do orientacji ekranu.
-- `visionect_joan.send_todo_list`: lista zadań (np. zakupy).
-- `visionect_joan.send_qr_code`: kod QR (np. do gościnnego Wi‑Fi).
-- `visionect_joan.sleep_device` i `wake_device`: uśpij/obudź urządzenie.
-- `visionect_joan.clear_display`, `force_refresh`, `set_display_rotation`: narzędzia zarządzania ekranem.
+- Interakcja i nawigacja:
+  - `visionect_joan.send_qr_code`: kod QR (np. do gościnnego Wi‑Fi).
+  - `visionect_joan.start_slideshow`: pokaz slajdów (lista widoków/URL).
+  - `visionect_joan.stop_slideshow` (nowość): zatrzymaj pokaz i wróć do wskazanego ekranu.
+  - `visionect_joan.send_keypad`: pełnoekranowa klawiatura numeryczna (PIN do webhooka HA).
+
+- Zarządzanie i diagnostyka:
+  - `visionect_joan.force_refresh`: natychmiastowe przeładowanie aktualnego URL.
+  - `visionect_joan.clear_display`: wyczyść ekran do bieli.
+  - `visionect_joan.set_display_rotation`: ustaw obrot ekranu (i zrestartuj).
+  - `visionect_joan.sleep_device` / `wake_device`: uśpij/obudź urządzenie.
+  - `visionect_joan.clear_web_cache`: wyczyść cache WWW (opcjonalny restart sesji).
+  - `visionect_joan.set_session_options`: ustaw dithering i bit depth (encoding).
+  - `visionect_joan.set_reload_timeout` (nowość): ustaw `ReloadTimeout` (0–86400 s).
 
 Integracja obsługuje szablony Jinja2. Możesz dynamicznie tworzyć treści m.in. w:
 - `message` (usługa `send_text`)
 - `caption` (usługa `send_camera_snapshot`)
 
-### Przycisk Wstecz i przyciski akcji (webhook)
+---
 
-- Przycisk akcji (webhook) — umożliwia dodanie interaktywnych przycisków „Akcja” (→) oraz drugiego przycisku (✔). Po naciśnięciu wysyłane jest żądanie POST do webhooka w Home Assistant, co pozwala wyzwalać automatyzacje (np. włącz światło, zmień scenę) bezpośrednio z ekranu e‑ink.
+## Przycisk Wstecz i przyciski akcji (webhook)
+
+- Przycisk akcji (webhook) — interaktywne przyciski „Akcja” (→) i drugi (✔). Po naciśnięciu wysyłane jest żądanie POST do webhooka w Home Assistant, co pozwala wyzwalać automatyzacje (np. włącz światło, zmień scenę) bezpośrednio z ekranu e‑ink.
 - Pasek przycisków znajduje się na dole ekranu, co ułatwia obsługę.
 - Przycisk „Wstecz” — powrót do głównego panelu (np. AppDaemon). Główne menu ustawisz w opcjach integracji (Konfiguruj).
+- Tryby „kliknij gdziekolwiek”: ekran może być w całości linkiem powrotnym lub wyzwalać webhook (wygodne w kiosk mode).
 
 <img width="1237" height="639" alt="image" src="https://github.com/user-attachments/assets/c1246088-77e0-4be7-8a51-ac49b9d8cd46" />
-
 <img width="561" height="705" alt="bac" src="https://github.com/user-attachments/assets/c7d2f579-759e-48dd-8046-5b0606f5de9e" />
-
 
 ---
 
@@ -112,18 +149,18 @@ Po instalacji i restarcie Home Assistant:
 1. Przejdź do `Ustawienia → Urządzenia i usługi`.
 2. Kliknij **„+ Dodaj integrację”**.
 3. Wyszukaj **„Visionect Joan”** i rozpocznij konfigurację.
-4. Wprowadź dane do Visionect Software Suite: [Instalacja Visionect Software Suite](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant_EN)
-   - Adres serwera (np. `192.168.x.x:8081`)(adres Home Assistant)
-   - Nazwa użytkownika (`admin`)
-   - Hasło (`należy sutawić swoje`)
-   - API Key oraz API Secret (dodasz w Visionect Software Suite → Users → Add new API key)
+4. Wprowadź dane do Visionect Software Suite:
+   - Adres serwera Visionect (np. `http://192.168.x.x:8081`)
+   - Nazwa użytkownika (np. `admin`)
+   - Hasło (należy ustawić własne)
+   - API Key oraz API Secret (Visionect Software Suite → Users → Add new API key)
 
 <img width="1567" height="425" alt="Konfiguracja integracji" src="https://github.com/user-attachments/assets/356a55f2-342d-43f4-bf64-3ef1c6522d4e" />
 <img width="575" height="615" alt="Dodawanie klucza API w Visionect Software Suite" src="https://github.com/user-attachments/assets/c467a686-6e58-4b6a-9286-033fc45ddbcd" />
 
 ---
 
-## Widoki i opcje — konfiguracja w UI
+## Widoki, menu i opcje — konfiguracja w UI
 
 - Wszystkie ustawienia (w tym widoki oraz adres głównego menu) konfiguruje się w UI:
   - `Ustawienia → Urządzenia i usługi → Visionect Joan → Konfiguruj`
@@ -131,42 +168,103 @@ Po instalacji i restarcie Home Assistant:
   - dodawać/edytować/usuwać widoki (nazwa + URL),
   - ustawić globalny „Main menu URL”.
 - W usługach (np. `visionect_joan.set_url`) możesz podać nazwę widoku zamiast pełnego adresu URL — integracja sama go rozpozna (dopasowanie nazw jest niewrażliwe na wielkość liter).
-- Konfiguracja przez `configuration.yaml` nie jest już używana.
+- Nowość: `visionect_joan.send_menu` potrafi automatycznie zbudować ekran z kafelkami z tych widoków — idealny „home screen”.
 
 ---
 
-## Przykłady użycia
+## Przykłady użycia (skrót)
 
-Ekrany, które możesz wyświetlić na tablecie Joan 6 obsługiwanym przez Visionect:
+- Wyświetl menu z zapisanych widoków (2 kolumny, z zegarem):
+```yaml
+service: visionect_joan.send_menu
+data:
+  device_id: <TWÓJ_DEVICE_ID>
+  title: "Panel domowy"
+  columns: 2
+  include_clock: true
+  add_back_button: false
+```
 
-<img width="1920" height="848" alt="Panel AppDaemon na ekranie Joan 6" src="https://github.com/user-attachments/assets/9dce230b-c149-49df-b1be-2802cf761cbe" />
-<img width="1920" height="1578" alt="AppDaemon — motyw ciemny" src="https://github.com/user-attachments/assets/c3e7cbff-4e94-4172-93e8-c688ca70a7d3" />
+- Własne pozycje menu:
+```yaml
+service: visionect_joan.send_menu
+data:
+  device_id: <TWÓJ_DEVICE_ID>
+  items: |
+    Status: Home Status
+    Pogoda: Weather
+    Kamera: http://<HA_IP>:8123/local/hall.jpg
+  columns: 3
+```
 
-**Więcej przykładów:**
+- Zatrzymaj pokaz slajdów i wróć do „Główne menu”:
+```yaml
+service: visionect_joan.stop_slideshow
+data:
+  device_id: <TWÓJ_DEVICE_ID>
+  predefined_url: "Main Menu"
+```
 
-<details>
-  <summary>Kliknij, aby zobaczyć więcej zrzutów ekranu</summary>
-  <img width="381" height="570" alt="Widok 1" src="https://github.com/user-attachments/assets/e1f32a48-0277-42ce-9018-837aeba1b6a8" />
-  <img width="510" height="739" alt="Widok 2" src="https://github.com/user-attachments/assets/8f8c673d-8447-42ec-9d13-0bd4e9683437" />
-  <img width="948" height="791" alt="Widok 3" src="https://github.com/user-attachments/assets/4a3c054a-e239-49c1-ab9d-037584cd7989" />
-  <img width="607" height="893" alt="Widok 4" src="https://github.com/user-attachments/assets/1321cfe8-905d-44ef-b1b9-29d999559a04" />
-  <img width="770" height="641" alt="Widok 5" src="https://github.com/user-attachments/assets/31e9bca1-d7c6-4245-b32f-4c909251bf2c" />
-  <img width="290" height="407" alt="Widok 6" src="https://github.com/user-attachments/assets/ad0d3f54-fe5a-466a-8da6-a5d93a052944" />
-  <img width="433" height="290" alt="Widok 7" src="https://github.com/user-attachments/assets/871617fa-b4cb-4d4e-af4b-eae5120b684a" />
-  <img width="307" height="457" alt="Widok 8" src="https://github.com/user-attachments/assets/d7d76fdd-52b7-4c95-8f77-a369e672ab4b" />
-  <img width="306" height="456" alt="Widok 9" src="https://github.com/user-attachments/assets/e3f248bb-f2c8-4e32-b41d-09cbf24a02bf" />
-  <img width="569" height="808" alt="Widok 10" src="https://github.com/user-attachments/assets/f746301e-d0fa-4993-aa7f-b7b4d5c2e15d" />
-</details>
+- Ustaw ReloadTimeout na 24h:
+```yaml
+service: visionect_joan.set_reload_timeout
+data:
+  device_id: <TWÓJ_DEVICE_ID>
+  seconds: 86400
+```
+
+- Podpis pod migawką z kamery z szablonem:
+```yaml
+service: visionect_joan.send_camera_snapshot
+data:
+  device_id: <TWÓJ_DEVICE_ID>
+  camera_entity: camera.drzwi
+  caption: >
+    Ostatnie otwarcie: {{ states('sensor.drzwi_last_open') }}
+```
+
+---
+
+## Diagnostyka
+
+- W `Ustawienia → Urządzenia i usługi → Visionect Joan → ⋮ → Pobierz diagnostykę` pobierzesz zredagowany JSON z kluczowymi informacjami (konfiguracja wpisu, lista urządzeń, aktualne URL, rotacja, ReloadTimeout, itp.).
+- Plik nie zawiera haseł ani sekretów (są zacienione) i przyspiesza rozwiązywanie problemów.
+
+---
+
+## Ikony SVG
+
+- Integracja wykorzystuje zestaw ikon SVG (dla encji i pogody) z katalogu `custom_components/visionect_joan/svg/`.
+- Jeśli brakuje pliku, integracja użyje `default.svg` i zapisze ostrzeżenie w logach.
+- Rekomendowane jest uzupełnienie braków (np. `window-open.svg`, `blinds-open.svg`, `wi-showers.svg`, …), aby widoki wyglądały spójnie.
+
+---
+
+## FAQ i rozwiązywanie problemów
+
+- Ekran „miga” co jakiś czas:
+  - To normalne: ekrany e‑ink wykonują okresowe pełne odświeżenie by usunąć ghosting.
+  - Dodatkowo odświeżenie następuje po zmianie treści (np. wywołanie usługi lub restart sesji).
+
+- „Nie ładuje kalendarza” / błędy `KeyError: 'action_webhook_id'`:
+  - W najnowszej wersji opcjonalne pola są obsługiwane bezbłędnie (używane są wartości domyślne).
+  - Zaktualizuj integrację i sprawdź logi. Upewnij się, że encja `calendar` zwraca zdarzenia w okresie, który wybierasz.
+
+- Obrazy lokalne i webhooki nie działają:
+  - Ustaw i używaj Internal URL w HA (Ustawienia → System → Sieć). Integracja preferuje adres wewnętrzny, aby urządzenie mogło połączyć się z HA.
+
+- Automatyczne odświeżanie treści jest za częste/za rzadkie:
+  - Użyj encji `number` (ReloadTimeout) albo usługi `set_reload_timeout`, aby dopasować interwał (0 = wyłączone, 86400 = 24h).
 
 ---
 
 ## Uwagi
 
--   Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
--   Działa z urządzeniem **Joan 6**, inne modele nie zostały przetestowane.
--   Do szybkiego napisania tego dodatku wykorzystano AI.
--   [Chcesz kupić nowy Joan 6?](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink).
--   [Opis krok po kroku wykorzystania tabletu Joan 6 jako panel sterowania Home Assistant](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant).
+- Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
+- Działa z urządzeniem **Joan 6**, inne modele nie zostały przetestowane.
+- Do szybkiego napisania tego dodatku wykorzystano AI.
+- [Chcesz kupić nowy Joan 6?](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink).
+- [Opis krok po kroku wykorzystania tabletu Joan 6 jako panel sterowania Home Assistant](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant).
 
 ## Licencja
 
