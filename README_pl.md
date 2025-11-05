@@ -63,7 +63,8 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje: po po
 <details>
   <summary>Pokaż zrzut ekranu</summary>
 
-  <img width="789" height="493" alt="Bez tytułu" src="https://github.com/user-attachments/assets/6a26c64b-e250-46e7-bc34-3ba0331e701a" />
+  <img width="838" height="566" alt="505984606-3d86ce11-44b9-4a65-aa2d-9c4379b77fd3" src="https://github.com/user-attachments/assets/ef9ef69b-413d-4ca4-86d9-373d3117880a" />
+
 
 </details>
 
