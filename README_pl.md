@@ -124,25 +124,87 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 
 - `visionect_joan.send_status_panel`
   - Panel statusów dowolnych encji: ikony + nazwy + wartości (z tłumaczeniem stanów on/off/open/…).
+ 
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1230" height="1416" alt="image" src="https://github.com/user-attachments/assets/bb21ddb7-77bf-4db1-bc57-9ecf2c2d5021" />
+
+</details>
+
+***
 
 - `visionect_joan.send_energy_panel`
   - Duży panel energii (bieżący pobór + karty: produkcja/import/eksport/zużycie dzienne). Dobrze wygląda na pionowym układzie.
 
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1230" height="1423" alt="image" src="https://github.com/user-attachments/assets/66b3f26d-f5c3-4276-b837-de6b85cf9fcf" />
+
+</details>
+
+***
+
 - `visionect_joan.send_weather`
   - 3 layouty: szczegółowe podsumowanie, lista prognozy dziennej, panel z wykresem 24 h (automatyczne ikony dzień/noc).
+
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1225" height="1237" alt="image" src="https://github.com/user-attachments/assets/588660d8-e0ff-48b3-b7a5-6d9432cd2329" />
+
+</details>
+
+***
 
 - `visionect_joan.send_calendar`
   - Lista wydarzeń (1–31 dni) lub siatka miesięczna z podglądem dnia.
 
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1920" height="2252" alt="image" src="https://github.com/user-attachments/assets/b6431600-0556-4052-abdf-53eacf79397e" />
+
+</details>
+
+***
+
 - `visionect_joan.send_todo_list`
   - Lista zadań (w tym Shopping List). Pozycje są duże i czytelne; wspiera interaktywne odhaczanie przez webhook (patrz niżej).
+
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1216" height="1201" alt="image" src="https://github.com/user-attachments/assets/6735340b-bec9-47a6-a72e-07d16da20943" />
+
+</details>
+
+***
 
 - `visionect_joan.send_sensor_graph`
   - Wykres historii wskazanych sensorów (line lub bar), automatycznie dopasowany do orientacji ekranu.
 
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1219" height="1895" alt="image" src="https://github.com/user-attachments/assets/c5507b3b-28e6-47a1-a88a-11d936f2f35b" />
+
+</details>
+
+***
+
 - `visionect_joan.send_rss_feed` ➋
   - Pobiera i pokazuje najnowsze wpisy z kanału RSS/Atom (stronicowanie, nagłówek, ikony). Podaj `feed_url`, `max_items`, opcjonalnie własny tytuł.
 
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1219" height="1895" alt="image" src="https://github.com/user-attachments/assets/c5507b3b-28e6-47a1-a88a-11d936f2f35b" />
+
+</details>
+
+***
 ### Interaktywność i nawigacja
 
 - `visionect_joan.send_qr_code`
