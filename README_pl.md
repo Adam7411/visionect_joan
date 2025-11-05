@@ -55,6 +55,14 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje: po po
 - Pełna kontrola ekranu: wyślij dowolny adres WWW, lokalne panele (np. AppDaemon) lub pojedyncze obrazy.
 - Dynamiczne widoki generowane pod e‑ink: pogoda, kalendarz (także siatka miesięczna), lista zadań (To‑Do/Shopping List), panel energii, panel statusów encji, wykresy historii sensorów.
 - Interaktywność: dolny pasek z przyciskiem „Wstecz” (←) i dwoma przyciskami akcji (✔ i →), a opcjonalnie „kliknij gdziekolwiek”, aby wykonać akcję lub wrócić.
+
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="561" height="705" alt="505983472-c7d2f579-759e-48dd-8046-5b0606f5de9e" src="https://github.com/user-attachments/assets/dd217c23-d402-43a8-acb3-1bf0ea841c74" />
+
+</details>
+
 - Dwa webhooki (akcje): osobne ID dla prawego (→) i środkowego (✔) przycisku.
 - Zarządzanie energią: usypianie/wybudzanie urządzenia, możliwość ustawienia interwału odświeżania sesji.
 - Podgląd na żywo: encja `camera` zwraca aktualny obraz z ekranu.
