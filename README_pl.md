@@ -12,7 +12,9 @@
 <p align="center">
 
 <br>
+
  Visionect Joan 6
+ 
 <img width="421" height="328" alt="image" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
 
 </p>
