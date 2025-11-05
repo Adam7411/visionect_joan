@@ -410,6 +410,79 @@ Każda z usług wyświetlających treści może dodać „nakładkę” z przyci
 - „Środkowy” (✔) – wywołuje webhook `action_webhook_2_id`.
 - „Klik anywhere” – może wywołać akcję (webhook) albo służyć jako szybki „powrót”.
 
+<details>
+ 
+  <summary><strong>Przykład: przycisk akcji (webhook) → włącz lampę</strong></summary>
+
+Ten przykład pokazuje, jak użyć `action_webhook_id` w widoku wysyłanym na Joan, aby po naciśnięciu prawego przycisku (→) włączyć lampę w Home Assistant.
+
+Działa z większością usług wyświetlających treści (send_text, send_status_panel, send_weather, send_image_url, send_todo_list, send_calendar, send_energy_panel, send_sensor_graph, start_slideshow). Poniżej używamy `send_text`.
+
+— Krok 1. Automatyzacja: nasłuch webhooka i włącz lampę
+
+Skopiuj do edytora YAML automatyzacji (zmień WEBHOOK_ID oraz encję lampy):
+
+```
+alias: "Joan: włącz lampę przyciskiem"
+mode: single
+
+trigger:
+  - platform: webhook
+    # USTAW SWÓJ WEBHOOK ID (musi zgadzać się z action_webhook_id w kroku 2):
+    webhook_id: joan_light_on
+
+action:
+  - service: light.turn_on
+    target:
+      entity_id: light.twoja_lampa  # np. light.kuchnia_lampa
+    data:
+      brightness_pct: 100  # opcjonalnie
+```
+
+— Krok 2. Wyślij na Joan widok z przyciskiem akcji (→)
+
+Wywołaj usługę `visionect_joan.send_text` (Narzędzia deweloperskie → Usługi) z `action_webhook_id: joan_light_on`. To doda dolny pasek z przyciskami; prawy (→) wyśle webhook do HA.
+
+```
+service: visionect_joan.send_text
+data:
+  message: "Włącz lampę"
+  add_back_button: true                # opcjonalnie pokaż 'Wstecz' (←)
+  back_button_url: "Main"              # nazwa zdefiniowanego widoku lub pełny URL (opcjonalnie)
+  action_webhook_id: joan_light_on     # MUSI zgadzać się z 'webhook_id' w automatyzacji
+target:
+  device_id: 00000000000000000000000000000000  # <- wstaw swój device_id Joana
+```
+
+Wariant: cały ekran jako przycisk
+- Jeśli zamiast widocznych przycisków na dole wolisz, aby kliknięcie w dowolne miejsce ekranu włączyło lampę, użyj:
+
+```yaml
+service: visionect_joan.send_text
+data:
+  message: "Dotknij, aby włączyć lampę"
+  click_anywhere_to_action: true       # ukryje pasek przycisków i uczyni cały ekran 'kliknij aby wykonać akcję'
+  action_webhook_id: joan_light_on
+target:
+  device_id: 00000000000000000000000000000000
+```
+
+Wskazówki:
+- Prawy przycisk (→) korzysta z `action_webhook_id`. Środkowy (✔) to `action_webhook_2_id`.
+- „Wstecz” (←) możesz dodać parametrem `add_back_button: true`. Cel „Wstecz”:
+  1) `back_button_url` z wywołania usługi,
+  2) encja „Back button target” dla urządzenia,
+  3) globalny „Main menu URL” z opcji integracji.
+- Najpewniejsze działanie webhooków jest, gdy Visionect Server działa jako dodatek w HA (integracja użyje prawidłowego adresu wewnętrznego). Jeśli Visionect działa na innym hoście, upewnij się, że ma dostęp HTTP/HTTPS do HA.
+- Ten sam schemat zadziała także z innymi usługami wyświetlania (np. `send_status_panel`, `send_image_url`) — wystarczy dodać `action_webhook_id`.
+
+Troubleshooting:
+- Naciśnięcie przycisku nic nie robi? Sprawdź w Podglądzie zdarzeń, czy webhook dochodzi i czy `trigger.json` jest widoczne w automatyzacji.
+- Jeśli masz certyfikat HTTPS i osobne hosty, zweryfikuj poprawność adresu wewnętrznego HA w Ustawienia → System → Sieć.
+  
+</details>
+
+
 Wskazówki:
 - Najpewniejsze działanie webhooków uzyskasz, gdy Visionect Server działa jako dodatek HA (ten sam host) – integracja automatycznie użyje prawidłowego adresu wewnętrznego HA dla webhooków.
 - Jeśli Visionect stoi na innym hoście, zadbaj o łączność HTTP do HA oraz certyfikat (jeśli https).
