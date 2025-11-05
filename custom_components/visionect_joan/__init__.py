@@ -169,7 +169,7 @@ THEMED_FONTS = {
     "Story Script": "'Story Script', cursive",
 }
 
-GOOGLE_FONTS_IMPORT_URL = "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Arbutus&family=Asimovian&family=Bangers&family=Blaka&family=Bungee&family=Bungee+Shade&family=Cherry+Bomb+One&family=Cinzel+Decorative:wght@400;700;900&family=Damion&family=Diplomata+SC&family=Fascinate&family=Joti+One&family=Libertinus+Keyboard&family=MedievalSharp&family=Michroma&family=New+Rocker&family=Rubik+Wet+Paint&family=Spicy+Rice&family=Story+Script&display=swap"
+GOOGLE_FONTS_IMPORT_URL = "https://fonts.googleapis.com/css2?family=Archivo+Black&family=Arbutus&family=Asimovian&family=Bangers&family=Blaka&family=Bungee&family=Bungee+Shade&family=Cherry+Bomb+One&family=Cinzel+Decorative:wght@400;700;900&family=Damion&family=Fascinate&family=Joti+One&family=Libertinus+Keyboard&family=MedievalSharp&family=Michroma&family=New+Rocker&family=Rubik+Wet+Paint&family=Spicy+Rice&family=Story+Script&display=swap"
 
 INTERACTIVE_SCHEMA_EXTENSION = {
     vol.Optional(ATTR_ADD_BACK_BUTTON, default=False): cv.boolean,
@@ -1229,7 +1229,7 @@ html,body{{margin:0;height:100%;background:#fff}}
     hass.services.async_register(DOMAIN, SERVICE_START_SLIDESHOW, handle_start_slideshow, schema=SERVICE_START_SLIDESHOW_SCHEMA)
     hass.services.async_register(DOMAIN, SERVICE_SEND_IMAGE_URL, handle_send_image_url, schema=SERVICE_SEND_IMAGE_URL_SCHEMA)
     hass.services.async_register(DOMAIN, SERVICE_SET_SESSION_OPTIONS, handle_set_session_options, schema=SERVICE_SET_SESSION_OPTIONS_SCHEMA)
-    hass.services.async_register(DOMAIN, SERVICE_SEND_KEYPAD, handle_send_keypad, schema=SERVICE_SEND_KEYPAD_SCHEMA)
+    # UWAGA: usunięto duplikat rejestracji SERVICE_SEND_KEYPAD z bloku "NEW services"
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     _LOGGER.info("Visionect Joan config entry successfully initialized.")
