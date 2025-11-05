@@ -55,7 +55,11 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje: po po
   - Force Refresh – natychmiastowy restart sesji renderera.
   - Reboot Device – restart urządzenia.
   - Clear Web Cache – czyszczenie cache przeglądarki.
-<img width="658" height="1002" alt="1" src="https://github.com/user-attachments/assets/67de6efe-ffd5-4757-8a82-71e46f039943" />
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="658" height="1002" alt="Zrzut ekranu" src="https://github.com/user-attachments/assets/67de6efe-ffd5-4757-8a82-71e46f039943" />
+</details>
 
 
 
