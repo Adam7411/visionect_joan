@@ -56,9 +56,7 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje: po po
   - Reboot Device – restart urządzenia.
   - Clear Web Cache – czyszczenie cache przeglądarki.
 
-Podpowiedzi:
-- Lokalny obraz do wyświetlenia umieść w `/config/www`, a URL będzie jak `http://<HA_IP>:8123/local/nazwa.png`.
-- Wybór „Back button target” działa globalnie dla danego urządzenia i jest używany przez wszystkie usługi z „przyciskiem wstecz”.
+
 
 ---
 
