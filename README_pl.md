@@ -264,8 +264,9 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 - `visionect_joan.send_keypad` ➍
   - Pełnoekranowa klawiatura numeryczna. Wpisany PIN wysyłany jest POST‑em do wskazanego webhooka w HA (`trigger.json.pin`).
   - Wskazówka: potrzebna automatyzacja do rozpoznania pinu
-
-  <details>
+  - 
+ <details>
+  
   <summary><strong>Przykład: Automatyzacja PIN (webhook + keypad) dla Visionect Joan</strong></summary>
 
 Ten przykład pokazuje, jak użyć usługi `visionect_joan.send_keypad` do wprowadzania PIN-u na ekranie Joan i sprawdzania go w automatyzacji z wyzwalaczem webhook. Jeśli PIN jest poprawny — urządzenie przechodzi do wskazanego widoku; jeśli błędny — pojawia się komunikat i klawiatura wraca po chwili.
