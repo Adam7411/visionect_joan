@@ -204,7 +204,7 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 <details>
   <summary>Pokaż zrzut ekranu</summary>
 
-  <img width="1219" height="1895" alt="image" src="https://github.com/user-attachments/assets/c5507b3b-28e6-47a1-a88a-11d936f2f35b" />
+  <img width="1225" height="1255" alt="image" src="https://github.com/user-attachments/assets/56316ce1-8350-49d5-a624-2f7a880b8a4e" />
 
 </details>
 
@@ -213,6 +213,13 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 
 - `visionect_joan.send_qr_code`
   - Generuje kod QR (np. gościnne Wi‑Fi) z opcjonalnym podpisem (pozycja nad/po QR).
+    
+  <details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1223" height="1765" alt="image" src="https://github.com/user-attachments/assets/83c4c7d9-6bc8-41e8-98f3-557cb9b09301" />
+
+</details>
 
 - `visionect_joan.start_slideshow` ➌
   - Odtwarza listę widoków (nazwy predefined lub pełne URL) w pętli, z czasem wyświetlania slajdu.
