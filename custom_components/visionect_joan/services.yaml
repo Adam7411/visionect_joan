@@ -1,0 +1,1433 @@
+set_url:
+  name: "Set Custom URL"
+  description: "Changes the URL displayed on the device screen. To set a predefined view from your configuration, you can either provide its name in the 'Predefined URL' field or use the 'select.select_option' service with the 'Choose view' entity of your device."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to perform the action on."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    url:
+      name: "URL"
+      description: "The new URL to display, or the name of a predefined view. Examples:\n - AppDaemon Dashboard: http://<YOUR_HA_IP>:5050/dashboard_name\n - Local Image: http://<YOUR_HA_IP>:8123/local/image.png\n - External Website: https://www.home-assistant.io"
+      example: "http://192.168.1.10:8123/local/dashboard.png"
+      selector:
+        text:
+    predefined_url:
+      name: "Predefined URL"
+      description: "The name of a predefined view saved in the integration configuration."
+      selector:
+        text:
+
+send_text:
+  name: "Send Text Message"
+  description: "Sends a text message (fully supports Jinja2 templates), optionally with an image, optimized for e-ink display."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect e-ink device to send the message to."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    message:
+      name: "Message"
+      description: "The text message to display on the e-ink screen."
+      required: true
+      example: "Meeting at 2:00 PM"
+      selector:
+        text:
+          multiline: true
+    layout:
+      name: "Layout"
+      description: "Arrangement of text and image on the screen."
+      required: false
+      default: "text_only"
+      selector:
+        select:
+          options:
+            - label: "Text Only"
+              value: "text_only"
+            - label: "Image Above Text"
+              value: "image_top"
+            - label: "Image Below Text"
+              value: "image_bottom"
+            - label: "Image to the Left of Text"
+              value: "image_left"
+            - label: "Image to the Right of Text"
+              value: "image_right"
+            - label: "Image Only"
+              value: "image_only"
+    image_url:
+      name: "Image URL"
+      description: "URL of the image to display. Optional. For local images, use the format http://<YOUR_HA_IP>:8123/local/image.png."
+      required: false
+      example: "http://<YOUR_HA_IP>:8123/local/image.png"
+      selector:
+        text:
+    image_zoom:
+      name: "Image Size"
+      description: "Adjusts the image size. 100% is the original size, <100% shrinks, >100% enlarges the image."
+      required: false
+      default: 100
+      selector:
+        number:
+          min: 50
+          max: 200
+          step: 5
+          mode: "slider"
+          unit_of_measurement: "%"
+    text_color:
+      name: "Text Color"
+      description: "Color of the text (black or white for e-ink)."
+      required: false
+      default: "black"
+      selector:
+        select:
+          options:
+            - label: "Black"
+              value: "black"
+            - label: "White"
+              value: "white"
+    background_color:
+      name: "Background Color"
+      description: "Background color of the e-ink screen."
+      required: false
+      default: "white"
+      selector:
+        select:
+          options:
+            - label: "White"
+              value: "white"
+            - label: "Black"
+              value: "black"
+    text_size:
+      name: "Text Size"
+      description: "Size of the text in pixels."
+      required: false
+      default: 28
+      example: 32
+      selector:
+        number:
+          min: 10
+          max: 150
+          step: 1
+          mode: "slider"
+          unit_of_measurement: "px"
+    text_align:
+      name: "Text Alignment"
+      description: "Text alignment on the screen."
+      required: false
+      default: "center"
+      selector:
+        select:
+          options:
+            - label: "Left"
+              value: "left"
+            - label: "Center"
+              value: "center"
+            - label: "Right"
+              value: "right"
+    font_family:
+      name: "Font Family"
+      description: "Themed font family for e-ink readability."
+      required: false
+      default: "Modern"
+      selector:
+        select:
+          options:
+            - label: "Modern"
+              value: "Modern"
+            - label: "Readable"
+              value: "Readable"
+            - label: "Archivo Black"
+              value: "Archivo Black"
+            - label: "Arbutus"
+              value: "Arbutus"
+            - label: "Asimovian"
+              value: "Asimovian"
+            - label: "Bangers"
+              value: "Bangers"
+            - label: "Blaka"
+              value: "Blaka"
+            - label: "Bungee"
+              value: "Bungee"
+            - label: "Bungee Shade"
+              value: "Bungee Shade"
+            - label: "Cherry Bomb One"
+              value: "Cherry Bomb One"
+            - label: "Cinzel Decorative"
+              value: "Cinzel Decorative"
+            - label: "Damion"
+              value: "Damion"
+            - label: "Diplomata SC"
+              value: "Diplomata SC"
+            - label: "Fascinate"
+              value: "Fascinate"
+            - label: "Joti One"
+              value: "Joti One"
+            - label: "Libertinus Keyboard"
+              value: "Libertinus Keyboard"
+            - label: "MedievalSharp"
+              value: "MedievalSharp"
+            - label: "Michroma"
+              value: "Michroma"
+            - label: "New Rocker"
+              value: "New Rocker"
+            - label: "Rubik Wet Paint"
+              value: "Rubik Wet Paint"
+            - label: "Spicy Rice"
+              value: "Spicy Rice"
+            - label: "Story Script"
+              value: "Story Script"
+    font_weight:
+      name: "Font Weight"
+      description: "Sets the weight (thickness) of the font."
+      required: false
+      default: "normal"
+      selector:
+        select:
+          options:
+            - label: "Normal"
+              value: "normal"
+            - label: "Bold"
+              value: "bold"
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      required: false
+      example: "toggle_kitchen_lights_hook"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      required: false
+      example: "confirm_action_hook"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      required: false
+      selector:
+        text:
+
+set_display_rotation:
+  name: "Set Display Rotation"
+  description: "Changes the display rotation of the Joan tablet screen."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Joan device to change display rotation for."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    display_rotation:
+      name: "Display Rotation"
+      description: "The display rotation to set on the Joan tablet."
+      required: true
+      selector:
+        select:
+          options:
+            - label: "Landscape"
+              value: "0"
+            - label: "Portrait, 90°"
+              value: "1"
+            - label: "Landscape, 180°"
+              value: "2"
+            - label: "Portrait, 270°"
+              value: "3"
+
+force_refresh:
+  name: "Force Refresh"
+  description: "Forces the device to immediately reload and display the content from its currently configured URL."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to refresh."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+
+clear_display:
+  name: "Clear Display"
+  description: "Clears the device's e-ink screen, typically to a white screen."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to clear."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+
+sleep_device:
+  name: "Sleep Device"
+  description: "Puts the device into a low-power sleep mode to conserve battery."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to put to sleep."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    duration:
+      name: "Duration"
+      description: "The sleep duration in seconds. The device will wake up automatically after this time."
+      required: false
+      default: 3600
+      example: 7200
+      selector:
+        number:
+          min: 1
+          max: 604800
+          mode: "box"
+          unit_of_measurement: "s"
+
+wake_device:
+  name: "Wake Device"
+  description: "Immediately wakes the device up from sleep mode."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to wake up."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+
+send_qr_code:
+  name: "Send QR Code"
+  description: "Generates a QR code and displays it on the device screen."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to display the QR code on."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    data:
+      name: "Data"
+      description: "The text or URL to encode in the QR code."
+      required: true
+      example: "WIFI:T:WPA;S:MyNetwork;P:MyPassword;;"
+      selector:
+        text:
+    message:
+      name: "Message"
+      description: "An optional message to display with the QR code."
+      required: false
+      example: "Scan for Guest Wi-Fi"
+      selector:
+        text:
+    qr_message_text_size:
+      name: "Message Text Size"
+      description: "The font size of the optional message in pixels."
+      required: false
+      default: 24
+      selector:
+        number:
+          min: 10
+          max: 100
+          mode: "slider"
+          unit_of_measurement: "px"
+    qr_message_position:
+      name: "Message Position"
+      description: "The position of the optional message relative to the QR code."
+      required: false
+      default: "below"
+      selector:
+        select:
+          options:
+            - label: "Below QR Code"
+              value: "below"
+            - label: "Above QR Code"
+              value: "above"
+    box_size:
+      name: "Box Size"
+      description: "The size of each box (pixel) in the QR code."
+      required: false
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 30
+          mode: "slider"
+    border:
+      name: "Border"
+      description: "The thickness of the border around the QR code."
+      required: false
+      default: 4
+      selector:
+        number:
+          min: 0
+          max: 10
+          mode: "slider"
+    fill_color:
+      name: "QR Code Color"
+      description: "The color of the QR code itself."
+      required: false
+      default: "black"
+      selector:
+        select:
+          options:
+            - label: "Black"
+              value: "black"
+            - label: "White"
+              value: "white"
+    back_color:
+      name: "Background Color"
+      description: "The background color of the QR code."
+      required: false
+      default: "white"
+      selector:
+        select:
+          options:
+            - label: "White"
+              value: "white"
+            - label: "Black"
+              value: "black"
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      required: false
+      example: "toggle_kitchen_lights_hook"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      required: false
+      example: "confirm_action_hook"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      required: false
+      selector:
+        text:
+
+send_calendar:
+  name: "Send Calendar"
+  description: "Formats and displays events from a selected calendar on the device screen."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to display the calendar on."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    calendar_entity:
+      name: "Calendar Entity"
+      description: "The calendar entity to get events from."
+      required: true
+      selector:
+        entity:
+          domain: "calendar"
+    duration_days:
+      name: "Duration (days)"
+      description: "The number of days from today to fetch events for. Only applies to list views."
+      required: false
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 31
+          mode: "slider"
+    display_style:
+      name: "Display Style"
+      description: "Visual theme for the calendar display."
+      required: false
+      default: "modern"
+      selector:
+        select:
+          options:
+            - label: "Modern (default)"
+              value: "modern"
+            - label: "Minimalist"
+              value: "minimalist"
+            - label: "Monthly Grid"
+              value: "monthly_grid"
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      required: false
+      example: "toggle_kitchen_lights_hook"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      required: false
+      example: "confirm_action_hook"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      required: false
+      selector:
+        text:
+
+send_weather:
+  name: "Send Weather"
+  description: "Formats and displays data from a weather entity on the device screen."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to display the weather on."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    weather_entity:
+      name: "Weather Entity"
+      description: "The weather entity to get data from."
+      required: true
+      selector:
+        entity:
+          domain: "weather"
+    layout:
+      name: "Layout"
+      description: "The visual layout for the weather display."
+      required: false
+      default: "detailed_summary"
+      selector:
+        select:
+          options:
+            - label: "Detailed Summary (Recommended)"
+              value: "detailed_summary"
+            - label: "Daily Forecast (List)"
+              value: "daily_forecast_list"
+            - label: "Weather Panel with Graph"
+              value: "weather_graph_panel"
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      required: false
+      example: "toggle_kitchen_lights_hook"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      required: false
+      example: "confirm_action_hook"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      required: false
+      selector:
+        text:
+
+send_energy_panel:
+  name: "Send Energy Panel"
+  description: "Displays a summary of your home's energy usage and production."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to display the energy panel on."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    power_usage_entity:
+      name: "Current Power Usage"
+      description: "Sensor showing the current, real-time power consumption of the house (e.g., in W or kW)."
+      required: false
+      selector:
+        entity:
+          device_class: "power"
+    daily_consumption_entity:
+      name: "Daily Energy Consumption"
+      description: "Sensor showing the total energy consumed by the house today (e.g., in kWh)."
+      required: false
+      selector:
+        entity:
+          device_class: "energy"
+    daily_production_entity:
+      name: "Daily Solar Production"
+      description: "Sensor showing the total energy produced by solar panels today (e.g., in kWh). Optional."
+      required: false
+      selector:
+        entity:
+          device_class: "energy"
+    daily_grid_import_entity:
+      name: "Daily Grid Import"
+      description: "Sensor showing the total energy imported from the grid today (e.g., in kWh). Optional."
+      required: false
+      selector:
+        entity:
+          device_class: "energy"
+    daily_grid_export_entity:
+      name: "Daily Grid Export"
+      description: "Sensor showing the total energy exported to the grid today (e.g., in kWh). Optional."
+      required: false
+      selector:
+        entity:
+          device_class: "energy"
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      required: false
+      example: "toggle_kitchen_lights_hook"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      required: false
+      example: "confirm_action_hook"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      required: false
+      selector:
+        text:
+
+send_todo_list:
+  name: "Send To-Do List"
+  description: "Formats and displays items from a selected to-do list (including Shopping List) on the device screen."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to display the list on."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    todo_entity:
+      name: "To-Do List Entity"
+      description: "The to-do list entity to get items from."
+      required: true
+      selector:
+        entity:
+          domain: "todo"
+    title:
+      name: "Custom Title"
+      description: "Optional title to display above the list. If not provided, the entity's friendly name will be used."
+      required: false
+      selector:
+        text:
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      required: false
+      example: "toggle_kitchen_lights_hook"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      required: false
+      example: "confirm_action_hook"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      required: false
+      selector:
+        text:
+
+send_camera_snapshot:
+  name: "Send Camera Snapshot"
+  description: "Displays a snapshot from a selected camera on the device screen."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to display the snapshot on."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    camera_entity:
+      name: "Camera Entity"
+      description: "The camera entity to get a snapshot from."
+      required: true
+      selector:
+        entity:
+          domain: "camera"
+    caption:
+      name: "Caption"
+      description: "Optional text to display below the image. Supports templates."
+      required: false
+      selector:
+        text:
+    image_zoom:
+      name: "Image Size"
+      description: "Adjusts the snapshot size. 100% is the original size, <100% shrinks, >100% enlarges the image."
+      required: false
+      default: 100
+      selector:
+        number:
+          min: 50
+          max: 200
+          step: 5
+          mode: "slider"
+          unit_of_measurement: "%"
+    display_rotation:
+      name: "Image Rotation"
+      description: "Rotates the camera snapshot. Note: this rotates the image, not the device's permanent screen orientation."
+      required: false
+      default: "0"
+      selector:
+        select:
+          options:
+            - label: "No rotation"
+              value: "0"
+            - label: "90° Clockwise"
+              value: "90"
+            - label: "180°"
+              value: "180"
+            - label: "270° Clockwise"
+              value: "270"
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      required: false
+      example: "toggle_kitchen_lights_hook"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      required: false
+      example: "confirm_action_hook"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      required: false
+      selector:
+        text:
+
+send_status_panel:
+  name: "Send Status Panel"
+  description: "Displays a custom panel with the current state of selected entities."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to display the panel on."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    title:
+      name: "Title"
+      description: "Optional title to display at the top of the panel."
+      required: false
+      example: "Home Status"
+      selector:
+        text:
+    entities:
+      name: "Entities"
+      description: "A list of entity IDs to display on the panel."
+      required: true
+      selector:
+        entity:
+          multiple: true
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      required: false
+      example: "toggle_kitchen_lights_hook"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      required: false
+      example: "confirm_action_hook"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      required: false
+      selector:
+        text:
+
+send_sensor_graph:
+  name: "Send Sensor Graph"
+  description: "Fetches the history of one or more sensors and displays it as a graph on the device screen."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to display the graph on."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    entities:
+      name: "Entities"
+      description: "A list of sensor entity IDs to plot on the graph."
+      required: true
+      selector:
+        entity:
+          domain: "sensor"
+          multiple: true
+    duration_hours:
+      name: "Graph Duration"
+      description: "The historical time period to fetch data from."
+      required: false
+      default: 24
+      selector:
+        number:
+          min: 1
+          max: 48
+          mode: "slider"
+          unit_of_measurement: "hours"
+    graph_type:
+      name: "Graph Type"
+      description: "The type of graph to generate."
+      required: false
+      default: "line"
+      selector:
+        select:
+          options:
+            - label: "Line Graph"
+              value: "line"
+            - label: "Bar Chart"
+              value: "bar"
+    show_points:
+      name: "Show Data Points"
+      description: "For line graphs, displays a marker for each data point."
+      required: false
+      default: false
+      selector:
+        boolean:
+    image_zoom:
+      name: "Image Size"
+      description: "Adjusts the final image size on the screen. 100% is default."
+      required: false
+      default: 100
+      selector:
+        number:
+          min: 50
+          max: 200
+          step: 5
+          mode: "slider"
+          unit_of_measurement: "%"
+    display_rotation:
+      name: "Image Rotation"
+      description: "Rotates the generated graph image. Note: this rotates the image, not the device's permanent screen orientation."
+      required: false
+      default: "0"
+      selector:
+        select:
+          options:
+            - label: "No rotation"
+              value: "0"
+            - label: "90° Clockwise"
+              value: "90"
+            - label: "180°"
+              value: "180"
+            - label: "270° Clockwise"
+              value: "270"
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      required: false
+      example: "toggle_kitchen_lights_hook"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      required: false
+      example: "confirm_action_hook"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      required: false
+      selector:
+        text:
+
+send_rss_feed:
+  name: "Send RSS Feed"
+  description: "Fetches and displays the latest items from an RSS feed on the device screen."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device to display the RSS feed on."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    feed_url:
+      name: "RSS Feed URL"
+      description: "The URL of the RSS/Atom feed to fetch."
+      required: true
+      example: "https://www.home-assistant.io/atom.xml"
+      selector:
+        text:
+    title:
+      name: "Custom Title"
+      description: "Optional title to display above the feed items. If not provided, a default title will be used."
+      required: false
+      example: "Latest News"
+      selector:
+        text:
+    max_items:
+      name: "Maximum Items"
+      description: "The maximum number of feed items to display."
+      required: false
+      default: 5
+      selector:
+        number:
+          min: 1
+          max: 20
+          mode: "slider"
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      required: false
+      example: "toggle_kitchen_lights_hook"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      required: false
+      example: "confirm_action_hook"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      required: false
+      selector:
+        text:
+
+clear_web_cache:
+  name: "Clear Web Cache"
+  description: "Clears the web browser cache on the Visionect device and optionally restarts the session."
+  fields:
+    device_id:
+      name: "Device"
+      description: "Select one or more Visionect devices."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+          multiple: true
+    restart_session:
+      name: "Restart Session"
+      description: "Restart the browser session after clearing the cache."
+      default: false
+      selector:
+        boolean: {}
+
+start_slideshow:
+  name: "Start Slideshow"
+  description: "Displays a list of views (predefined names or full URLs) in a loop with a specified time per slide."
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+          multiple: true
+    views:
+      name: "Views/URLs"
+      description: "A list of views to display. Enter one view name or full URL per line."
+      required: true
+      example: |
+        http://IP_HA:5050/dashboard_name
+        My dashboard name
+        https://www.home-assistant.io/
+      selector:
+        text:
+          multiline: true
+    seconds_per_slide:
+      name: "Seconds per slide"
+      description: "Specifies the display time for each slide. Important: Each screen refresh consumes battery power. Shorter intervals use more energy, while longer intervals save energy."
+      default: 30
+      selector:
+        number:
+          min: 3
+          max: 3600
+          unit_of_measurement: "s"
+          mode: "box"
+          step: 1
+    loop:
+      name: "Loop"
+      description: "After the last slide, return to the first."
+      default: true
+      selector:
+        boolean: {}
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      selector:
+        text: {}
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      selector:
+        text: {}
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      default: false
+      selector:
+        boolean: {}
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      default: false
+      selector:
+        boolean: {}
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      default: false
+      selector:
+        boolean: {}
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      selector:
+        text: {}
+
+send_image_url:
+  name: "Send Image URL"
+  description: "Displays an image from the specified URL (PNG/JPG/SVG) with optional zoom and rotation."
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+          multiple: true
+    image_url:
+      name: "Image URL (local images, use the format http://<YOUR_HA_IP>:8123/local/image.png)"
+      required: true
+      selector:
+        text: {}
+    image_zoom:
+      name: "Zoom"
+      description: "50–200%"
+      default: 100
+      selector:
+        number:
+          min: 50
+          max: 200
+          step: 1
+          unit_of_measurement: "%"
+          mode: "box"
+    display_rotation:
+      name: "Image Rotation"
+      default: "0"
+      selector:
+        select:
+          options:
+            - "0"
+            - "90"
+            - "180"
+            - "270"
+    small_screen_optimized:
+      name: "Optimize for 6\" screen"
+      description: "Optimizes layout for smaller screens (~6 inches) by reducing font sizes and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Action Webhook ID (Right Button)"
+      description: "ID of a webhook to trigger when the right button (→) is pressed. This feature works reliably when the Visionect Server v3 (All-in-One) is installed as a Home Assistant Add-on. The integration is designed to automatically use the correct internal address (http://homeassistant:8123)."
+      selector:
+        text: {}
+    action_webhook_2_id:
+      name: "Action Webhook 2 ID (Center Button)"
+      description: "ID of a webhook to trigger when the center button (✔) is pressed."
+      selector:
+        text: {}
+    click_anywhere_to_action:
+      name: "Click Anywhere for Action"
+      description: "Makes the entire screen a clickable area to trigger the Action Webhook (Right Button). Enabling this will hide all visible buttons."
+      default: false
+      selector:
+        boolean: {}
+    add_back_button:
+      name: "Add Back Button (Left Button)"
+      description: "Displays a back button (←). The button's destination is determined with the following priority:\n1. The URL or view name set via the 'Back Button URL' option in this service call.\n2. The default target configured for this specific device using the 'Back button target' selector entity.\n3. Global Main Menu URL (if set)."
+      default: false
+      selector:
+        boolean: {}
+    click_anywhere_to_return:
+      name: "Click Anywhere to Return"
+      description: "Makes the entire screen a clickable link to return. The destination is determined by the same priority as the 'Add Back Button' option. Enabling this will hide all visible buttons."
+      default: false
+      selector:
+        boolean: {}
+    back_button_url:
+      name: "Back Button URL"
+      description: "Overrides the default back destination. Can be a full URL or the name of a predefined view saved in the integration configuration."
+      selector:
+        text: {}
+
+set_session_options:
+  name: "Set Session Options"
+  description: "Sets session rendering parameters (e.g., encoding and dithering) for the Visionect device."
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+          multiple: true
+    encoding:
+      name: "Encoding (Bit Depth)"
+      description: "Typical values are 1/2/4/8 bpp; leave empty to keep current setting."
+      selector:
+        select:
+          custom_value: true
+          options:
+            - "1"
+            - "2"
+            - "4"
+            - "8"
+    dithering:
+      name: "Dithering"
+      description: "Dithering algorithm; leave empty to keep current setting."
+      selector:
+        select:
+          custom_value: true
+          options:
+            - "none"
+            - "bayer"
+            - "floyd-steinberg"
+
+send_keypad:
+  name: "Send Keypad"
+  description: "Displays a full-screen numeric keypad on the Joan device and sends the entered PIN to a Home Assistant webhook. Note: You must create an automation with a Webhook trigger using this Webhook ID to handle the PIN in Home Assistant. The request payload is JSON with the shape {\"pin\": \"1234\"}."
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect device on which the keypad should be displayed."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    title:
+      name: "Title"
+      description: "The header displayed above the keypad."
+      required: false
+      default: "Enter PIN"
+      selector:
+        text:
+    action_webhook_id:
+      name: "Webhook ID"
+      description: "The webhook ID to which the entered PIN will be sent. Create an automation with a Webhook trigger using this ID; the payload is JSON: {\"pin\": \"1234\"}."
+      required: true
+      example: "joan_keypad_webhook"
+      selector:
+        text:
