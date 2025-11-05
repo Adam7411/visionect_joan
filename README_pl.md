@@ -265,14 +265,14 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 
 ***
 
-- `visionect_joan.start_slideshow` ➌
-  - Odtwarza listę widoków (nazwy predefined lub pełne URL) w pętli, z czasem wyświetlania slajdu.
-  - Wskazówka: krótki interwał = częstsze odświeżenia e‑ink i większe zużycie baterii. Zalecane ≥ 30 s.
+- `visionect_joan.start_slideshow` 
+  - Odtwarza listę widoków (predefiniowane nazwy lub pełne lokalne adresy URL) w pętli z czasem wyświetlania per‑slide.
+Wskazówka: Im więcej sekund na przełączenie slajdu tym wydłozy się zużycie baterii. Wyświetla listę widoków (predefiniowane nazwy lub pełne adresy URL) w pętli z określonym czasem na slajd. Ważne: Ten pokaz slajdów renderuje strony wewnątrz ramki iframe. Wiele zewnętrznych witryn internetowych (np. google.com, home-assistant.io) blokuje osadzanie za pomocą X-Frame-Options/Content-Security-Policy i NIE wyświetla się. Aby uzyskać wiarygodne wyniki, używaj wyłącznie adresów lokalnych (Asystent domowy/AppDaemon/pliki lokalne) lub ustawionych widoków skonfigurowanych w integracji Visionect Joan.
  
 <details>
   <summary>Pokaż zrzut ekranu</summary>
 
-  <img width="1228" height="1457" alt="image" src="https://github.com/user-attachments/assets/106d5ae9-8d8a-4b3f-8f5e-206aab76e0c8" />
+  <img width="606" height="729" alt="510095682-106d5ae9-8d8a-4b3f-8f5e-206aab76e0c8" src="https://github.com/user-attachments/assets/91d25761-2709-417b-9a2c-edf2104c5869" />
 
 </details>
 
