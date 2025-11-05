@@ -19,7 +19,7 @@ Integracja `visionect_joan` zmienia energooszczędny tablet e‑ink **Joan 6** w
 
 Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje: po powrocie do domu pokaż panel energii, po wejściu do kuchni wyświetl listę zakupów, przy wykryciu ruchu wyślij zdjęcie z kamery i automatycznie wróć do głównego pulpitu.
 
----
+***
 
 ## Najważniejsze funkcje
 
@@ -31,7 +31,7 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje: po po
 - Podgląd na żywo: encja `camera` zwraca aktualny obraz z ekranu.
 - Konfiguracja w UI: widoki predefiniowane i adres głównego menu ustawiasz w opcjach integracji (bez YAML).
 
----
+***
 
 ## Dostępne encje
 
