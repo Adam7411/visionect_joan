@@ -74,6 +74,10 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 - `visionect_joan.set_url`
   - Ustawia dowolny URL lub nazwę zdefiniowanego widoku (predefined).
   - Wskazówka: nazwy widoków dopasowywane są bez rozróżniania wielkości liter. Dodawaj/edytuj widoki w: Ustawienia → Urządzenia i usługi → Visionect Joan → Konfiguruj.
+ <details>
+  <summary>Pokaż zrzut ekranu</summary>   
+<img width="1231" height="575" alt="image" src="https://github.com/user-attachments/assets/c38501ac-9328-449f-897f-22c3c6ac4aad" />
+</details>
 
 - `visionect_joan.send_text`
   - Wysyła sformatowany tekst (obsługuje Jinja2), opcjonalnie z obrazem i różnymi układami (text only, text + image).
