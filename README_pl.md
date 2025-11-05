@@ -444,6 +444,11 @@ Wskazówki:
    - Hasło (`należy sutawić swoje`)
    - API Key oraz API Secret (dodasz w Visionect Software Suite → Users → Add new API key)
 
+<img width="1567" height="425" alt="a" src="https://github.com/user-attachments/assets/37bbcdb7-e820-4275-b7ed-efc9248048e5" />
+
+<img width="575" height="615" alt="2" src="https://github.com/user-attachments/assets/a70ccc87-bbff-4fa4-aec5-f4e602709f19" />
+
+
 ---
 
 ## Przykłady użycia
