@@ -358,7 +358,7 @@ Ekrany, które możesz wyświetlić na tablecie Joan 6:
 - Testowany na **Joan 6**; inne modele nie były weryfikowane.
 - Do szybszego rozwoju użyto AI.
 - [Chcesz kupić nowy Joan 6?](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink)
-- [Opis: jak użyć Joan 6 jako panelu sterowania Home Assistant](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
+- [Opis: Visionect Software Suite - Instalacja](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
 
 ---
 
