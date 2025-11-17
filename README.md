@@ -117,6 +117,18 @@ Below is the full list of services available in the integration (many can be com
 
 ### Content display
 
+- `visionect_joan.send_button_panel`
+  - Allows you to create a grid of up to 12 configurable buttons. Each button can have its own name, icon, and a unique webhook_id to trigger automations in Home Assistant.
+  - Tip: The panel works by sending signals to Home Assistant via webhooks. For a button to do anything, you must create an automation that is triggered by its webhook.
+
+<details>
+  <summary>Show screenshot</summary>
+
+  <img width="1214" height="3814" alt="calastrona" src="https://github.com/user-attachments/assets/ab3d7d4e-8843-4e2e-a348-c9d3f83e0da1" />
+</details>
+
+***
+
 - `visionect_joan.set_url`
   - Sets any URL or the name of a predefined view.
   - Tip: view names are matched case‑insensitively. Add/edit views in: Settings → Devices & Services → Visionect Joan → Configure.
