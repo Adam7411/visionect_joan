@@ -120,6 +120,8 @@ Below is the full list of services available in the integration (many can be com
 - `visionect_joan.send_button_panel`
   - Allows you to create a grid of up to 12 configurable buttons. Each button can have its own name, icon, and a unique webhook_id to trigger automations in Home Assistant.
   - Tip: The panel works by sending signals to Home Assistant via webhooks. For a button to do anything, you must create an automation that is triggered by its webhook.
+  - ⚠️ Important Limitation: No State Feedback
+The button panel provides one-way communication only (it is stateless). This means the buttons do not show the current state of your devices (e.g., they won't change appearance if a light is on or off). Pressing a button sends a command to Home Assistant, but the panel itself is not dynamically updated with state information from HA
 
 <details>
   <summary>Show screenshot</summary>
@@ -144,9 +146,7 @@ Below is the full list of services available in the integration (many can be com
 - `visionect_joan.send_text`
   - Sends formatted text (supports Jinja2), optionally with an image and various layouts (text only, text + image).
   - Tips: use fonts that read well on e‑ink; for images, adjust `image_zoom` and `image_rotation`.
-  - ⚠️ Important Limitation: No State Feedback
-The button panel provides one-way communication only (it is stateless). This means the buttons do not show the current state of your devices (e.g., they won't change appearance if a light is on or off). Pressing a button sends a command to Home Assistant, but the panel itself is not dynamically updated with state information from HA
- 
+
 <details>
   <summary>Show screenshot</summary>
 
