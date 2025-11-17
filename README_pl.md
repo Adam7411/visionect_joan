@@ -117,6 +117,18 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
 
 ### Wyświetlanie treści
 
+- `visionect_joan.send_button_panel`
+  - Umożliwia stworzenie siatki do 12 konfigurowalnych przycisków. Każdy przycisk może mieć własną nazwę, ikonę i przypisany unikalny webhook_id, który wywołuje automatyzacje w Home Assistant.
+  - Wskazówka: Panel wysyła sygnały do Home Assistant za pomocą webhooków. Aby przycisk działał, musisz stworzyć automatyzację, która na ten sygnał zareaguje.
+
+<details>
+  <summary>Pokaż zrzut ekranu</summary>
+
+  <img width="1214" height="3814" alt="calastrona" src="https://github.com/user-attachments/assets/fdbb51ba-0f4b-4db4-98bd-e5d01b34ce77" />
+</details>
+
+***
+
 - `visionect_joan.set_url`
   - Ustawia dowolny URL lub nazwę zdefiniowanego widoku (predefined).
   - Wskazówka: nazwy widoków dopasowywane są bez rozróżniania wielkości liter. Dodawaj/edytuj widoki w: Ustawienia → Urządzenia i usługi → Visionect Joan → Konfiguruj.
