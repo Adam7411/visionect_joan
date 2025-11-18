@@ -62,7 +62,7 @@ Dzięki rozbudowanym usługom możesz tworzyć zaawansowane automatyzacje: po po
   <img width="561" height="705" alt="505983472-c7d2f579-759e-48dd-8046-5b0606f5de9e" src="https://github.com/user-attachments/assets/dd217c23-d402-43a8-acb3-1bf0ea841c74" />
 
 </details>
-
+- Panel 12 przycisków webhook
 - Dwa webhooki (akcje): osobne ID dla prawego (→) i środkowego (✔) przycisku.
 - Zarządzanie energią: usypianie/wybudzanie urządzenia, możliwość ustawienia interwału odświeżania sesji.
 - Podgląd na żywo: encja `camera` zwraca aktualny obraz z ekranu.
