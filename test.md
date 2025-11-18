@@ -87,6 +87,7 @@ Integracja działa jako “most” między Home Assistant a Visionect Software S
 
 <details>
   <summary>Kliknij, aby rozwinąć listę przykładowych ekranów</summary>
+  <img width="425" height="574" alt="515106368-0cb2af06-6885-4056-9c51-6835f62c06e9" src="https://github.com/user-attachments/assets/fea6f969-3785-4efd-961a-58e9086becfd" />
   <img width="758" height="1024" alt="Panel domowy" src="https://github.com/user-attachments/assets/fd78c164-6691-477e-84e1-e47a1f70a8cc" />
   <img width="758" height="1024" alt="Kanał RSS" src="https://github.com/user-attachments/assets/f5a1f528-8201-47a0-9f7a-15b435f9152c" />
   <img width="758" height="1024" alt="Pogoda szczegółowa" src="https://github.com/user-attachments/assets/2aca216e-e0d2-454e-b089-ee1eb04e947b" />
