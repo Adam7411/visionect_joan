@@ -25,7 +25,7 @@
   <img width="758" height="1024" alt="RSS view" src="https://github.com/user-attachments/assets/f5a1f528-8201-47a0-9f7a-15b435f9152c" />
   <img width="758" height="1024" alt="Weather" src="https://github.com/user-attachments/assets/2aca216e-e0d2-454e-b089-ee1eb04e947b" />
   <img width="758" height="1024" alt="PIN keypad" src="https://github.com/user-attachments/assets/c765b34f-ed4e-48d7-a59d-ff8ecd67aa7c" />
-  <img width="758" height="1024" alt="Calendar" src="https://github.com/user-attachments/assets/a5f3b53e-1b33-414b-8173-3fac794cbd46" />
+  <img width="758" height="1024" alt="ndar" src="https://github.com/user-attachments/assets/a5f3b53e-1b33-414b-8173-3fac794cbd46" />
   <img width="758" height="1024" alt="Camera snapshot" src="https://github.com/user-attachments/assets/9c087661-69b0-463b-937e-19b2567cab6b" />
   <img width="758" height="1024" alt="QR code" src="https://github.com/user-attachments/assets/f3c19b37-0dad-4bd9-89ac-271c016d4211" />
   <img width="758" height="1024" alt="Sensor graph" src="https://github.com/user-attachments/assets/7819468a-c33b-409f-9845-2256def6a134" />
@@ -52,7 +52,7 @@ Thanks to rich services, you can build advanced automations: show the energy pan
 ## Key features
 
 - Full screen control: send any web URL, local dashboards (e.g., AppDaemon), or single images.
-- Dynamic e‑ink‑optimized views: weather, calendar (including monthly grid), tasks (To‑Do/Shopping List), energy panel, entity status panel, sensor history graphs.
+- Dynamic e‑ink‑optimized views: weather, ndar (including monthly grid), tasks (To‑Do/Shopping List), energy panel, entity status panel, sensor history graphs.
 - Interactivity: a bottom bar with a “Back” button (←) and two action buttons (✔ and →), or optionally “tap anywhere” to run an action or go back.
 
 <details>
@@ -95,7 +95,7 @@ Thanks to rich services, you can build advanced automations: show the energy pan
   - Choose view – select a predefined view for the device.
   - Back button target – default “Back” destination.
   - Dithering Method – dithering algorithm (e.g., none/bayer/floyd‑steinberg).
-  - Bit Depth – grayscale depth (normally 1 or 4).
+  - Bit Depth – grays depth (normally 1 or 4).
 - `button`
   - Force Refresh – immediately restart the renderer session.
   - Reboot Device – reboot device.
@@ -224,7 +224,7 @@ The button panel provides one-way communication only (it is stateless). This mea
 <details>
   <summary>Show screenshot</summary>
 
-  <img width="1920" height="2252" alt="Service: send_calendar" src="https://github.com/user-attachments/assets/b6431600-0556-4052-abdf-53eacf79397e" />
+  <img width="1207" height="801" alt="510071400-b6431600-0556-4052-abdf-53eacf79397e" src="https://github.com/user-attachments/assets/9d8f867c-34a2-4637-b8d2-e5d89c39a571" />
 
 </details>
 
