@@ -528,7 +528,7 @@ Wskazówki:
 4. Wprowadź dane do Visionect Software Suite: [Instalacja Visionect Software Suite](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant_EN)
    - Adres serwera (np. `192.168.x.x:8081`)(adres Home Assistant)
    - Nazwa użytkownika (`admin`)
-   - Hasło (`należy sutawić swoje`)
+   - Hasło (`należy ustawić swoje`)
    - API Key oraz API Secret (dodasz w Visionect Software Suite → Users → Add new API key)
 
 <img width="1567" height="425" alt="a" src="https://github.com/user-attachments/assets/37bbcdb7-e820-4275-b7ed-efc9248048e5" />
