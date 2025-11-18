@@ -373,81 +373,87 @@ Włączenie jednej z opcji ukrywa dolny pasek.
 
 ## Przykłady automatyzacji
 
+Poniżej te same przykłady co wcześniej, ale z dopisanymi komentarzami “zboku” (`#`).
+
 ### 1. Prosty komunikat
 ```yaml
-service: visionect_joan.send_text
+service: visionect_joan.send_text            # Wywołujemy usługę wysyłającą tekst
 target:
-  device_id: 00000000000000000000000000000000
+  device_id: 00000000000000000000000000000000  # ← Wstaw swoje device_id (Urz. i usługi → urządzenie → trzy kropki → Kopiuj ID)
 data:
-  message: "Witaj!\n{{ now().strftime('%H:%M') }}"
-  text_size: 42
+  message: "Witaj!\n{{ now().strftime('%H:%M') }}"  # Treść (obsługa Jinja2)
+  text_size: 42                                     # Rozmiar czcionki (px)
 ```
 
 ### 2. Włącz światło przyciskiem (→)
-Automatyzacja webhook:
+
+Automatyzacja webhook (reaguje na naciśnięcie przycisku):
 ```yaml
-alias: "Joan: światło salon"
+alias: "Joan: światło salon"             # Nazwa automatyzacji
 trigger:
   - platform: webhook
-    webhook_id: joan_light_on
+    webhook_id: joan_light_on            # MUSI się zgadzać z action_webhook_id w wywołaniu usługi
 action:
   - service: light.turn_on
     target:
-      entity_id: light.salon
+      entity_id: light.salon             # Encja światła do włączenia
 ```
-Wyświetlenie:
+
+Wyświetlenie widoku z przyciskiem akcji:
 ```yaml
 service: visionect_joan.send_text
 target:
-  device_id: 00000000000000000000000000000000
+  device_id: 00000000000000000000000000000000  # Joan 6
 data:
-  message: "Światło w salonie"
-  action_webhook_id: joan_light_on
-  add_back_button: true
-  back_button_url: MainMenu
+  message: "Światło w salonie"           # Tekst na ekranie
+  action_webhook_id: joan_light_on       # Po naciśnięciu (→) zostanie wywołany ten webhook
+  add_back_button: true                   # Dodaj przycisk Wstecz (←)
+  back_button_url: MainMenu               # Cel Wstecz: nazwa widoku lub pełny URL
 ```
 
 ### 3. Keypad PIN z powrotem do widoku
-Pierwsze wywołanie:
+
+Pierwsze wywołanie (pokazanie klawiatury PIN):
 ```yaml
 service: visionect_joan.send_keypad
 target:
-  device_id: 266a72218733bb9a056aff49bf6f8e2d
+  device_id: 266a72218733bb9a056aff49bf6f8e2d  # Joan 6
 data:
-  title: "PIN"
-  action_webhook_id: joan_pin
+  title: "PIN"                         # Nagłówek nad klawiaturą (opcjonalny)
+  action_webhook_id: joan_pin         # Webhook, na który zostanie POSTowany PIN (JSON: {"pin": "1234"})
 ```
-Automatyzacja:
+
+Automatyzacja (walidacja PIN i nawigacja):
 ```yaml
-alias: "PIN → dostęp"
+alias: "PIN → dostęp"                      # Nazwa automatyzacji
 mode: single
 trigger:
   - platform: webhook
-    webhook_id: joan_pin
+    webhook_id: joan_pin                   # Musi odpowiadać action_webhook_id z send_keypad
 variables:
-  correct_pin: "321"
+  correct_pin: "321"                       # PIN referencyjny (rozważ secrets/input_text)
 action:
   - choose:
       - conditions:
           - condition: template
-            value_template: "{{ trigger.json.pin == correct_pin }}"
+            value_template: "{{ trigger.json.pin == correct_pin }}"  # Porównanie PIN
         sequence:
           - service: visionect_joan.set_url
             target:
-              device_id: 266a72218733bb9a056aff49bf6f8e2d
+              device_id: 266a72218733bb9a056aff49bf6f8e2d           # Joan 6
             data:
-              url: DomPanel
+              url: DomPanel                                         # Nazwa widoku lub pełny URL
     default:
       - service: visionect_joan.send_text
         target:
           device_id: 266a72218733bb9a056aff49bf6f8e2d
         data:
-          message: "Błędny PIN!"
+          message: "Błędny PIN!"             # Komunikat o błędnym PIN
           text_size: 48
           add_back_button: true
           back_button_url: MainMenu
-      - delay: "00:00:03"
-      - service: visionect_joan.send_keypad
+      - delay: "00:00:03"                    # Krótka pauza
+      - service: visionect_joan.send_keypad  # Ponowne wyświetlenie klawiatury
         target:
           device_id: 266a72218733bb9a056aff49bf6f8e2d
         data:
@@ -457,52 +463,52 @@ action:
 
 ### 4. Panel energii po wejściu do strefy
 ```yaml
-alias: "Powrót do domu → Panel energii"
+alias: "Powrót do domu → Panel energii"   # Opis celu automatyzacji
 trigger:
   - platform: zone
-    entity_id: person.jan
-    zone: zone.home
-    event: enter
+    entity_id: person.jan                 # Osoba, której wejście do strefy śledzimy
+    zone: zone.home                       # Strefa "home"
+    event: enter                          # Zdarzenie wejścia
 action:
   - service: visionect_joan.send_energy_panel
     target:
-      device_id: 00000000000000000000000000000000
+      device_id: 00000000000000000000000000000000  # Joan 6
     data:
-      power_usage_entity: sensor.house_power
-      daily_consumption_entity: sensor.energy_daily_consumption
+      power_usage_entity: sensor.house_power           # Aktualny pobór mocy (W/kW)
+      daily_consumption_entity: sensor.energy_daily_consumption  # Dzienne zużycie (kWh)
       add_back_button: true
-      back_button_url: MainMenu
+      back_button_url: MainMenu                        # Dokąd wrócić po (←)
 ```
 
 ### 5. Slideshow – rotacja menu informacyjnego
 ```yaml
 service: visionect_joan.start_slideshow
 target:
-  device_id: 00000000000000000000000000000000
+  device_id: 00000000000000000000000000000000  # Joan 6
 data:
-  views: |
+  views: |                                     # Każda linia: nazwa widoku LUB pełny lokalny URL
     MainMenu
     PogodaPanel
     http://192.168.1.10:8123/local/ogloszenia.png
-  seconds_per_slide: 45
-  loop: true
-  add_back_button: true
+  seconds_per_slide: 45                        # Czas na slajd (sekundy) – krócej = większe zużycie baterii
+  loop: true                                   # Po ostatnim wróć do pierwszego
+  add_back_button: true                        # Dodaj (←) z powrotem do np. MainMenu (jeśli ustawione jako globalne lub per‑device)
 ```
 
 ### 6. Snapshot kamery po ruchu
 ```yaml
-alias: "Ruch → Snapshot"
+alias: "Ruch → Snapshot"                  # Gdy wykryto ruch, pokaż zdjęcie z kamery
 trigger:
   - platform: state
-    entity_id: binary_sensor.motion_hall
+    entity_id: binary_sensor.motion_hall  # Czujka ruchu
     to: "on"
 action:
   - service: visionect_joan.send_camera_snapshot
     target:
-      device_id: 00000000000000000000000000000000
+      device_id: 00000000000000000000000000000000  # Joan 6
     data:
-      camera_entity: camera.hallway
-      caption: "Ruch: {{ now().strftime('%H:%M:%S') }}"
+      camera_entity: camera.hallway                # Encja kamery
+      caption: "Ruch: {{ now().strftime('%H:%M:%S') }}"  # Podpis pod obrazem
       add_back_button: true
       back_button_url: MainMenu
 ```
