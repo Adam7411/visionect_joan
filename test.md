@@ -1,282 +1,431 @@
-<!-- README_PL.md -->
 <div align="right">
-<a href="README.md">English</a> | <a href="README_pl.md">Polski</a>
+<a href="README.md">English</a> | <strong>Polski</strong>
 </div>
 
-<a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Adam7411&repository=visionect_joan&category=integration" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs.svg" alt="Otwórz w HACS"></a>
+<!-- Odznaki (możesz dodać więcej jeśli chcesz) -->
+<p align="center">
+  <a href="https://github.com/Adam7411/visionect_joan/releases"><img alt="Wydanie" src="https://img.shields.io/github/v/release/Adam7411/visionect_joan?style=for-the-badge"></a>
+  <a href="https://github.com/Adam7411/visionect_joan"><img alt="Licencja" src="https://img.shields.io/github/license/Adam7411/visionect_joan?style=for-the-badge"></a>
+  <a href="https://hacs.xyz/"><img alt="HACS" src="https://img.shields.io/badge/HACS-Custom-orange?style=for-the-badge"></a>
+  <a href="https://github.com/Adam7411/visionect_joan/stargazers"><img alt="Gwiazdki" src="https://img.shields.io/github/stars/Adam7411/visionect_joan?style=for-the-badge"></a>
+</p>
 
 # Visionect Joan dla Home Assistant
 
-<img width="1280" height="800" alt="Przykładowy ekran główny na tablecie Joan 6" src="https://github.com/user-attachments/assets/32214988-dc0e-44ce-af14-2d7f71fb8e6c" />
+> Integracja `visionect_joan` zmienia energooszczędny tablet e‑ink **Joan 6** w konfigurowalne centrum informacji i sterowania dla Twojego systemu Home Assistant: panele energii, kalendarz, lista zakupów / zadań, grafy sensorów, pogoda (różne układy), kanał RSS, snapshot kamery, PIN keypad, pokazy slajdów oraz interaktywne przyciski / webhooki.
+
+<img width="1280" height="800" alt="Ekran główny Joan 6" src="https://github.com/user-attachments/assets/32214988-dc0e-44ce-af14-2d7f71fb8e6c" />
 
 <p align="center">
+⬇️ Sprzęt: Joan 6 ⬇️  
 <br>
-⬇️ Visionect Joan 6 ⬇️
-<img width="421" height="328" alt="image" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
-
-***
-👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇
-<details>
-  <summary>Pokaż zrzut ekranu</summary> 
-  <!-- Oryginalne zrzuty zachowane -->
-  <img width="425" height="574" alt="panel start" src="https://github.com/user-attachments/assets/6034d4e4-bfd5-45b2-ab4f-d52c2854f8ee" />
-  <img width="758" height="1024" alt="joan" src="https://github.com/user-attachments/assets/fd78c164-6691-477e-84e1-e47a1f70a8cc" />
-  <img width="758" height="1024" alt="rss" src="https://github.com/user-attachments/assets/f5a1f528-8201-47a0-9f7a-15b435f9152c" />
-  <img width="758" height="1024" alt="pog" src="https://github.com/user-attachments/assets/2aca216e-e0d2-454e-b089-ee1eb04e947b" />
-  <img width="758" height="1024" alt="pin" src="https://github.com/user-attachments/assets/c765b34f-ed4e-48d7-a59d-ff8ecd67aa7c" />
-  <img width="758" height="1024" alt="kalenda" src="https://github.com/user-attachments/assets/a5f3b53e-1b33-414b-8173-3fac794cbd46" />
-  <img width="758" height="1024" alt="cam" src="https://github.com/user-attachments/assets/9c087661-69b0-463b-937e-19b2567cab6b" />
-  <img width="758" height="1024" alt="qr" src="https://github.com/user-attachments/assets/f3c19b37-0dad-4bd9-89ac-271c016d4211" />
-  <img width="758" height="1024" alt="graf" src="https://github.com/user-attachments/assets/7819468a-c33b-409f-9845-2256def6a134" />
-  <img width="758" height="1024" alt="tekst" src="https://github.com/user-attachments/assets/0d735375-caf9-4e8c-a4c8-6b5008a88f9b" />
-  <img width="758" height="1024" alt="pogoda2" src="https://github.com/user-attachments/assets/6267ae6c-0263-4fb0-8189-c638cc5d685d" />
-  <img width="758" height="1024" alt="statusy" src="https://github.com/user-attachments/assets/8e35f996-26a3-4e4f-9951-1938530a9028" />
-  <img width="758" height="1024" alt="energia" src="https://github.com/user-attachments/assets/acb78d0e-ca38-451e-8fc2-f64f479d1c78" />
-  <img width="758" height="1024" alt="podglad" src="https://github.com/user-attachments/assets/3bd6d185-33ae-4407-98c5-9b70821c27b9" />
-  <img width="758" height="1024" alt="diag" src="https://github.com/user-attachments/assets/fe7eb843-a6f1-4ef7-a3a4-e006b93c528f" />
-</details>
-***
+<img width="421" height="328" alt="Joan 6 - tablet e-ink" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
 </p>
 
-Integracja `visionect_joan` zmienia energooszczędny tablet e‑ink **Joan 6** w potężne centrum informacji […] (oryginalny opis).
-
-***
+---
 
 ## Spis treści
-- [Najważniejsze funkcje](#najważniejsze-funkcje)
-- [Dostępne encje](#dostępne-encje)
-- [Usługi](#usługi)
-- [Wskazówki konfiguracji usług](#wskazówki-konfiguracji-usług)
-- [Warstwa interaktywna i webhooki](#warstwa-interaktywna-i-webhooki)
-- [Instalacja](#instalacja)
-- [Konfiguracja](#konfiguracja)
-- [Instalacja i konfiguracja Visionect Software Suite](#instalacja-i-konfiguracja-visionect-software-suite)
-- [Przykłady użycia](#przykłady-użycia)
-- [Wydajność i bateria](#wydajność-i-bateria)
-- [Bezpieczeństwo](#bezpieczeństwo)
-- [Rozwiązywanie problemów](#rozwiązywanie-problemów)
-- [Uwagi](#uwagi)
-- [Licencja](#licencja)
+1. [Opis i przeznaczenie](#opis-i-przeznaczenie)  
+2. [Najważniejsze funkcje](#najważniejsze-funkcje)  
+3. [Zrzuty ekranu](#zrzuty-ekranu)  
+4. [Instalacja](#instalacja)  
+5. [Konfiguracja Visionect Software Suite (VSS)](#konfiguracja-visionect-software-suite-vss)  
+6. [Predefiniowane widoki (Views)](#predefiniowane-widoki-views)  
+7. [Encje](#encje)  
+8. [Usługi – skrót](#usługi--skrót)  
+9. [Szczegóły usług](#szczegóły-usług)  
+10. [Warstwa interaktywna i priorytet “Wstecz”](#warstwa-interaktywna-i-priorytet-wstecz)  
+11. [Przykłady automatyzacji](#przykłady-automatyzacji)  
+12. [Wydajność i oszczędzanie baterii](#wydajność-i-oszczędzanie-baterii)  
+13. [Bezpieczeństwo i webhooki](#bezpieczeństwo-i-webhooki)  
+14. [Rozwiązywanie problemów (Troubleshooting)](#rozwiązywanie-problemów-troubleshooting)  
+15. [FAQ](#faq)  
+16. [Plan rozwoju (Roadmap)](#plan-rozwoju-roadmap)  
+17. [Wkład / Contributing](#wkład--contributing)  
+18. [Licencja](#licencja)  
+
+---
+
+## Opis i przeznaczenie
+
+Integracja działa jako “most” między Home Assistant a Visionect Software Suite (VSS). Umożliwia generowanie dynamicznych, zoptymalizowanych pod e‑ink ekranów na Joan 6, reagujących na kontekst (zdarzenia, strefy, czas, czujniki). Zamiast zwykłego “dashbordu” możesz wysłać *w pełni renderowany* widok: panel energii, lista zadań z interaktywnym odhaczaniem (webhook), graf historii, sekcja pogody z wykresem, keypad PIN czy panel 12 przycisków.
 
 ---
 
 ## Najważniejsze funkcje
-(oryginalna lista zachowana)
+
+- Pełna kontrola ekranu: dowolny URL, lokalne strony (AppDaemon, /local/, Lovelace panel embed), obrazy, HTML “data:” inline.
+- Widoki zoptymalizowane dla e‑ink:
+  - Pogoda: szczegółowy, lista prognozy, panel z wykresem 24h.
+  - Kalendarz: lista dni, minimalistyczny, siatka miesięczna + podgląd dnia.
+  - Lista zadań / Shopping List z interaktywnym odhaczaniem przez webhook.
+  - Panel energii (zużycie, produkcja, import, eksport, konsumpcja).
+  - Panel statusów encji (ikony + nazwy + wartości + tłumaczenia stanów).
+  - Graf historii sensorów (line / bar) z automatycznym dopasowaniem orientacji.
+  - RSS / Atom – paginowany.
+  - QR code (np. Wi‑Fi dla gości).
+  - Keypad PIN (webhook → automatyzacja weryfikująca kod).
+  - Panel 12 przycisków (stateless – każdy wywołuje własny webhook).
+- Warstwa interaktywna: dolny pasek (← Wstecz / ✔ środkowy / → prawy), albo pełny ekran jako “tap to action” / “tap to back”.
+- Live preview (`camera`) – bieżący zrzut ekranu jako encja kamery.
+- Ustawienia w UI (bez YAML): predefiniowane widoki + globalny Main Menu URL.
+- Zarządzanie: rotacja ekranu, czyszczenie WebKit cache, wymuszenie odświeżenia, sleep/wake.
+- Parametry renderingu: dithering, encoding (głębia bitowa).
+- Mechanizm cleanup plików tymczasowych (snapshoty / grafy) w `www/`.
+
 <details>
-  <summary>Pokaż zrzut ekranu</summary>
-  <img width="561" height="705" alt="pasek przycisków" src="https://github.com/user-attachments/assets/dd217c23-d402-43a8-acb3-1bf0ea841c74" />
+  <summary>Zrzut: dolny pasek z przyciskami</summary>
+  <img width="561" height="705" alt="Dolny pasek akcji" src="https://github.com/user-attachments/assets/dd217c23-d402-43a8-acb3-1bf0ea841c74" />
 </details>
 
-***
-
-## Dostępne encje
-(oryginalne)
 <details>
-  <summary>Pokaż zrzut ekranu</summary>
-  <img width="658" height="1002" alt="Zrzut ekranu" src="https://github.com/user-attachments/assets/67de6efe-ffd5-4757-8a82-71e46f039943" />
+  <summary>Opcje integracji (widoki predefiniowane)</summary>
+  <img width="838" height="566" alt="Opcje integracji" src="https://github.com/user-attachments/assets/ef9ef69b-413d-4ca4-86d9-373d3117880a" />
 </details>
 
 ---
 
-## Usługi
-(Oryginalne sekcje + zrzuty pozostają – nie usuwam)
+## Zrzuty ekranu
 
-### Wyświetlanie treści
-- `visionect_joan.send_button_panel` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1214" height="3814" alt="calastrona" src="https://github.com/user-attachments/assets/fdbb51ba-0f4b-4db4-98bd-e5d01b34ce77" />
+<details>
+  <summary>Kliknij, aby rozwinąć listę przykładowych ekranów</summary>
+  <img width="758" height="1024" alt="Panel domowy" src="https://github.com/user-attachments/assets/fd78c164-6691-477e-84e1-e47a1f70a8cc" />
+  <img width="758" height="1024" alt="Kanał RSS" src="https://github.com/user-attachments/assets/f5a1f528-8201-47a0-9f7a-15b435f9152c" />
+  <img width="758" height="1024" alt="Pogoda szczegółowa" src="https://github.com/user-attachments/assets/2aca216e-e0d2-454e-b089-ee1eb04e947b" />
+  <img width="758" height="1024" alt="Keypad PIN" src="https://github.com/user-attachments/assets/c765b34f-ed4e-48d7-a59d-ff8ecd67aa7c" />
+  <img width="758" height="1024" alt="Kalendarz miesięczny" src="https://github.com/user-attachments/assets/a5f3b53e-1b33-414b-8173-3fac794cbd46" />
+  <img width="758" height="1024" alt="Snapshot kamery" src="https://github.com/user-attachments/assets/9c087661-69b0-463b-937e-19b2567cab6b" />
+  <img width="758" height="1024" alt="Kod QR" src="https://github.com/user-attachments/assets/f3c19b37-0dad-4bd9-89ac-271c016d4211" />
+  <img width="758" height="1024" alt="Graf sensora" src="https://github.com/user-attachments/assets/7819468a-c33b-409f-9845-2256def6a134" />
+  <img width="758" height="1024" alt="Tekst wiadomości" src="https://github.com/user-attachments/assets/0d735375-caf9-4e8c-a4c8-6b5008a88f9b" />
+  <img width="758" height="1024" alt="Drugi układ pogody" src="https://github.com/user-attachments/assets/6267ae6c-0263-4fb0-8189-c638cc5d685d" />
+  <img width="758" height="1024" alt="Status panel encji" src="https://github.com/user-attachments/assets/8e35f996-26a3-4e4f-9951-1938530a9028" />
+  <img width="758" height="1024" alt="Panel energii" src="https://github.com/user-attachments/assets/acb78d0e-ca38-451e-8fc2-f64f479d1c78" />
+  <img width="758" height="1024" alt="Podgląd live" src="https://github.com/user-attachments/assets/3bd6d185-33ae-4407-98c5-9b70821c27b9" />
+  <img width="758" height="1024" alt="Diagnostyka / bateria" src="https://github.com/user-attachments/assets/fe7eb843-a6f1-4ef7-a3a4-e006b93c528f" />
 </details>
-***
-- `visionect_joan.set_url` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1220" height="595" alt="image" src="https://github.com/user-attachments/assets/bfdf8101-1b45-45e0-ab1a-46c7ab79d96b" />
-</details>
-***
-- `visionect_joan.send_text` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1225" height="2066" alt="image" src="https://github.com/user-attachments/assets/9912da53-becf-4932-ab7e-7f0a17a681d7" />
-</details>
-***
-- `visionect_joan.send_image_url` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1234" height="1448" alt="image" src="https://github.com/user-attachments/assets/9da6769f-668a-4adb-9edf-b5fdc5851d55" />
-</details>
-***
-- `visionect_joan.send_camera_snapshot` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1223" height="1472" alt="image" src="https://github.com/user-attachments/assets/6cec8748-a586-46c2-8f2b-2bcf-25237e08" />
-</details>
-***
-- `visionect_joan.send_status_panel` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1230" height="1416" alt="image" src="https://github.com/user-attachments/assets/bb21ddb7-77bf-4db1-bc57-9ecf2c2d5021" />
-</details>
-***
-- `visionect_joan.send_energy_panel` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1230" height="1423" alt="image" src="https://github.com/user-attachments/assets/66b3f26d-f5c3-4276-b837-de6b85cf9fcf" />
-</details>
-***
-- `visionect_joan.send_weather` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1225" height="1237" alt="image" src="https://github.com/user-attachments/assets/588660d8-e0ff-48b3-b7a5-6d9432cd2329" />
-</details>
-***
-- `visionect_joan.send_calendar` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1207" height="801" alt="kalendarz" src="https://github.com/user-attachments/assets/83f5d345-69ef-42af-84d3-f7f4f3c3b1a0" />
-</details>
-***
-- `visionect_joan.send_todo_list` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1216" height="1201" alt="image" src="https://github.com/user-attachments/assets/6735340b-bec9-47a6-a72e-07d16da20943" />
-</details>
-***
-- `visionect_joan.send_sensor_graph` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1219" height="1895" alt="image" src="https://github.com/user-attachments/assets/c5507b3b-28e6-47a1-a88a-11d936f2f35b" />
-</details>
-***
-- `visionect_joan.send_rss_feed` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1225" height="1255" alt="image" src="https://github.com/user-attachments/assets/56316ce1-8350-49d5-a624-2f7a880b8a4e" />
-</details>
-***
-
-### Interaktywność i nawigacja
-- `visionect_joan.send_qr_code` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1223" height="1765" alt="image" src="https://github.com/user-attachments/assets/a55360c9-9f17-4b81-baf9-b990692bc2a0" />
-</details>
-***
-- `visionect_joan.start_slideshow` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="606" height="729" alt="slideshow" src="https://github.com/user-attachments/assets/91d25761-2709-417b-9a2c-edf2104c5869" />
-</details>
-***
-- `visionect_joan.send_keypad` […]
-<details><summary>Pokaż zrzut ekranu</summary>
-  <img width="1220" height="632" alt="image" src="https://github.com/user-attachments/assets/5df2b9d9-ae6e-4a60-9f9f-c787f7658135" />
-</details>
-
-### Parametry renderingu i zarządzanie
-(oryginalne)
-- `visionect_joan.set_session_options` […]
-- `visionect_joan.clear_web_cache` […]
-- `visionect_joan.force_refresh` […]
-- `visionect_joan.set_display_rotation` […]
-- `visionect_joan.clear_display` […]
-- `visionect_joan.sleep_device` / `visionect_joan.wake_device` […]
-
----
-
-## Wskazówki konfiguracji usług
-
-| Usługa | Parametry kluczowe | Rekomendacja |
-|--------|--------------------|--------------|
-| set_url | url, add_back_button | Używaj nazw widoków (predefiniowanych) dla stabilności; adresy lokalne przy VSS w tym samym hoście |
-| send_text | message, text_size, image_rotation | Rozmiar 32–48; unikaj zbyt częstych zmian dużych obrazów |
-| send_button_panel | buttons[], webhook_id | 3–4 kolumny w pionie; każdy webhook z osobną automatyzacją |
-| send_keypad | action_webhook_id, title | PIN max_length 3–6; po błędzie szybki komunikat i powrót do keypad |
-| start_slideshow | views[], seconds_per_slide | ≥ 30 s aby ograniczyć zużycie baterii |
-| send_sensor_graph | sensor_ids, hours | Godziny ≤ 24 w trybie częstego odświeżania |
-| set_session_options | encoding, dithering | encoding=1 dla tekstu/statusów; encoding=4 + floyd‑steinberg dla zdjęć |
-| send_rss_feed | feed_url, max_items | 5–10 pozycji czytelne; aktualizacja co 30–60 min |
-| send_energy_panel | add_back_button, orientation | Portret czytelniejszy; wywołuj kontekstowo (geo-fence) |
-
-Przykład automatyzacji “Powrót do menu głównego po 5 minutach nieaktywności”:
-```
-alias: "Joan: powrót do menu"
-trigger:
-  - platform: time_pattern
-    minutes: "/5"
-condition:
-  - condition: template
-    value_template: "{{ states('camera.joan_preview') != 'unavailable' }}"
-action:
-  - service: visionect_joan.set_url
-    data:
-      url: MainMenu
-    target:
-      device_id: YOUR_DEVICE_ID
-```
-
----
-
-## Warstwa interaktywna i webhooki
-Priority “Wstecz”: 1) back_button_url 2) encja Back button target 3) globalny Main menu URL.
-Wariant dotyk-cały-ekran: `click_anywhere_to_action: true`.
 
 ---
 
 ## Instalacja
-(oryginalna sekcja bez zmian)
 
-### Przez HACS (zalecane) […]
-### Ręcznie […]
+### Przez HACS (zalecane)
+1. Zainstaluj [HACS](https://hacs.xyz/) (jeśli nie masz).
+2. W HACS → Integrations kliknij ⋮ → Custom repositories.
+3. Dodaj repo: `Adam7411/visionect_joan` jako “Integration”.
+4. Odnajdź “Visionect Joan” → Install.
+5. Restart Home Assistant.
 
----
-
-## Konfiguracja
-(oryginalna) + upewnij się, że:
-- API Key/Secret utworzone w VSS.
-- Adres HA dostępny z hosta VSS (jeśli osobny).
-
----
-
-## Instalacja i konfiguracja Visionect Software Suite
-
-1. Zainstaluj Visionect Software Suite (dodatek / Docker).
-2. Upewnij się, że port (np. 8081) jest dostępny z HA.
-3. Utwórz API Key & Secret (Users → Add new API key).
-4. W integracji wpisz IP/host bez protokołu (np. `192.168.1.10:8081`) jeśli wymaga.
-5. Test: wywołaj `visionect_joan.force_refresh`; jeśli encja `camera` odświeży obraz – OK.
-6. Oddzielny host? Skonfiguruj poprawny adres wewnętrzny HA (Ustawienia → System → Sieć).
+### Ręcznie
+1. Pobierz najnowszy release (`visionect-joan.zip` albo “Source code”).
+2. Wypakuj do: `/config/custom_components/visionect_joan/`.
+3. Restart HA.
 
 ---
 
-## Przykłady użycia
-(oryginalne + możesz dodać nowe)
-- Światło przyciskiem webhook.
-- PIN bezpieczeństwa.
-- Rotacja widoków informacyjnych (slideshow).
-- Panel energii przy wejściu do strefy.
+## Konfiguracja Visionect Software Suite (VSS)
+
+1. Zainstaluj Visionect Software Suite (np. oficjalny pakiet lub All‑in‑One w Docker / Add-on).  
+2. Ustal adres (np. `192.168.1.25:8081`). Jeśli nie dodasz portu → zostanie przyjęty domyślny 8081.  
+3. W panelu VSS utwórz API Key + Secret (Users → Add new API key).  
+4. W Home Assistant: Ustawienia → Urządzenia i usługi → “+ Dodaj integrację” → “Visionect Joan”.  
+5. Uzupełnij: Host, (opcjonalnie) Username/Password lub API Key/Secret. Integracja spróbuje HMAC → Basic → login.  
+6. Po udanym teście zostanie utworzona encja + zestaw urządzeń (Joan 6).  
+
+Jeśli VSS jest na innym hoście:
+- Skonfiguruj poprawny wewnętrzny URL HA (Ustawienia → System → Sieć) – webhooki wymagają poprawnej lokalnej nazwy/hosta.
+- Zadbaj o dostęp przez HTTP/HTTPS (certyfikat jeśli TLS).
+- Firewall: otwórz porty lokalne (8081 dla VSS, 8123 dla HA).
 
 ---
 
-## Wydajność i bateria
+## Predefiniowane widoki (Views)
 
-| Element | Wskazówka |
-|---------|-----------|
-| ReloadTimeout | ≥ 60 s dla statycznych widoków |
-| Slideshow | Dłuższy czas slajdu = mniej odświeżeń |
-| encoding | 1-bit dla tekstu; 4-bit gdy potrzebne odcienie |
-| dithering | none dla prostych ikon; floyd‑steinberg dla fotograficznych elementów |
-| Nadmierne odświeżenia | Grupuj aktualizacje (automatyzacja) |
+Widoki zapisujesz w Opcjach integracji:
+1. Ustawienia → Urządzenia i usługi → Visionect Joan → Konfiguruj.
+2. “Add view” → Nazwa + URL.
+3. Te nazwy możesz potem wybierać przez encję `Choose view` (select) lub podawać jako `predefined_url` / `url` w usługach.
 
----
-
-## Bezpieczeństwo
-
-- Webhooki bez uwierzytelniania – używaj głównie w sieci lokalnej.
-- Nie wystawiaj publicznie portu webhooków bez proxy/autoryzacji.
-- Trudne, nieoczywiste `webhook_id` (losowe stringi).
-- PIN nie w logach – porównuj w szablonie.
+Format legacy (“Name: URL” linia po linii) jest automatycznie migrowany.
 
 ---
 
-## Rozwiązywanie problemów
+## Encje
+
+| Typ encji | Nazwa / Funkcja | Uwagi |
+|-----------|-----------------|-------|
+| `camera` | Podgląd aktualnego ekranu | Koduje zrzut jako obraz PNG |
+| `sensor` | Stan online/offline, bateria, temperatura, RSSI, uptime, napięcie, pamięć, URL, diagn. | Część domyślnie włączona |
+| `binary_sensor` | Ładowanie (Charger) | `is_charging` |
+| `text` | Nazwa urządzenia | Zmiana wysyłana do API |
+| `number` | `ReloadTimeout` (czas odświeżenia sesji) | 0–86400 s |
+| `select` | Wybór widoku / Back target / dithering / głębia | Głębia (encoding) i dithering jako opcje sesji |
+| `button` | Force Refresh / Reboot / Clear Web Cache | Reboot i Clear domyślnie ukryte |
+| (wewnętrzne) | Panel opcji widoków | Przez OptionsFlow |
+
+---
+
+## Usługi – skrót
+
+| Usługa | Kategoria | Interaktywność (overlay) | Opis skrócony |
+|--------|-----------|--------------------------|---------------|
+| `visionect_joan.set_url` | Nawigacja | Opcjonalnie | Ustaw URL lub nazwę widoku |
+| `visionect_joan.send_text` | Treść | Tak | Tekst + układ obrazu (Jinja2) |
+| `visionect_joan.send_image_url` | Treść | Tak | Sam obraz (PNG/JPG/SVG/WebP) |
+| `visionect_joan.send_camera_snapshot` | Treść | Tak | Snapshot z encji kamery |
+| `visionect_joan.send_status_panel` | Status | Tak | Lista encji (ikony + stan) |
+| `visionect_joan.send_energy_panel` | Energia | Tak | Zużycie + produkcja/import/export |
+| `visionect_joan.send_weather` | Pogoda | Tak | 3 layouty (szczegóły / lista / wykres) |
+| `visionect_joan.send_calendar` | Kalendarz | Tak | Lista / minimalistyczna / miesięczna |
+| `visionect_joan.send_todo_list` | Lista | Tak | To-Do / Shopping List + webhook toggle |
+| `visionect_joan.send_sensor_graph` | Historia | Tak | Wykres line/bar wielu sensorów |
+| `visionect_joan.send_rss_feed` | RSS | Tak | Lista + paginacja |
+| `visionect_joan.send_qr_code` | QR | Tak | Kod + podpis |
+| `visionect_joan.start_slideshow` | Nawigacja | Tak | Rotacja widoków / URL w pętli |
+| `visionect_joan.send_keypad` | Wejście | Tak (bez Back domyślnie) | PIN → webhook |
+| `visionect_joan.send_button_panel` | Akcje | Tak | Do 12 przycisków (webhook) |
+| `visionect_joan.set_session_options` | Render | N/A | Głębia / dithering |
+| `visionect_joan.clear_web_cache` | Utrzymanie | N/A | Czyszczenie cache (opcjonalny restart) |
+| `visionect_joan.force_refresh` | Utrzymanie | N/A | Restart sesji |
+| `visionect_joan.set_display_rotation` | Utrzymanie | N/A | Rotacja + reboot |
+| `visionect_joan.clear_display` | Utrzymanie | N/A | Pusty ekran |
+| `visionect_joan.sleep_device` / `wake_device` | Zasilanie | N/A | Sen / wybudzenie |
+| (encje `number`, `select`) | Parametry | N/A | ReloadTimeout / encoding / dithering |
+
+---
+
+## Szczegóły usług
+
+Pełne pola i opisy znajdują się w pliku `services.yaml` (UI: Developer Tools → Services).  
+Poniżej wybrane wskazówki parametryzacji (polskie nazwy skrócone):
+
+### Tekst (`send_text`)
+- `message`: wspiera Jinja2.
+- `layout`: np. `image_left` gdy chcesz zestawić ikonę / wykres.
+- `small_screen_optimized`: true → mniejsze odstępy/fonty.
+
+### Obraz (`send_image_url`)
+- Lokalnie: `http://<HA_IP>:8123/local/plik.png`
+- Walidacja rozszerzeń: png, jpg, jpeg, gif, svg, webp.
+
+### Graf sensorów (`send_sensor_graph`)
+- `graph_type`: line / bar.
+- `duration_hours`: 6–24 sensowne dla codziennego podglądu.
+- `show_points`: true przy rozproszonych wartościach.
+
+### Pogoda (`send_weather`)
+- `layout`: 
+  - `detailed_summary` – ogólne warunki + dzienne skróty,
+  - `daily_forecast_list` – dużo dni (lista),
+  - `weather_graph_panel` – wykres temperatury 24h + szczegóły.
+
+### Slideshow (`start_slideshow`)
+- Wiele linii: każda nazwa widoku lub pełny URL.
+- Krótszy `seconds_per_slide` = większe zużycie baterii.
+
+### Panel przycisków (`send_button_panel`)
+- Każdy przycisk ma: `button_X_webhook_id`, `button_X_name`, `button_X_icon`.
+- Stateless → przycisk nie zmienia wyglądu jeśli urządzenie zmieni stan.
+
+### Keypad (`send_keypad`)
+- Wysyła PIN POST `{"pin": "1234"}` do `/api/webhook/<ID>`.
+- Walidacja w automatyzacji webhook → warunek `trigger.json.pin`.
+
+### To‑Do (`send_todo_list`)
+- Przy użyciu webhook toggle możesz w automatyzacji zaktualizować status zadania (własna logika).
+
+---
+
+## Warstwa interaktywna i priorytet “Wstecz”
+
+Priorytet określania celu powrotu:
+1. `back_button_url` (w wywołaniu usługi)
+2. Per‑device selektor `Back button target`
+3. Globalny `Main menu URL` (opcje integracji)
+
+Wyłączenie widocznych przycisków:
+- `click_anywhere_to_action: true` → cały ekran = akcja (webhook).
+- `click_anywhere_to_return: true` → cały ekran = powrót.
+- Jeśli włączysz jedno z powyższych → dolny pasek znika.
+
+---
+
+## Przykłady automatyzacji
+
+### 1. Prosty komunikat
+```yaml
+service: visionect_joan.send_text
+target:
+  device_id: 00000000000000000000000000000000
+data:
+  message: "Witaj!\n{{ now().strftime('%H:%M') }}"
+  text_size: 42
+```
+
+### 2. Włącz światło przyciskiem (→)
+Automatyzacja webhook:
+```yaml
+alias: "Joan: światło salon"
+trigger:
+  - platform: webhook
+    webhook_id: joan_light_on
+action:
+  - service: light.turn_on
+    target:
+      entity_id: light.salon
+```
+Wyświetlenie:
+```yaml
+service: visionect_joan.send_text
+target:
+  device_id: 00000000000000000000000000000000
+data:
+  message: "Światło w salonie"
+  action_webhook_id: joan_light_on
+  add_back_button: true
+  back_button_url: MainMenu
+```
+
+### 3. Keypad PIN z powrotem do widoku
+Pierwsze wywołanie:
+```yaml
+service: visionect_joan.send_keypad
+target:
+  device_id: 266a72218733bb9a056aff49bf6f8e2d
+data:
+  title: "PIN"
+  action_webhook_id: joan_pin
+```
+Automatyzacja:
+```yaml
+alias: "PIN → dostęp"
+mode: single
+trigger:
+  - platform: webhook
+    webhook_id: joan_pin
+variables:
+  correct_pin: "321"
+action:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.json.pin == correct_pin }}"
+        sequence:
+          - service: visionect_joan.set_url
+            target:
+              device_id: 266a72218733bb9a056aff49bf6f8e2d
+            data:
+              url: DomPanel
+    default:
+      - service: visionect_joan.send_text
+        target:
+          device_id: 266a72218733bb9a056aff49bf6f8e2d
+        data:
+          message: "Błędny PIN!"
+          text_size: 48
+          add_back_button: true
+          back_button_url: MainMenu
+      - delay: "00:00:03"
+      - service: visionect_joan.send_keypad
+        target:
+          device_id: 266a72218733bb9a056aff49bf6f8e2d
+        data:
+          title: "PIN"
+          action_webhook_id: joan_pin
+```
+
+### 4. Panel energii po wejściu do strefy
+```yaml
+alias: "Powrót do domu → Panel energii"
+trigger:
+  - platform: zone
+    entity_id: person.jan
+    zone: zone.home
+    event: enter
+action:
+  - service: visionect_joan.send_energy_panel
+    target:
+      device_id: 00000000000000000000000000000000
+    data:
+      power_usage_entity: sensor.house_power
+      daily_consumption_entity: sensor.energy_daily_consumption
+      add_back_button: true
+      back_button_url: MainMenu
+```
+
+### 5. Slideshow – rotacja menu informacyjnego
+```yaml
+service: visionect_joan.start_slideshow
+target:
+  device_id: 00000000000000000000000000000000
+data:
+  views: |
+    MainMenu
+    PogodaPanel
+    http://192.168.1.10:8123/local/ogloszenia.png
+  seconds_per_slide: 45
+  loop: true
+  add_back_button: true
+```
+
+### 6. Snapshot kamery po ruchu
+```yaml
+alias: "Ruch → Snapshot"
+trigger:
+  - platform: state
+    entity_id: binary_sensor.motion_hall
+    to: "on"
+action:
+  - service: visionect_joan.send_camera_snapshot
+    target:
+      device_id: 00000000000000000000000000000000
+    data:
+      camera_entity: camera.hallway
+      caption: "Ruch: {{ now().strftime('%H:%M:%S') }}"
+      add_back_button: true
+      back_button_url: MainMenu
+```
+
+---
+
+## Wydajność i oszczędzanie baterii
+
+| Element | Rekomendacja |
+|---------|--------------|
+| `ReloadTimeout` | 60–300 s dla paneli informacyjnych; 0 tylko gdy wymuszasz pokaz statyczny |
+| Slideshow | ≥ 30 s per slide; unikaj szybkiego “przerzucania” |
+| Encoding | `1` dla tekstu / prostych widoków; `4` dla zdjęć i cieniowanych wykresów |
+| Dithering | `none` dla czytelności; `floyd-steinberg` dla obrazów |
+| Duże obrazy | Skaluj do rozdzielczości ekranu przed wysłaniem |
+| Noc | Automatyzacja redukująca odświeżenia (czas lub `person` strefy) |
+| Sleep | Użyj `sleep_device` gdy tablet nie potrzebuje aktualizacji dłużej (np. noc) |
+
+---
+
+## Bezpieczeństwo i webhooki
+
+- Webhooki HA ( `/api/webhook/<id>` ) nie są domyślnie uwierzytelnione – traktuj je jako lokalne triggery.
+- Nie wystawiaj przypadkowo portu 8123 publicznie bez reverse proxy/autoryzacji.
+- Dla wrażliwych akcji używaj losowych identyfikatorów (`joan_akcji_9342hf` etc.).
+- PIN nie zapisuj w logach – porównuj przez szablony lub przechowuj w `input_text`/secrets.
+- Oddzielny host? Zadbaj o poprawny `internal_url`, inaczej webhook może być źle skonstruowany.
+
+---
+
+## Rozwiązywanie problemów (Troubleshooting)
 
 | Problem | Przyczyna | Rozwiązanie |
 |---------|-----------|-------------|
-| Brak reakcji przycisku | Zła nazwa webhook_id | Sprawdź w automatyzacji |
-| “Stare” obrazy | Cache przeglądarki | `clear_web_cache`, `force_refresh` |
-| Brak wykresu | Brak historii sensora | Włącz recorder |
-| Wolno się odświeża | encoding=4 + duże obrazy | Zmień na encoding=1 |
-| Nie zmienia orientacji | Sesja nie odświeżona | `set_display_rotation` + `force_refresh` |
+| Brak reakcji przycisku | Zły `webhook_id` / brak automatyzacji | Sprawdź w Podglądzie zdarzeń → webhook |
+| Nie odświeża się ekran | Stara sesja | `force_refresh` lub zwiększ ReloadTimeout |
+| “Stare” obrazy / CSS | Cache WebKit | `clear_web_cache` + (opcjonalnie restart) |
+| Pusty graf | Brak historii / recorder wyłączony | Włącz zapis historii dla sensorów |
+| Błędna rotacja | Sesja nie przeładowana | Po rotacji reboot + force_refresh |
+| PIN zawsze błędny | Automatyzacja nie odbiera JSON | Sprawdź `trigger.json` w template debug |
+| Kanał RSS pusty | Feed niedostępny / błąd sieci | Otwórz URL w przeglądarce, sprawdź logi |
 
-Debug log:
-```
+Aktywacja debug:
+```yaml
 logger:
   logs:
     custom_components.visionect_joan: debug
@@ -284,15 +433,57 @@ logger:
 
 ---
 
-## Uwagi
+## FAQ
 
-- Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
-- Testowany na Joan 6.
-- AI użyto do wspomagania rozwoju.
-- [Opis instalacji VSS](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant_EN)
-- [Zakup Joan 6](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink)
+**Czy przyciski mogą pokazywać stan urządzeń (np. światła)?**  
+Obecnie panel 12 przycisków jest stateless (brak sprzężenia zwrotnego). W planach wariant z odczytem stanie przez webhook / warstwę renderowania.
+
+**Ghosting na ekranie – normalne?**  
+Częste odświeżenia e‑ink powodują artefakty. Ogranicz liczbę aktualizacji i wybierz wyższy kontrast (encoding=1).
+
+**Czy mogę używać z innymi modelami Joan?**  
+Testowane na Joan 6. Inne modele mogą działać częściowo – brak oficjalnych testów.
+
+**Dlaczego zewnętrzna strona nie wyświetla się w slideshow?**  
+Wiele domen blokuje iframe (nagłówki CSP / X-Frame-Options). Używaj lokalnych URL / predefiniowanych widoków.
+
+**Czy mogę wysyłać HTML własny?**  
+Tak – `data:text/html,<html>...` jako URL w `set_url` lub poprzez generatory (usługi dynamiczne).
+
+---
+
+## Plan rozwoju (Roadmap)
+
+- Podgląd stanów w panelu przycisków (dwukierunkowość).
+- Możliwość przypięcia stylów / motywów użytkownika (custom CSS).
+- Obsługa innych modeli Joan (weryfikacja).
+- Tryb “aktywny tylko gdy w pobliżu” (integracja z BLE / presence).
+- Serwis broadcast (jednoczesne wysyłanie do wielu urządzeń ze scalaniem wyników).
+
+---
+
+## Wkład / Contributing
+
+1. Fork → Branch (np. `feat/panel-stanow`).
+2. Zmiany opisane w PR + zrzuty, jeśli zmiana dotyczy UI.
+3. Konwencje commitów (zalecane): `feat:`, `fix:`, `docs:`, `perf:`, `refactor:`.
+4. Staraj się dodawać typowanie, unikać blokowania pętli event loop.
+5. Zgłoszenia błędów → Issues (dołącz logi, wersję HA, wersję integracji).
+6. Testy (opcjonalnie) – snapshoty HTML można porównać przez prosty diff.
 
 ---
 
 ## Licencja
+
 MIT
+
+---
+
+## Noty końcowe
+
+- Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
+- AI wspomagało część generowania kodu i dokumentacji.
+- Zakup Joan 6 (przykładowy link): *(jeśli aktualny – dodaj własny)*.
+- Przewidziane są dalsze usprawnienia w zakresie optymalizacji i bezpieczeństwa webhooków.
+
+Miłego używania – jeśli masz sugestie, otwórz Issue lub PR! 😊
