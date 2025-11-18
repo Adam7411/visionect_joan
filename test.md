@@ -40,9 +40,7 @@
 13. [Bezpieczeństwo i webhooki](#bezpieczeństwo-i-webhooki)  
 14. [Rozwiązywanie problemów (Troubleshooting)](#rozwiązywanie-problemów-troubleshooting)  
 15. [FAQ](#faq)  
-16. [Plan rozwoju (Roadmap)](#plan-rozwoju-roadmap)  
-17. [Wkład / Contributing](#wkład--contributing)  
-18. [Licencja](#licencja)  
+16. [Licencja](#licencja)  
 
 ---
 
