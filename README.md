@@ -20,7 +20,7 @@
 👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇
 <details>
   <summary>Show screenshots</summary> 
-  
+  <img width="425" height="574" alt="515106368-0cb2af06-6885-4056-9c51-6835f62c06e9" src="https://github.com/user-attachments/assets/6ead9216-7d0b-4613-91ad-0aacca0069d9" />
   <img width="758" height="1024" alt="Home panel" src="https://github.com/user-attachments/assets/fd78c164-6691-477e-84e1-e47a1f70a8cc" />
   <img width="758" height="1024" alt="RSS view" src="https://github.com/user-attachments/assets/f5a1f528-8201-47a0-9f7a-15b435f9152c" />
   <img width="758" height="1024" alt="Weather" src="https://github.com/user-attachments/assets/2aca216e-e0d2-454e-b089-ee1eb04e947b" />
