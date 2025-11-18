@@ -121,7 +121,7 @@ Poniżej pełna lista usług dostępnych w integracji (wiele z nich możesz poł
   - Umożliwia stworzenie siatki do 12 konfigurowalnych przycisków. Każdy przycisk może mieć własną nazwę, ikonę i przypisany unikalny webhook_id, który wywołuje automatyzacje w Home Assistant.
   - Wskazówka: Panel wysyła sygnały do Home Assistant za pomocą webhooków. Aby przycisk działał, musisz stworzyć automatyzację, która na ten sygnał zareaguje.
   - ⚠️ Ważne ograniczenie: Brak informacji o stanie
-Panel przycisków działa jednokierunkowo. Oznacza to, że przyciski nie pokazują aktualnego stanu urządzeń (np. czy światło jest włączone). Naciśnięcie przycisku wysyła polecenie do Home Assistant, ale wygląd ikony na tablecie nie jest dynamicznie aktualizowany.
+Panel przycisków działa jednokierunkowo. Oznacza to, że przyciski nie pokazują aktualnego stanu urządzeń (np. czy światło jest włączone). Naciśnięcie przycisku wysyła polecenie do Home Assistant, ale wygląd ikony na tablecie nie jest dynamicznie aktualizowany. (informacji o stanie przycisku i inne polecam użyć dashboard AppDaemon)
 
 <details>
   <summary>Pokaż zrzut ekranu</summary>
