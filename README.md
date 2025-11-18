@@ -121,7 +121,7 @@ Below is the full list of services available in the integration (many can be com
   - Allows you to create a grid of up to 12 configurable buttons. Each button can have its own name, icon, and a unique webhook_id to trigger automations in Home Assistant.
   - Tip: The panel works by sending signals to Home Assistant via webhooks. For a button to do anything, you must create an automation that is triggered by its webhook.
   - ⚠️ Important Limitation: No State Feedback
-The button panel provides one-way communication only (it is stateless). This means the buttons do not show the current state of your devices (e.g., they won't change appearance if a light is on or off). Pressing a button sends a command to Home Assistant, but the panel itself is not dynamically updated with state information from HA
+The button panel provides one-way communication only (it is stateless). This means the buttons do not show the current state of your devices (e.g., they won't change appearance if a light is on or off). Pressing a button sends a command to Home Assistant, but the panel itself is not dynamically updated with state information from HA. (for information about button status and others, I recommend using the AppDaemon dashboard)
 
 <details>
   <summary>Show screenshot</summary>
