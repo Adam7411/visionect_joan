@@ -224,7 +224,7 @@ Panel przycisków działa jednokierunkowo. Oznacza to, że przyciski nie pokazuj
 <details>
   <summary>Pokaż zrzut ekranu</summary>
 
-  <img width="1920" height="2252" alt="image" src="https://github.com/user-attachments/assets/b6431600-0556-4052-abdf-53eacf79397e" />
+  <img width="1207" height="801" alt="510071400-b6431600-0556-4052-abdf-53eacf79397e" src="https://github.com/user-attachments/assets/83f5d345-69ef-42af-84d3-f7f4f3c3b1a0" />
 
 </details>
 
