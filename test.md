@@ -125,17 +125,18 @@ Integracja działa jako “most” między Home Assistant a Visionect Software S
 
 ## Konfiguracja Visionect Software Suite (VSS)
 
-1. Zainstaluj Visionect Software Suite (np. oficjalny pakiet lub All‑in‑One w Docker / Add-on).  
-2. Ustal adres (np. `192.168.1.25:8081`). Jeśli nie dodasz portu → zostanie przyjęty domyślny 8081.  
-3. W panelu VSS utwórz API Key + Secret (Users → Add new API key).  
-4. W Home Assistant: Ustawienia → Urządzenia i usługi → “+ Dodaj integrację” → “Visionect Joan”.  
-5. Uzupełnij: Host, (opcjonalnie) Username/Password lub API Key/Secret. Integracja spróbuje HMAC → Basic → login.  
-6. Po udanym teście zostanie utworzona encja + zestaw urządzeń (Joan 6).  
+1. Przejdź do `Ustawienia → Urządzenia i usługi`.
+2. Kliknij **„+ Dodaj integrację”**.
+3. Wyszukaj **„Visionect Joan”** i rozpocznij konfigurację.
+4. Wprowadź dane do Visionect Software Suite: [Instalacja Visionect Software Suite](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant_EN)
+   - Adres serwera (np. `192.168.x.x:8081`)(adres Home Assistant)
+   - Nazwa użytkownika (`admin`)
+   - Hasło (`należy ustawić swoje`)
+   - API Key oraz API Secret (dodasz w Visionect Software Suite → Users → Add new API key)
 
-Jeśli VSS jest na innym hoście:
-- Skonfiguruj poprawny wewnętrzny URL HA (Ustawienia → System → Sieć) – webhooki wymagają poprawnej lokalnej nazwy/hosta.
-- Zadbaj o dostęp przez HTTP/HTTPS (certyfikat jeśli TLS).
-- Firewall: otwórz porty lokalne (8081 dla VSS, 8123 dla HA).
+<img width="1567" height="425" alt="a" src="https://github.com/user-attachments/assets/37bbcdb7-e820-4275-b7ed-efc9248048e5" />
+
+<img width="575" height="615" alt="2" src="https://github.com/user-attachments/assets/a70ccc87-bbff-4fa4-aec5-f4e602709f19" />
 
 ---
 
