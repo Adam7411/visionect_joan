@@ -453,27 +453,6 @@ Tak – `data:text/html,<html>...` jako URL w `set_url` lub poprzez generatory (
 
 ---
 
-## Plan rozwoju (Roadmap)
-
-- Podgląd stanów w panelu przycisków (dwukierunkowość).
-- Możliwość przypięcia stylów / motywów użytkownika (custom CSS).
-- Obsługa innych modeli Joan (weryfikacja).
-- Tryb “aktywny tylko gdy w pobliżu” (integracja z BLE / presence).
-- Serwis broadcast (jednoczesne wysyłanie do wielu urządzeń ze scalaniem wyników).
-
----
-
-## Wkład / Contributing
-
-1. Fork → Branch (np. `feat/panel-stanow`).
-2. Zmiany opisane w PR + zrzuty, jeśli zmiana dotyczy UI.
-3. Konwencje commitów (zalecane): `feat:`, `fix:`, `docs:`, `perf:`, `refactor:`.
-4. Staraj się dodawać typowanie, unikać blokowania pętli event loop.
-5. Zgłoszenia błędów → Issues (dołącz logi, wersję HA, wersję integracji).
-6. Testy (opcjonalnie) – snapshoty HTML można porównać przez prosty diff.
-
----
-
 ## Licencja
 
 MIT
@@ -487,4 +466,4 @@ MIT
 - Zakup Joan 6 (przykładowy link): *(jeśli aktualny – dodaj własny)*.
 - Przewidziane są dalsze usprawnienia w zakresie optymalizacji i bezpieczeństwa webhooków.
 
-Miłego używania – jeśli masz sugestie, otwórz Issue lub PR! 😊
+
