@@ -579,6 +579,12 @@ Tak – `data:text/html,<html>...</html>` jako URL w `set_url` lub automatycznie
 
 ---
 
+- Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
+- Testowany na **Joan 6**; inne modele nie były weryfikowane.
+- Do szybszego rozwoju użyto AI.
+- [Chcesz kupić nowy Joan 6?](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink)
+- [Opis: Visionect Software Suite - Instalacja](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
+
 ## Licencja
 
 MIT
