@@ -10,7 +10,7 @@
   <a href="https://github.com/Adam7411/visionect_joan/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/Adam7411/visionect_joan?style=for-the-badge"></a>
 </p>
 
-# Visionect Joan for Home Assistant
+# Visionect Joan for Home Assistant <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Adam7411&repository=visionect_joan&category=integration" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Otwórz swoją instancję Home Assistant i przejdź do repozytorium w HACS." /></a>
 
 > The `visionect_joan` integration turns the energy‑efficient e‑ink **Joan 6** tablet into a customizable information & control hub for Home Assistant: energy panel, calendar views, shopping / to‑do lists, sensor graphs, multi‑layout weather, RSS feed, camera snapshot, PIN keypad, slideshows, and interactive buttons / webhooks.
 
