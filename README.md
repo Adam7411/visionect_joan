@@ -1,578 +1,590 @@
 <div align="right">
-<a href="README.md">English</a> | <a href="README_pl.md">Polski</a>
+<strong>English</strong> | <a href="README_pl.md">Polski</a>
 </div>
 
-<a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Adam7411&repository=visionect_joan&category=integration" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Open your Home Assistant instance and go to the repository in HACS." /></a>
+<!-- Badges -->
+<p align="center">
+  <a href="https://github.com/Adam7411/visionect_joan/releases"><img alt="Release" src="https://img.shields.io/github/v/release/Adam7411/visionect_joan?style=for-the-badge"></a>
+  <a href="https://github.com/Adam7411/visionect_joan"><img alt="License" src="https://img.shields.io/github/license/Adam7411/visionect_joan?style=for-the-badge"></a>
+  <a href="https://hacs.xyz/"><img alt="HACS" src="https://img.shields.io/badge/HACS-Custom-orange?style=for-the-badge"></a>
+  <a href="https://github.com/Adam7411/visionect_joan/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/Adam7411/visionect_joan?style=for-the-badge"></a>
+</p>
 
 # Visionect Joan for Home Assistant
 
-<img width="1280" height="800" alt="Sample home screen on a Joan 6 tablet" src="https://github.com/user-attachments/assets/32214988-dc0e-44ce-af14-2d7f71fb8e6c" />
+> The `visionect_joan` integration turns the energy‑efficient e‑ink **Joan 6** tablet into a customizable information & control hub for Home Assistant: energy panel, calendar views, shopping / to‑do lists, sensor graphs, multi‑layout weather, RSS feed, camera snapshot, PIN keypad, slideshows, and interactive buttons / webhooks.
+
+<img width="1280" height="800" alt="Joan 6 home screen" src="https://github.com/user-attachments/assets/32214988-dc0e-44ce-af14-2d7f71fb8e6c" />
 
 <p align="center">
-
+⬇️ Hardware: Joan 6 ⬇️  
 <br>
-
-⬇️ Visionect Joan 6 ⬇️
- 
-<img width="421" height="328" alt="Joan 6 hardware" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
-
-***
-👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇👇
-<details>
-  <summary>Show screenshots</summary> 
-  <img width="425" height="574" alt="515106368-0cb2af06-6885-4056-9c51-6835f62c06e9" src="https://github.com/user-attachments/assets/6ead9216-7d0b-4613-91ad-0aacca0069d9" />
-  <img width="758" height="1024" alt="Home panel" src="https://github.com/user-attachments/assets/fd78c164-6691-477e-84e1-e47a1f70a8cc" />
-  <img width="758" height="1024" alt="RSS view" src="https://github.com/user-attachments/assets/f5a1f528-8201-47a0-9f7a-15b435f9152c" />
-  <img width="758" height="1024" alt="Weather" src="https://github.com/user-attachments/assets/2aca216e-e0d2-454e-b089-ee1eb04e947b" />
-  <img width="758" height="1024" alt="PIN keypad" src="https://github.com/user-attachments/assets/c765b34f-ed4e-48d7-a59d-ff8ecd67aa7c" />
-  <img width="758" height="1024" alt="ndar" src="https://github.com/user-attachments/assets/a5f3b53e-1b33-414b-8173-3fac794cbd46" />
-  <img width="758" height="1024" alt="Camera snapshot" src="https://github.com/user-attachments/assets/9c087661-69b0-463b-937e-19b2567cab6b" />
-  <img width="758" height="1024" alt="QR code" src="https://github.com/user-attachments/assets/f3c19b37-0dad-4bd9-89ac-271c016d4211" />
-  <img width="758" height="1024" alt="Sensor graph" src="https://github.com/user-attachments/assets/7819468a-c33b-409f-9845-2256def6a134" />
-  <img width="758" height="1024" alt="Text message" src="https://github.com/user-attachments/assets/0d735375-caf9-4e8c-a4c8-6b5008a88f9b" />
-  <img width="758" height="1024" alt="Weather layout 2" src="https://github.com/user-attachments/assets/6267ae5-0263-4fb0-8189-c638cc5d685d" />
-  <img width="758" height="1024" alt="Status panel" src="https://github.com/user-attachments/assets/8e35f996-26a3-4e4f-9951-1938530a9028" />
-  <img width="758" height="1024" alt="Energy panel" src="https://github.com/user-attachments/assets/acb78d0e-ca38-451e-8fc2-f64f479d1c78" />
-  <img width="758" height="1024" alt="Live preview" src="https://github.com/user-attachments/assets/3bd6d185-33ae-4407-98c5-9b70821c27b9" />
-  <img width="758" height="1024" alt="Battery/diagnostics" src="https://github.com/user-attachments/assets/fe7eb843-a6f1-4ef7-a3a4-e006b93c528f" />
-  
-  
-</details>
-
-***
-
+<img width="421" height="328" alt="Joan 6 e-ink tablet" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
 </p>
 
-The `visionect_joan` integration turns the energy‑efficient e‑ink tablet **Joan 6** into a powerful, fully customizable information hub for your smart home.
+---
 
-Thanks to rich services, you can build advanced automations: show the energy panel when you get home, display your shopping list when you enter the kitchen, send a camera snapshot when motion is detected, and automatically return to the main screen.
-
-***
-
-## Key features
-
-- Full screen control: send any web URL, local dashboards (e.g., AppDaemon), or single images.
-- Dynamic e‑ink‑optimized views: weather, ndar (including monthly grid), tasks (To‑Do/Shopping List), energy panel, entity status panel, sensor history graphs.
-- Interactivity: a bottom bar with a “Back” button (←) and two action buttons (✔ and →), or optionally “tap anywhere” to run an action or go back.
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="561" height="705" alt="Bottom action bar with back/action buttons" src="https://github.com/user-attachments/assets/dd217c23-d402-43a8-acb3-1bf0ea841c74" />
-
-</details>
-
-- Two webhooks (actions): separate IDs for the right (→) and center (✔) buttons.
-- Power management: sleep/wake device, and set the session refresh interval.
-- Live preview: the `camera` entity returns the device’s current screen image.
-- UI configuration: set predefined views and the main menu URL in integration options (no YAML).
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="838" height="566" alt="Integration options with predefined views" src="https://github.com/user-attachments/assets/ef9ef69b-413d-4ca4-86d9-373d3117880a" />
-
-
-</details>
-
-
-***
-
-## Available entities
-
-- `camera` – Live screen preview.
-- `sensor`
-  - Online/offline, battery, temperature, RSSI, uptime, battery voltage, storage (free/total/used), “configured URL”, last seen.
-  - Diagnostics: last connect reason, last error code.
-  - Display orientation (descriptive value).
-- `binary_sensor`
-  - Charging status (is the charger connected).
-- `text`
-  - Device name (change directly from HA).
-- `number`
-  - Screen refresh (`ReloadTimeout`) – how often the session refreshes (s).
-- `select`
-  - Choose view – select a predefined view for the device.
-  - Back button target – default “Back” destination.
-  - Dithering Method – dithering algorithm (e.g., none/bayer/floyd‑steinberg).
-  - Bit Depth – grays depth (normally 1 or 4).
-- `button`
-  - Force Refresh – immediately restart the renderer session.
-  - Reboot Device – reboot device.
-  - Clear Web Cache – clear web browser cache.
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="658" height="1002" alt="Screenshot" src="https://github.com/user-attachments/assets/67de6efe-ffd5-4757-8a82-71e46f039943" />
-</details>
-
-
+## Table of Contents
+1. [Purpose & Overview](#purpose--overview)  
+2. [Key Features](#key-features)  
+3. [Screenshots](#screenshots)  
+4. [Installation](#installation)  
+5. [Visionect Software Suite (VSS) Setup](#visionect-software-suite-vss-setup)  
+6. [Predefined Views](#predefined-views)  
+7. [Entities](#entities)  
+8. [Services – Summary](#services--summary)  
+9. [Service Details](#service-details)  
+10. [Interactive Layer & Back Priority](#interactive-layer--back-priority)  
+11. [Automation Examples](#automation-examples)  
+12. [Performance & Battery](#performance--battery)  
+13. [Security & Webhooks](#security--webhooks)  
+14. [Troubleshooting](#troubleshooting)  
+15. [FAQ](#faq)  
+16. [License](#license)  
 
 ---
 
-## Services
+## Purpose & Overview
 
-Below is the full list of services available in the integration (many can be combined with the interactive overlay: buttons, webhooks, click‑anywhere):
-
-### Content display
-
-- `visionect_joan.send_button_panel`
-  - Allows you to create a grid of up to 12 configurable buttons. Each button can have its own name, icon, and a unique webhook_id to trigger automations in Home Assistant.
-  - Tip: The panel works by sending signals to Home Assistant via webhooks. For a button to do anything, you must create an automation that is triggered by its webhook.
-  - ⚠️ Important Limitation: No State Feedback
-The button panel provides one-way communication only (it is stateless). This means the buttons do not show the current state of your devices (e.g., they won't change appearance if a light is on or off). Pressing a button sends a command to Home Assistant, but the panel itself is not dynamically updated with state information from HA. (for information about button status and others, I recommend using the AppDaemon dashboard)
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1214" height="3814" alt="calastrona" src="https://github.com/user-attachments/assets/ab3d7d4e-8843-4e2e-a348-c9d3f83e0da1" />
-</details>
-
-***
-
-- `visionect_joan.set_url`
-  - Sets any URL or the name of a predefined view.
-  - Tip: view names are matched case‑insensitively. Add/edit views in: Settings → Devices & Services → Visionect Joan → Configure.
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1220" height="595" alt="Service: set_url" src="https://github.com/user-attachments/assets/bfdf8101-1b45-45e0-ab1a-46c7ab79d96b" />
-</details>
-
-***
-
-- `visionect_joan.send_text`
-  - Sends formatted text (supports Jinja2), optionally with an image and various layouts (text only, text + image).
-  - Tips: use fonts that read well on e‑ink; for images, adjust `image_zoom` and `image_rotation`.
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1225" height="2066" alt="Service: send_text" src="https://github.com/user-attachments/assets/9912da53-becf-4932-ab7e-7f0a17a681d7" />
-
-</details>
-
-***
-
-- `visionect_joan.send_image_url` ➊
-  - Displays an image from a URL (PNG/JPG/SVG/WebP supported).
-  - Tips: for local images, use `http://<HA_IP>:8123/local/...`.
- 
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1234" height="1448" alt="Service: send_image_url" src="https://github.com/user-attachments/assets/9da6769f-668a-4adb-9edf-b5fdc5851d55" />
-
-
-</details>
-
-***
-
-- `visionect_joan.send_camera_snapshot`
-  - Captures a snapshot from a `camera` entity and displays it on the screen (with caption and image rotation).
- 
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1223" height="1472" alt="Service: send_camera_snapshot" src="https://github.com/user-attachments/assets/6cec8748-a586-46c2-8f2b-2bcf-25237e08" />
-
-</details>
-
-***
-
-- `visionect_joan.send_status_panel`
-  - Status panel for any entities: icons + names + values (with translations for on/off/open/…).
- 
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1230" height="1416" alt="Service: send_status_panel" src="https://github.com/user-attachments/assets/bb21ddb7-77bf-4db1-bc57-9ecf2c2d5021" />
-
-</details>
-
-***
-
-- `visionect_joan.send_energy_panel`
-  - Large energy panel (current power + cards: production/import/export/daily consumption). Looks great in portrait.
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1230" height="1423" alt="Service: send_energy_panel" src="https://github.com/user-attachments/assets/66b3f26d-f5c3-4276-b837-de6b85cf9fcf" />
-
-</details>
-
-***
-
-- `visionect_joan.send_weather`
-  - 3 layouts: detailed summary, daily forecast list, panel with a 24 h graph (auto day/night icons).
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1225" height="1237" alt="Service: send_weather" src="https://github.com/user-attachments/assets/588660d8-e0ff-48b3-b7a5-6d9432cd2329" />
-
-</details>
-
-***
-
-- `visionect_joan.send_calendar`
-  - Event list (1–31 days) or a monthly grid with a per‑day view.
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1207" height="801" alt="510071400-b6431600-0556-4052-abdf-53eacf79397e" src="https://github.com/user-attachments/assets/9d8f867c-34a2-4637-b8d2-e5d89c39a571" />
-
-</details>
-
-***
-
-- `visionect_joan.send_todo_list`
-  - To‑Do list (including Shopping List). Large, readable items; supports interactive toggling via webhook (see below).
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1216" height="1201" alt="Service: send_todo_list" src="https://github.com/user-attachments/assets/6735340b-bec9-47a6-a72e-07d16da20943" />
-
-</details>
-
-***
-
-- `visionect_joan.send_sensor_graph`
-  - History graph for selected sensors (line or bar), automatically adapted to the screen orientation.
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1219" height="1895" alt="Service: send_sensor_graph" src="https://github.com/user-attachments/assets/c5507b3b-28e6-47a1-a88a-11d936f2f35b" />
-
-</details>
-
-***
-
-- `visionect_joan.send_rss_feed` ➋
-  - Fetches and displays the latest items from an RSS/Atom feed (pagination, header, icons). Provide `feed_url`, `max_items`, and optionally a custom title.
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1225" height="1255" alt="Service: send_rss_feed" src="https://github.com/user-attachments/assets/56316ce1-8350-49d5-a624-2f7a880b8a4e" />
-
-</details>
-
-***
-### Interactivity and navigation
-
-- `visionect_joan.send_qr_code`
-  - Generates a QR code (e.g., guest Wi‑Fi) with an optional caption (above/below).
-    
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1223" height="1765" alt="Service: send_qr_code" src="https://github.com/user-attachments/assets/a55360c9-9f17-4b81-baf9-b990692bc2a0" />
-
-</details>
-
-***
-
-- `visionect_joan.start_slideshow`
-  - Plays a list of views (predefined names or full local URLs) in a loop with a per‑slide display time.
-  - Tip: shorter intervals = more frequent e‑ink refreshes and higher battery use. 
-Displays a list of views (predefined names or full URLs) in a loop with a specified time per slide. Important: This slideshow renders pages inside an iframe. Many external websites (e.g., google.com, home-assistant.io) block embedding via X-Frame-Options/Content-Security-Policy and will NOT display. Use only local addresses (Home Assistant/AppDaemon/local files) or predefined views configured in the Visionect Joan integration for reliable results.
-
-<details>
- 
-  <summary>Show screenshot</summary>
-
-  <img width="606" height="729" alt="510095682-106d5ae9-8d8a-4b3f-8f5e-206aab76e0c8" src="https://github.com/user-attachments/assets/907859fd-2ecd-43a2-a56f-2cd3a278ad69" />
-
-</details>
-
-***
-
-- `visionect_joan.send_keypad` ➍
-  - Full‑screen numeric keypad. The entered PIN is POSTed to a Home Assistant webhook (`trigger.json.pin`).
-  - Tip: you need an automation to validate the code.
-  
- <details>
-  
-  <summary><strong>Example: PIN automation (webhook + keypad) for Visionect Joan</strong></summary>
-
-This example shows how to use `visionect_joan.send_keypad` to enter a PIN on the Joan screen and validate it in an automation triggered by a webhook. If the PIN is correct — the device navigates to a target view; if it’s wrong — a message appears and the keypad returns after a short delay.
-
-— Requirements:
-- The Visionect Joan integration is installed and the device (Joan 6) is added.
-- You know your tablet’s `device_id` (Settings → Devices & Services → your device → three dots → Copy device ID).
-- A view is defined in the integration options (or you can use a full URL).
-
-— How to show the keypad for the first time:
-- Call `visionect_joan.send_keypad` once with:
-  - device_id: your tablet
-  - title: e.g., “Enter PIN”
-  - action_webhook_id: e.g., “joan_pin” (must match the webhook in the automation)
-
-— Automation YAML (paste into HA’s automation YAML editor and replace values in comments):
-
-```
-alias: PIN code automation for Visionect Joan
-mode: single
-
-trigger:
-  - platform: webhook
-    # SET YOUR WEBHOOK ID (must match visionect_joan.send_keypad → action_webhook_id):
-    webhook_id: joan_pin
-
-action:
-  - choose:
-      # Condition: correct PIN?
-      - conditions:
-          - condition: template
-            # SET YOUR PIN:
-            value_template: "{{ trigger.json.pin == '321' }}"
-        sequence:
-          # SUCCESS: navigate to a view (predefined view name or full URL)
-          - action: visionect_joan.set_url
-            target:
-              # SET YOUR DEVICE_ID:
-              device_id: 266a72218733bb9a056aff49bf6f8e2d
-            data:
-              # Change to a view name (e.g., KuchniaGóra) or provide a full URL
-              url: KuchniaGóra
-    default:
-      # WRONG PIN: show a message
-      - action: visionect_joan.send_text
-        target:
-          device_id: 266a72218733bb9a056aff49bf6f8e2d
-        data:
-          message: "Wrong code!"
-          text_size: 48
-          # (optional) you can add an overlay with Back/action buttons:
-          # add_back_button: true
-          # back_button_url: "ViewNameOrURL"
-      # short pause
-      - delay: "00:00:03"
-      # Show the keypad again (same webhook_id as in the trigger)
-      - action: visionect_joan.send_keypad
-        target:
-          device_id: 266a72218733bb9a056aff49bf6f8e2d
-        data:
-          title: "Try again"
-          action_webhook_id: joan_pin
-```
-
-— Tips and security:
-- Webhooks don’t require a token — best used on a local network or behind a reverse proxy/ACL.
-- You can store the PIN more safely (e.g., `input_text` helper or secrets) and compare via a template.
-- Instead of a view name in `data.url`, you may use a full URL (e.g., an AppDaemon dashboard).
-
-</details>
- 
-
-<details>
-  <summary>Show screenshot</summary>
-
-  <img width="1220" height="632" alt="Service: send_keypad call" src="https://github.com/user-attachments/assets/5df2b9d9-ae6e-4a60-9f9f-c787f7658135" />
-
-</details>
-
-***
-
-### Rendering parameters and management
-
-- `visionect_joan.set_session_options` ➎
-  - Sets session parameters: `encoding` (bit depth, usually “1” or “4”) and `dithering` (none/bayer/floyd‑steinberg).
-  - Tip: 1‑bit = highest contrast and speed; 4‑bit = 16 grayscale levels (better graphics).
-
-- `visionect_joan.clear_web_cache`
-  - Clears the WebKit cache for selected devices; optionally set `restart_session: true`.
-  - Tip: useful when “stale” images or styles get stuck.
-
-- `visionect_joan.force_refresh`
-  - Immediately restarts the session (refreshes the current view).
-
-- `visionect_joan.set_display_rotation`
-  - Permanently changes device screen orientation (requires a short device reboot).
-
-- `visionect_joan.clear_display`
-  - Clears the screen to a blank background (white).
-
-- `visionect_joan.sleep_device` / `visionect_joan.wake_device`
-  - Sleep/wake device (save battery; set sleep duration in seconds).
-
-➊ `send_image_url` – accepted extensions: png, jpg, jpeg, gif, svg, webp (format support also depends on the Visionect renderer version).
-
-➋ `send_rss_feed` – the integration parses the feed (Feedparser), builds lists and pagination; great for quick “news boards”.
-
-➌ `start_slideshow` – accepts view names (from “Views & options”) and/or full URLs (one per line).
-
-➍ `send_keypad` – the HA automation must use a Webhook trigger; in conditions: `{{ trigger.json.pin == '1234' }}`.
-
-➎ `set_session_options` – leaving a parameter empty keeps the current value unchanged.
+The integration acts as a bridge between Home Assistant and the Visionect Software Suite (VSS). It renders dynamic, e‑ink‑optimized screens on the Joan 6 tablet triggered by context (events, zones, sensor changes, time). Instead of loading a generic dashboard, you generate a complete, static or semi‑static “screen” (energy panel, interactive to‑do list, weather with graph, keypad PIN, 12‑button action panel, etc.).
 
 ---
 
-## Interactive overlay (buttons, click‑anywhere, webhooks)
+## Key Features
 
-Every content service can add an “overlay” with buttons:
-- “Back” (←) — return to a URL determined by:
-  1) `back_button_url` in the service call,
-  2) the `Back button target` selector entity (per device),
-  3) the global “Main menu URL” set in the integration options.
-- “Action” (→) — triggers the `action_webhook_id` webhook.
-- “Center” (✔) — triggers the `action_webhook_2_id` webhook.
-- “Click anywhere” — can trigger an action (webhook) or serve as a quick “return”.
+- Full screen content control: any URL, local pages (AppDaemon, `/local/`, embedded Lovelace), images, inline `data:text/html`.
+- Optimized built‑in views:
+  - Weather: detailed summary, daily forecast list, 24h temperature graph panel.
+  - Calendar: multi‑day list, minimalist list, monthly grid + daily overlay.
+  - To‑Do / Shopping list with interactive toggling via webhook.
+  - Energy panel (current usage + production/import/export/consumption daily metrics).
+  - Entity status panel (icons + names + values + translated states).
+  - Sensor history graph (line/bar; multi entity; orientation aware).
+  - Paginated RSS / Atom feed.
+  - QR code (guest Wi‑Fi, device pairing).
+  - PIN keypad (webhook → HA automation validates code).
+  - Up to 12 action buttons (stateless webhooks).
+- Interactive overlay: bottom bar (← Back / ✔ Center / → Action) or full-screen tap-to-back / tap-to-action.
+- Live preview (`camera` entity) – current rendered screen as a still image.
+- UI configuration (no YAML): predefined views + global Main Menu URL.
+- Management utilities: display rotation, clear WebKit cache, force refresh, sleep/wake.
+- Rendering controls: encoding (bit depth), dithering method.
+- Automatic cleanup of temporary media (snapshots / graphs) in `www/`.
 
 <details>
- 
-  <summary><strong>Example: action button (webhook) → turn on a light</strong></summary>
-
-This example shows how to use `action_webhook_id` in a view sent to Joan so that pressing the right button (→) turns on a light in Home Assistant.
-
-Works with most display services (send_text, send_status_panel, send_weather, send_image_url, send_todo_list, send_calendar, send_energy_panel, send_sensor_graph, start_slideshow). Below we use `send_text`.
-
-— Step 1. Automation: listen for the webhook and turn on the light
-
-Copy into the automation YAML editor (change WEBHOOK_ID and the light entity):
-
-```
-alias: "Joan: turn on light via button"
-mode: single
-
-trigger:
-  - platform: webhook
-    # SET YOUR WEBHOOK ID (must match action_webhook_id in step 2):
-    webhook_id: joan_light_on
-
-action:
-  - service: light.turn_on
-    target:
-      entity_id: light.your_light  # e.g., light.kitchen_ceiling
-    data:
-      brightness_pct: 100  # optional
-```
-
-— Step 2. Send a view to Joan with an action button (→)
-
-Call the `visionect_joan.send_text` service (Developer Tools → Services) with `action_webhook_id: joan_light_on`. This adds the bottom bar; the right button (→) will POST a webhook to HA.
-
-```
-service: visionect_joan.send_text
-data:
-  message: "Turn on the light"
-  add_back_button: true                # optionally show 'Back' (←)
-  back_button_url: "Main"              # predefined view name or full URL (optional)
-  action_webhook_id: joan_light_on     # MUST match 'webhook_id' in the automation
-target:
-  device_id: 00000000000000000000000000000000  # <- your Joan device_id
-```
-
-Variant: make the entire screen a button
-- If you prefer a full‑screen “tap to act” instead of visible buttons at the bottom, use:
-
-```yaml
-service: visionect_joan.send_text
-data:
-  message: "Tap to turn on the light"
-  click_anywhere_to_action: true       # hides the button bar and makes the whole screen a 'tap to act'
-  action_webhook_id: joan_light_on
-target:
-  device_id: 00000000000000000000000000000000
-```
-
-Tips:
-- The right button (→) uses `action_webhook_id`. The center (✔) uses `action_webhook_2_id`.
-- You can add “Back” (←) with `add_back_button: true`. The “Back” destination priority:
-  1) `back_button_url` in the service call,
-  2) device’s “Back button target” selector entity,
-  3) global “Main menu URL” in integration options.
-- Webhooks work most reliably when the Visionect Server runs as a HA add‑on on the same host (the integration will use the correct internal URL). If the server is on a different host, ensure it can reach HA over HTTP/HTTPS.
-- The same approach works with other display services (e.g., `send_status_panel`, `send_image_url`) — just add `action_webhook_id`.
-
-Troubleshooting:
-- Pressing the button does nothing? Check the Events viewer to see if the webhook arrives and whether `trigger.json` is present in the automation.
-- If you use HTTPS and separate hosts, verify the internal URL in Settings → System → Network.
-  
+  <summary>Screenshot: bottom action bar</summary>
+  <img width="561" height="705" alt="Bottom action bar" src="https://github.com/user-attachments/assets/dd217c23-d402-43a8-acb3-1bf0ea841c74" />
 </details>
 
+<details>
+  <summary>Predefined view options</summary>
+  <img width="838" height="566" alt="Integration options" src="https://github.com/user-attachments/assets/ef9ef69b-413d-4ca4-86d9-373d3117880a" />
+</details>
 
-Tips:
-- Webhooks are most reliable when the Visionect Server runs as a HA add‑on (same host) — the integration automatically uses the correct internal HA address for webhooks.
-- If Visionect runs on another host, ensure HTTP connectivity to HA and a valid certificate (if using https).
+---
+
+## Screenshots
+
+<details>
+  <summary>Expand screenshot gallery</summary>
+  <img width="425" height="574" alt="Start panel" src="https://github.com/user-attachments/assets/fea6f969-3785-4efd-961a-58e9086becfd" />
+  <img width="758" height="1024" alt="Home dashboard" src="https://github.com/user-attachments/assets/fd78c164-6691-477e-84e1-e47a1f70a8cc" />
+  <img width="758" height="1024" alt="RSS feed view" src="https://github.com/user-attachments/assets/f5a1f528-8201-47a0-9f7a-15b435f9152c" />
+  <img width="758" height="1024" alt="Detailed weather" src="https://github.com/user-attachments/assets/2aca216e-e0d2-454e-b089-ee1eb04e947b" />
+  <img width="758" height="1024" alt="PIN keypad" src="https://github.com/user-attachments/assets/c765b34f-ed4e-48d7-a59d-ff8ecd67aa7c" />
+  <img width="758" height="1024" alt="Monthly calendar" src="https://github.com/user-attachments/assets/a5f3b53e-1b33-414b-8173-3fac794cbd46" />
+  <img width="758" height="1024" alt="Camera snapshot" src="https://github.com/user-attachments/assets/a73e16a8-af85-47a0-9088-f21b932f9231" />
+  <img width="758" height="1024" alt="QR code view" src="https://github.com/user-attachments/assets/f3c19b37-0dad-4bd9-89ac-271c016d4211" />
+  <img width="758" height="1024" alt="Sensor graph" src="https://github.com/user-attachments/assets/7819468a-c33b-409f-9845-2256def6a134" />
+  <img width="758" height="1024" alt="Text message layout" src="https://github.com/user-attachments/assets/0d735375-caf9-4e8c-a4c8-6b5008a88f9b" />
+  <img width="758" height="1024" alt="Weather alternate layout" src="https://github.com/user-attachments/assets/6267ae6c-0263-4fb0-8189-c638cc5d685d" />
+  <img width="758" height="1024" alt="Entity status panel" src="https://github.com/user-attachments/assets/8e35f996-26a3-4e4f-9951-1938530a9028" />
+  <img width="758" height="1024" alt="Energy panel" src="https://github.com/user-attachments/assets/acb78d0e-ca38-451e-8fc2-f64f479d1c78" />
+  <img width="758" height="1024" alt="Live preview camera" src="https://github.com/user-attachments/assets/3bd6d185-33ae-4407-98c5-9b70821c27b9" />
+  <img width="758" height="1024" alt="Diagnostics & battery" src="https://github.com/user-attachments/assets/fe7eb843-a6f1-4ef7-a3a4-e006b93c528f" />
+</details>
 
 ---
 
 ## Installation
 
 ### Via HACS (recommended)
-1. Install [HACS](https://hacs.xyz/) in Home Assistant.
-2. HACS → Integrations → menu (⋮) → Custom repositories.
-3. Add this repo as an Integration and click Add.
-4. Find “Visionect Joan” and click Install.
+1. Install [HACS](https://hacs.xyz/) if not already.
+2. In HACS → Integrations → ⋮ → Custom repositories.
+3. Add `Adam7411/visionect_joan` as “Integration”.
+4. Search “Visionect Joan” → Install.
 5. Restart Home Assistant.
 
 ### Manual
-1. Download the latest release (`visionect-joan.zip` or `Source code (zip)`).
-2. Extract to `/config/custom_components/visionect_joan/`.
+1. Download the latest release archive.
+2. Extract to: `/config/custom_components/visionect_joan/`.
 3. Restart Home Assistant.
 
 ---
 
-## Configuration
+## Visionect Software Suite (VSS) Setup
 
+1. Go to Home Assistant: Settings → Devices & Services.
+2. Click “+ Add Integration”.
+3. Search “Visionect Joan”.
+4. Provide connection details (see VSS install guide: [Visionect Software Suite Installation](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant_EN)):
+   - Server host: `IP:8081` (default Visionect Management API port 8081).
+   - Username (e.g. `admin`) & Password OR API Key & Secret.
+   - Create API key/secret in VSS → Users → Add new API key.
 
-1. Go to `Settings → Devices & Services`.
-2. Click “+ Add integration”.
-3. Search for “Visionect Joan” and start configuration.
-4. Enter your Visionect Software Suite details: [Visionect Software Suite installation](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant_EN)
-   - Server address (e.g., `192.168.x.x:8081`) (Home Assistant address)
-   - Username (`admin`)
-   - Password (`set your own`)
-   - API Key and API Secret (create in Visionect Software Suite → Users → Add new API key)
-
-<img width="1567" height="425" alt="Config screen" src="https://github.com/user-attachments/assets/37bbcdb7-e820-4275-b7ed-efc9248048e5" />
-
-<img width="575" height="615" alt="Add API key in VSS" src="https://github.com/user-attachments/assets/a70ccc87-bbff-4fa4-aec5-f4e602709f19" />
-
+<img width="1567" height="425" alt="Integration step 1" src="https://github.com/user-attachments/assets/37bbcdb7-e820-4275-b7ed-efc9248048e5" />
+<img width="575" height="615" alt="Integration step 2" src="https://github.com/user-attachments/assets/a70ccc87-bbff-4fa4-aec5-f4e602709f19" />
 
 ---
 
-## Examples
+## Predefined Views
 
-Screens you can display on a Joan 6 tablet:
+Configure in integration Options:
+1. Settings → Devices & Services → Visionect Joan → Configure.
+2. “Add view” → Name + URL.
+3. Names are selectable via the “Choose view” select entity or referenced in services (`url` / `predefined_url`).
+
+Legacy “Name: URL” line format is auto‑parsed.
+
+---
+
+## Entities
+
+| Entity Type | Purpose | Notes |
+|-------------|---------|-------|
+| `camera` | Live screen preview | Encodes current display as PNG |
+| `sensor` | Online state, battery, temperature, RSSI, uptime, voltage, storage, URL, diagnostics | Some disabled by default |
+| `binary_sensor` | Charging status | `is_charging` |
+| `text` | Device name | Writes directly to device via API |
+| `number` | `ReloadTimeout` (session refresh interval) | 0–86400 s |
+| `select` | View switch / Back target / dithering / bit depth | Session options (encoding/dithering) |
+| `button` | Force Refresh / Reboot / Clear Web Cache | Reboot & Clear disabled by default |
+| (internal) | Views options flow | Options UI only |
 
 <details>
-  <summary>Click to see more screenshots</summary>
-  <img width="381" height="570" alt="View 1" src="https://github.com/user-attachments/assets/e1f32a48-0277-42ce-9018-837aeba1b6a8" />
-  <img width="510" height="739" alt="View 2" src="https://github.com/user-attachments/assets/8f8c673d-8447-42ec-9d13-0bd4e9683437" />
-  <img width="948" height="791" alt="View 3" src="https://github.com/user-attachments/assets/4a3c054a-e239-49c1-ab9d-037584cd7989" />
-  <img width="607" height="893" alt="View 4" src="https://github.com/user-attachments/assets/1321cfe8-905d-44ef-b1b9-29d999559a04" />
-  <img width="770" height="641" alt="View 5" src="https://github.com/user-attachments/assets/31e9bca1-d7c6-4245-b32f-4c909251bf2c" />
-  <img width="290" height="407" alt="View 6" src="https://github.com/user-attachments/assets/ad0d3f54-fe5a-466a-8da6-a5d93a052944" />
-  <img width="433" height="290" alt="View 7" src="https://github.com/user-attachments/assets/871617fa-b4cb-4d4e-af4b-eae5120b684a" />
-  <img width="307" height="457" alt="View 8" src="https://github.com/user-attachments/assets/d7d76fdd-52b7-4c95-8f77-a369e672ab4b" />
-  <img width="306" height="456" alt="View 9" src="https://github.com/user-attachments/assets/e3f248bb-f2c8-4e32-b41d-09cbf24a02bf" />
-  <img width="569" height="808" alt="View 10" src="https://github.com/user-attachments/assets/f746301e-d0fa-4993-aa7f-b7b4d5c2e15d" />
-  <img width="758" height="1024" alt="Home panel" src="https://github.com/user-attachments/assets/fd78c164-6691-477e-84e1-e47a1f70a8cc" />
-  
+  <summary>Show entity screenshot</summary>
+  <img width="658" height="1002" alt="Entity list" src="https://github.com/user-attachments/assets/67de6efe-ffd5-4757-8a82-71e46f039943" />
 </details>
 
 ---
 
+## Services – Summary
 
-## Notes
+| Service | Category | Interactive Overlay | Short Description |
+|---------|----------|---------------------|-------------------|
+| `visionect_joan.set_url` | Navigation | Optional | Set URL or predefined view |
+| `visionect_joan.send_text` | Content | Yes | Text + optional image layout (Jinja2) |
+| `visionect_joan.send_image_url` | Content | Yes | Single image (PNG/JPG/SVG/WebP) |
+| `visionect_joan.send_camera_snapshot` | Content | Yes | Snapshot from HA camera entity |
+| `visionect_joan.send_status_panel` | Status | Yes | Icons + state values |
+| `visionect_joan.send_energy_panel` | Energy | Yes | Current usage + daily metrics |
+| `visionect_joan.send_weather` | Weather | Yes | 3 layouts (detail/list/graph) |
+| `visionect_joan.send_calendar` | Calendar | Yes | List / minimalist / monthly grid |
+| `visionect_joan.send_todo_list` | Lists | Yes | To‑Do / Shopping (interactive toggle) |
+| `visionect_joan.send_sensor_graph` | History | Yes | Line/bar graph multi entity |
+| `visionect_joan.send_rss_feed` | RSS | Yes | Paginated feed items |
+| `visionect_joan.send_qr_code` | QR | Yes | QR + caption |
+| `visionect_joan.start_slideshow` | Navigation | Yes | Rotate views / URLs |
+| `visionect_joan.send_keypad` | Input | Yes (no Back by default) | PIN keypad → webhook |
+| `visionect_joan.send_button_panel` | Actions | Yes | Up to 12 stateless webhook buttons |
+| `visionect_joan.set_session_options` | Render | N/A | Bit depth / dithering |
+| `visionect_joan.clear_web_cache` | Maintenance | N/A | Clear WebKit cache (optional restart) |
+| `visionect_joan.force_refresh` | Maintenance | N/A | Restart session |
+| `visionect_joan.set_display_rotation` | Maintenance | N/A | Rotate & reboot |
+| `visionect_joan.clear_display` | Maintenance | N/A | Blank screen |
+| `visionect_joan.sleep_device` / `wake_device` | Power | N/A | Sleep / wake tablet |
 
-- This is not an official Visionect or Home Assistant integration.
-- Tested with **Joan 6**; other models have not been verified.
-- AI was used for faster development.
+---
 
-- [Guide: Visionect Software Suite - Installation](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
+## Service Details
+
+Expandable sections with screenshots (full field documentation lives in `services.yaml` & HA UI).
+
+### Content Display
+
+- `visionect_joan.send_button_panel`  
+  - Grid of up to 12 configurable buttons. Each has a label, icon (from `svg_button`), and individual `webhook_id`.  
+  - Tip: Each webhook must have a corresponding automation (Webhook trigger) to act.  
+  - ⚠ Stateless: The button panel does not reflect live entity states (use status panels / dashboards for state feedback).
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1214" height="3814" alt="Button panel service form" src="https://github.com/user-attachments/assets/fdbb51ba-0f4b-4db4-98bd-e5d01b34ce77" />
+  </details>
+
+***
+
+- `visionect_joan.set_url`  
+  - Sets any URL or predefined view name. Case‑insensitive matching for view names.  
+  - Edit predefined views: Settings → Devices & Services → Visionect Joan → Configure.
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1220" height="595" alt="Set URL service form" src="https://github.com/user-attachments/assets/bfdf8101-1b45-45e0-ab1a-46c7ab79d96b" />
+  </details>
+
+***
+
+- `visionect_joan.send_text`  
+  - Render styled text (Jinja2 supported), optional image, multiple layouts (text_only, image_top, left/right etc.).
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1225" height="2066" alt="Send text service form" src="https://github.com/user-attachments/assets/9912da53-becf-4932-ab7e-7f0a17a681d7" />
+  </details>
+
+***
+
+- `visionect_joan.send_image_url`  
+  - Display an image from URL (supported: png, jpg, jpeg, gif, svg, webp). For local files use `http://<HA_IP>:8123/local/...`.
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1234" height="1448" alt="Send image URL form" src="https://github.com/user-attachments/assets/9da6769f-668a-4adb-9edf-b5fdc5851d55" />
+  </details>
+
+***
+
+- `visionect_joan.send_camera_snapshot`  
+  - Captures a snapshot from a HA camera entity, renders with caption & optional rotation.
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1223" height="1472" alt="Camera snapshot form" src="https://github.com/user-attachments/assets/6cec8748-a586-46c2-8f2b-2bcf-25237e08" />
+  </details>
+
+***
+
+- `visionect_joan.send_status_panel`  
+  - Custom entity status panel with friendly names, icons, translated states.
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1230" height="1416" alt="Status panel form" src="https://github.com/user-attachments/assets/bb21ddb7-77bf-4db1-bc57-9ecf2c2d5021" />
+  </details>
+
+***
+
+- `visionect_joan.send_energy_panel`  
+  - Energy summary: current usage + daily production/import/export/consumption. Portrait recommended.
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1230" height="1423" alt="Energy panel form" src="https://github.com/user-attachments/assets/66b3f26d-f5c3-4276-b837-de6b85cf9fcf" />
+  </details>
+
+***
+
+- `visionect_joan.send_weather`  
+  - Layouts: detailed summary, daily forecast list, temperature graph panel (24h).
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1225" height="1237" alt="Weather form" src="https://github.com/user-attachments/assets/588660d8-e0ff-48b3-b7a5-6d9432cd2329" />
+  </details>
+
+***
+
+- `visionect_joan.send_calendar`  
+  - Renders list (1–31 days) or monthly grid with daily drill‑down.
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1207" height="801" alt="Monthly calendar form" src="https://github.com/user-attachments/assets/83f5d345-69ef-42af-84d3-f7f4f3c3b1a0" />
+  </details>
+
+***
+
+- `visionect_joan.send_todo_list`  
+  - To‑Do / Shopping List items with optional interactive checkbox toggling via webhook.
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1216" height="1201" alt="To-do list form" src="https://github.com/user-attachments/assets/6735340b-bec9-47a6-a72e-07d16da20943" />
+  </details>
+
+***
+
+- `visionect_joan.send_sensor_graph`  
+  - Historical graph (line/bar) for selected sensors. Auto adjusts orientation spacing.
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1219" height="1895" alt="Sensor graph form" src="https://github.com/user-attachments/assets/c5507b3b-28e6-47a1-a88a-11d936f2f35b" />
+  </details>
+
+***
+
+- `visionect_joan.send_rss_feed`  
+  - Fetches and paginates RSS/Atom feed items (title list).
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1225" height="1255" alt="RSS feed form" src="https://github.com/user-attachments/assets/56316ce1-8350-49d5-a624-2f7a880b8a4e" />
+  </details>
+
+***
+
+### Interactivity & Navigation
+
+- `visionect_joan.send_qr_code`  
+  - QR generation with caption (above/below).
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1223" height="1765" alt="QR code form" src="https://github.com/user-attachments/assets/a55360c9-9f17-4b81-baf9-b990692bc2a0" />
+  </details>
+
+***
+
+- `visionect_joan.start_slideshow`  
+  - Loops through view names or local URLs.  
+  - Note: Many external sites block iframe embedding (X-Frame-Options / CSP).
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="606" height="729" alt="Slideshow form" src="https://github.com/user-attachments/assets/91d25761-2709-417b-9a2c-edf2104c5869" />
+  </details>
+
+***
+
+- `visionect_joan.send_keypad`  
+  - Full-screen numeric keypad sending JSON `{"pin": "1234"}` to webhook.
+  <details>
+    <summary>Show screenshot</summary>
+    <img width="1220" height="632" alt="Keypad form" src="https://github.com/user-attachments/assets/5df2b9d9-ae6e-4a60-9f9f-c787f7658135" />
+  </details>
+
+***
+
+### Rendering & Management
+
+- `visionect_joan.set_session_options` – Set session rendering parameters (`encoding`, `dithering`).  
+- `visionect_joan.clear_web_cache` – Clear WebKit cache (optional restart).  
+- `visionect_joan.force_refresh` – Restart current session (force reload).  
+- `visionect_joan.set_display_rotation` – Persist orientation (reboot required).  
+- `visionect_joan.clear_display` – Blank white screen.  
+- `visionect_joan.sleep_device` / `wake_device` – Power management.
+
+---
+
+## Interactive Layer & Back Priority
+
+Back target resolution priority:
+1. `back_button_url` provided in the service call
+2. Per‑device select entity `Back button target`
+3. Global `Main menu URL` (integration options)
+
+Hiding buttons:
+- `click_anywhere_to_action: true` → full screen triggers Action webhook.
+- `click_anywhere_to_return: true` → full screen navigates back.
+When either is enabled, the bottom bar is hidden.
+
+---
+
+## Automation Examples
+
+Annotated with inline comments (`#`).
+
+### 1. Simple text message
+```yaml
+service: visionect_joan.send_text                  # Send a styled text screen
+target:
+  device_id: 00000000000000000000000000000000       # Replace with your device_id
+data:
+  message: "Hello!\n{{ now().strftime('%H:%M') }}"  # Jinja2 template for current time
+  text_size: 42                                     # Font size (px)
+```
+
+### 2. Toggle a light with right button (→)
+
+Automation reacting to the webhook:
+```yaml
+alias: "Joan: living room light"            # Friendly name
+trigger:
+  - platform: webhook
+    webhook_id: joan_light_on               # Must match action_webhook_id below
+action:
+  - service: light.turn_on
+    target:
+      entity_id: light.living_room          # Light entity to control
+```
+
+Display the screen with actionable button:
+```yaml
+service: visionect_joan.send_text
+target:
+  device_id: 00000000000000000000000000000000  # Joan device
+data:
+  message: "Living room light"              # On-screen label
+  action_webhook_id: joan_light_on          # Triggers the automation above
+  add_back_button: true                     # Show ← Back
+  back_button_url: MainMenu                 # View name or full URL
+```
+
+### 3. PIN keypad with success navigation
+
+Initial keypad display:
+```yaml
+service: visionect_joan.send_keypad
+target:
+  device_id: 266a72218733bb9a056aff49bf6f8e2d  # Joan device
+data:
+  title: "PIN"
+  action_webhook_id: joan_pin                  # Webhook receiving PIN JSON
+```
+
+Automation validating PIN:
+```yaml
+alias: "PIN → access"
+mode: single
+trigger:
+  - platform: webhook
+    webhook_id: joan_pin                       # Must match keypad webhook
+variables:
+  correct_pin: "321"                           # Consider storing this securely
+action:
+  - choose:
+      - conditions:
+          - condition: template
+            value_template: "{{ trigger.json.pin == correct_pin }}"  # Compare PIN
+        sequence:
+          - service: visionect_joan.set_url
+            target:
+              device_id: 266a72218733bb9a056aff49bf6f8e2d
+            data:
+              url: HomePanel                   # Predefined view name
+    default:
+      - service: visionect_joan.send_text
+        target:
+          device_id: 266a72218733bb9a056aff49bf6f8e2d
+        data:
+          message: "Wrong PIN!"
+          text_size: 48
+          add_back_button: true
+          back_button_url: MainMenu
+      - delay: "00:00:03"                      # Short pause
+      - service: visionect_joan.send_keypad    # Redisplay keypad
+        target:
+          device_id: 266a72218733bb9a056aff49bf6f8e2d
+        data:
+          title: "PIN"
+          action_webhook_id: joan_pin
+```
+
+### 4. Energy panel on zone entry
+```yaml
+alias: "Arrive home → Energy panel"          # Trigger when person enters home zone
+trigger:
+  - platform: zone
+    entity_id: person.alex                   # Person entity
+    zone: zone.home
+    event: enter
+action:
+  - service: visionect_joan.send_energy_panel
+    target:
+      device_id: 00000000000000000000000000000000
+    data:
+      power_usage_entity: sensor.house_power            # Current power (W/kW)
+      daily_consumption_entity: sensor.energy_daily_consumption
+      add_back_button: true
+      back_button_url: MainMenu
+```
+
+### 5. Slideshow rotating information
+```yaml
+service: visionect_joan.start_slideshow
+target:
+  device_id: 00000000000000000000000000000000
+data:
+  views: |                                      # Each line: view name OR local URL
+    MainMenu
+    WeatherPanel
+    http://192.168.1.10:8123/local/announcements.png
+  seconds_per_slide: 45                         # Slide duration (sec) – shorter = more battery drain
+  loop: true                                    # Return to first slide after last
+  add_back_button: true
+```
+
+### 6. Camera snapshot on motion
+```yaml
+alias: "Motion → Snapshot"
+trigger:
+  - platform: state
+    entity_id: binary_sensor.hall_motion        # Motion sensor
+    to: "on"
+action:
+  - service: visionect_joan.send_camera_snapshot
+    target:
+      device_id: 00000000000000000000000000000000
+    data:
+      camera_entity: camera.hallway             # Camera entity
+      caption: "Motion: {{ now().strftime('%H:%M:%S') }}"
+      add_back_button: true
+      back_button_url: MainMenu
+```
+
+---
+
+## Performance & Battery
+
+| Aspect | Recommendation |
+|--------|---------------|
+| `ReloadTimeout` | 60–300 s for info panels; use 0 only for static display (manual change) |
+| Slideshow interval | ≥ 30 s per slide; avoid rapid cycling |
+| Encoding | `1` for text/status; `4` only when grayscale detail needed |
+| Dithering | `none` for clarity; `floyd-steinberg` for photographic/grayscale content |
+| Large images | Pre-scale server side to device resolution |
+| Night usage | Reduce refreshes via time or presence automations |
+| Sleep mode | Use `sleep_device` during long inactivity (overnight) |
+
+---
+
+## Security & Webhooks
+
+- HA webhooks (`/api/webhook/<id>`) are unauthenticated by default – treat them as local triggers.
+- Do not expose port 8123 publicly without reverse proxy + authentication.
+- Use long, non‑guessable `webhook_id` strings for sensitive actions.
+- Do not log raw PIN values; compare via templates or store hashed.
+- If VSS runs on a separate host, ensure `internal_url` in HA is correct so webhook URLs resolve properly.
+
+---
+
+## Troubleshooting
+
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| Button press ignored | Incorrect `webhook_id` or missing automation | Check Developer Tools → Events → webhook |
+| Screen not updating | Stale session | Use `force_refresh` or adjust `ReloadTimeout` |
+| Old styles/images persist | WebKit cache | `clear_web_cache` (optionally restart session) |
+| Empty graph | Recorder/history disabled | Enable history recording for sensors |
+| Wrong orientation after change | Session not rebuilt | Use `set_display_rotation` → reboot completes automatically |
+| PIN always fails | Automation not parsing JSON | Inspect `trigger.json` in Template Editor |
+| RSS feed empty | Feed unreachable or blocked | Open URL in browser, check logs |
+
+Enable debug logging:
+```yaml
+logger:
+  logs:
+    custom_components.visionect_joan: debug
+```
+
+---
+
+## FAQ
+
+**Do button panels show live entity states?**  
+No—panels are stateless (one‑way). Use `send_status_panel` or a custom dashboard for real‑time states.
+
+**Is e‑ink “ghosting” normal?**  
+Frequent high‑contrast refreshes cause artifacts; reduce update frequency and prefer encoding=1 for crisp text.
+
+**Other Joan models supported?**  
+Tested on Joan 6; other models may partially work but are not verified yet.
+
+**External site not visible in slideshow?**  
+Likely blocked by X‑Frame-Options / CSP. Use local HA/AppDaemon URLs or predefined views.
+
+**Can I send arbitrary HTML?**  
+Yes – `data:text/html,<html>...</html>` via `set_url` or generate using existing services.
 
 ---
 
 ## License
 
 MIT
+
+---
+
+## Closing Notes
+
+- Not an official Visionect or Home Assistant integration.
+- Some code & documentation steps assisted by AI tooling.
+- Future enhancements planned for interactive state feedback and theming.
+- Feedback & contributions welcome—open an Issue or PR. 😊
