@@ -582,9 +582,8 @@ MIT
 
 ---
 
-## Closing Notes
+- The project is not an official integration of Visionect or Home Assistant.
+- Tested on **Joan 6**; other models were not verified.
+- AI was used for faster development.
+- [Visionect Software Suite - installation](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
 
-- Not an official Visionect or Home Assistant integration.
-- Some code & documentation steps assisted by AI tooling.
-- Future enhancements planned for interactive state feedback and theming.
-- Feedback & contributions welcome—open an Issue or PR. 😊
