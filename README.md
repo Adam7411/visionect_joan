@@ -586,4 +586,5 @@ MIT
 - Tested on **Joan 6**; other models were not verified.
 - AI was used for faster development.
 - [Visionect Software Suite - installation](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
+- [Joan 6 dashboard Generator](https://github.com/Adam7411/joan_generator/blob/main/README.md)
 
