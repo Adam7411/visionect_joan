@@ -583,8 +583,12 @@ Tak – `data:text/html,<html>...</html>` jako URL w `set_url` lub automatycznie
 - Testowany na **Joan 6**; inne modele nie były weryfikowane.
 - Do szybszego rozwoju użyto AI.
 - [Chcesz kupić nowy Joan 6?](https://allegrolokalnie.pl/oferta/joan-6-nowy-home-assistant-energooszczedny-dotykowy-tablet-eink)
-- [Opis: Visionect Software Suite - Instalacja](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
-- [Joan 6 dashboard Generator](https://github.com/Adam7411/joan_generator/blob/main/README.md)
+***
+- [Visionect Software Suite - Instalacja w Proxmox](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
+- [Visionect Software Suite - Instalacja w Home Assistant](https://github.com/Adam7411/visionect-v3-allinone/blob/main/visionect-v3-allinone/README_pl.md)
+- [Dodatek Visionect Joan dla Home Assistant](https://github.com/Adam7411/visionect_joan/blob/main/README_pl.md)
+- [Dodatek Joan 6: AppDaemon Dashboard Generator](https://github.com/Adam7411/joan_generator/)
+***
 
 ## Licencja
 
