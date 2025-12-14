@@ -291,6 +291,12 @@ async def _add_interactive_layer_to_url(
         icon_action1_svg = await async_get_icon_as_base64(hass, "arrow-right.svg")
         icon_action2_svg = await async_get_icon_as_base64(hass, "check-circle.svg")
         
+        # --- LOGIKA UKRYWANIA DATY ---
+        timestamp_css = ""
+        if has_webhook_1: # Jeśli jest prawy przycisk, ukrywamy datę
+            timestamp_css = ".timestamp { display: none !important; }"
+        # -----------------------------
+
         common_css = f"""
         html {{ box-sizing: border-box; }}
         *, *:before, *:after {{ box-sizing: inherit; }}
@@ -335,7 +341,10 @@ async def _add_interactive_layer_to_url(
             position: fixed; top: 0; left: 0; right: 0; bottom: 0;
             width: 100vw; height: 100vh; z-index: 999; background: transparent; cursor: pointer;
         }}
+        
+        {timestamp_css}
         """
+
         if re.search(r"</style>", decoded_html, re.IGNORECASE):
             decoded_html = re.sub(r"</style>", common_css + "</style>", decoded_html, count=1, flags=re.IGNORECASE)
         else:
@@ -351,7 +360,7 @@ async def _add_interactive_layer_to_url(
                 _LOGGER.warning("Could not determine internal URL for webhook: %s", e)
             
             if not base_url:
-                base_url = "http://homeassistant:8123"  # Fallback
+                base_url = "http://homeassistant.local:8123"  # Fallback
             
             return f"{base_url.rstrip('/')}/api/webhook/{webhook_id}"
 
@@ -386,7 +395,6 @@ async def _add_interactive_layer_to_url(
              interactive_scripts += "function navigate(e,u){try{if(e)e.stopPropagation();window.location.href=u;}catch(err){}}"
         
         if js_needs_webhook:
-            # Dodane nagłówki i prosty debounce
             interactive_scripts += """
             var __vectLock = false;
             function triggerWebhook(e,u){
@@ -515,12 +523,26 @@ def create_text_message_url(message: str, text_color: str = "black", background_
         
         style_css = f"""
             {font_import_rule}
-            body {{ font-family: {font_family_css}; color: {text_color}; background-color: {background_color}; margin: 0; padding: 20px; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: {text_align}; box-sizing: border-box; -webkit-font-smoothing: none; font-smooth: never; }}
-            .container {{ display: flex; flex-direction: {flex_direction}; align-items: center; justify-content: center; width: 100%; height: 100%; gap: 20px; }}
-            .text-container {{ font-size: {text_size}; font-weight: {font_weight}; line-height: 1.5; word-wrap: break-word; flex-shrink: 1; }}
-            .image-container {{ flex-shrink: 0; max-width: {'40%' if layout in ['image_left', 'image_right'] else '90%'}; max-height: {'90%' if layout in ['image_left', 'image_right'] else '80%'}; display: flex; align-items: center; justify-content: center;}}
+            /* ZMIANA: Zmniejszono padding z 20px na 5px, żeby zyskać miejsce przy krawędziach */
+            body {{ font-family: {font_family_css}; color: {text_color}; background-color: {background_color}; margin: 0; padding: 5px; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: {text_align}; box-sizing: border-box; -webkit-font-smoothing: none; font-smooth: never; }}
+            
+            /* ZMIANA: Zmniejszono gap z 20px na 5px (odstęp między obrazkiem a tekstem) */
+            .container {{ display: flex; flex-direction: {flex_direction}; align-items: center; justify-content: center; width: 100%; height: 100%; gap: 5px; }}
+            
+            .text-container {{ font-size: {text_size}; font-weight: {font_weight}; line-height: 1.2; word-wrap: break-word; flex-shrink: 1; }}
+            
+            /* ZMIANA: Zwiększono limity max-width/max-height do 100%, aby obrazek mógł wypełnić ekran */
+            .image-container {{ 
+                flex-shrink: 0; 
+                max-width: {'45%' if layout in ['image_left', 'image_right'] else '100%'}; 
+                max-height: {'100%' if layout in ['image_left', 'image_right'] else '100%'}; 
+                display: flex; align-items: center; justify-content: center;
+                flex-grow: 1; /* Pozwala kontenerowi rosnąć */
+            }}
+            
             img {{ max-width: 100%; max-height: 100%; object-fit: contain; }}
             .timestamp {{ position: absolute; bottom: 10px; right: 10px; font-size: 16px; opacity: 0.8; font-family: 'Courier New', Courier, monospace; font-weight: 700; }}
+
         """
         body_html = f"""
             <div class="container">
@@ -1168,42 +1190,53 @@ def _generate_weather_forecast_graph(
         if not timestamps:
             return None
 
-        # POPRAWKA: Użycie Figure zamiast plt.subplots dla lepszej wydajności i bezpieczeństwa wątków
         from matplotlib.figure import Figure
         from matplotlib.backends.backend_agg import FigureCanvasAgg
 
         plt.style.use('grayscale')
         matplotlib.rcParams.update({
-            'font.size': 20, 'axes.titlesize': 24, 'axes.labelsize': 18,
-            'xtick.labelsize': 16, 'ytick.labelsize': 16, 'lines.linewidth': 3.5,
-            'lines.markersize': 8, 'figure.facecolor': 'white', 'axes.facecolor': 'white',
+            'font.size': 16,
+            'axes.titlesize': 22,        # Tytuł jeszcze większy
+            'axes.labelsize': 16,
+            'xtick.labelsize': 14,
+            'ytick.labelsize': 14,
+            'lines.linewidth': 4,
+            'lines.markersize': 10,
+            'figure.facecolor': 'white', 'axes.facecolor': 'white',
             'savefig.facecolor': 'white', 'text.color': 'black', 'axes.labelcolor': 'black',
             'xtick.color': 'black', 'ytick.color': 'black', 'axes.edgecolor': 'black',
         })
         
-        figsize = (8, 6) if is_portrait else (10, 4.5)
+        # ZMIANA: Zwiększamy wysokość (z 5.5 na 6.0 w pionie)
+        # Dzięki temu wykres zajmie 75% ekranu, zostawiając dół na tekst.
+        if is_portrait:
+            figsize = (6.0, 6.0) 
+        else:
+            figsize = (8.0, 5.0)
+
         fig = Figure(figsize=figsize, dpi=100, constrained_layout=False)
+        canvas = FigureCanvasAgg(fig)
         ax = fig.add_subplot(111)
         
-        ax.plot(timestamps, temperatures, marker='o', linestyle='-')
+        ax.plot(timestamps, temperatures, marker='o', linestyle='-', color='black')
 
         title = "Prognoza 24h" if lang == "pl" else "24h Forecast"
         ax.set_title(title, fontweight='bold')
-        ax.set_ylabel(f"{'Temperatura' if lang == 'pl' else 'Temperature'} ({temp_unit})")
-        ax.grid(True, which='major', linestyle='--', linewidth=1.0)
+        
+        ax.grid(True, which='major', linestyle='--', linewidth=1.5)
+        
+        ax.xaxis.set_major_locator(mdates.HourLocator(interval=4))
+        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
         
         if is_portrait:
-            ax.xaxis.set_major_locator(mdates.HourLocator(interval=6))
-            fig.autofmt_xdate(rotation=30, ha='right')
-            plt.subplots_adjust(left=0.18, right=0.95, top=0.88, bottom=0.20)
+            fig.autofmt_xdate(rotation=45, ha='right')
+            # ZMIANA: Agresywne marginesy. 
+            # left=0.10 (bardzo blisko lewej), top=0.92 (tytuł wyżej)
+            fig.subplots_adjust(left=0.10, right=0.98, top=0.92, bottom=0.15)
         else:
-            ax.xaxis.set_major_locator(mdates.HourLocator(interval=4))
             fig.autofmt_xdate(rotation=0, ha='center')
-            plt.subplots_adjust(left=0.12, right=0.97, top=0.85, bottom=0.15)
-            
-        ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
+            fig.subplots_adjust(left=0.08, right=0.99, top=0.90, bottom=0.15)
 
-        canvas = FigureCanvasAgg(fig)
         buf = io.BytesIO()
         canvas.print_png(buf)
         buf.seek(0)
@@ -1212,7 +1245,6 @@ def _generate_weather_forecast_graph(
     except Exception as e:
         _LOGGER.error(f"Failed to generate weather forecast graph: {e}")
         return None
-
 
 def _generate_graph_image(
     hass,
