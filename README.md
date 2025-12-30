@@ -79,7 +79,7 @@ The integration acts as a bridge between Home Assistant and the Visionect Softwa
 
 <details>
   <summary>Screenshot: bottom action bar</summary>
-  <img width="561" height="705" alt="Bottom action bar" src="https://github.com/user-attachments/assets/dd217c23-d402-43a8-acb3-1bf0ea841c74" />
+  <img width="758" height="1024" alt="pog ang" src="https://github.com/user-attachments/assets/0cb98b17-95f0-4ccc-a683-e509ac9c16b6" />
 </details>
 
 <details>
