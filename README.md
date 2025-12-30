@@ -85,6 +85,11 @@ The integration acts as a bridge between Home Assistant and the Visionect Softwa
 <details>
   <summary>Predefined view options</summary>
   <img width="838" height="566" alt="options" src="https://github.com/user-attachments/assets/a18904bc-f445-446b-b8f5-5f288045a832" />
+
+ <img width="599" height="316" alt="image" src="https://github.com/user-attachments/assets/137413e3-758b-44c8-92de-4b23ad4b227d" />
+
+ <img width="591" height="572" alt="image" src="https://github.com/user-attachments/assets/63626c47-4adf-4ca3-8fd3-a037d12b2c34" />
+
 </details>
 
 ---
