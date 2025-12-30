@@ -1,0 +1,2302 @@
+set_url:
+  name: "Set Custom URL"
+  description: "This service permanently changes the website or image displayed on the Visionect e-ink device screen, setting it as the new 'Main' view. It supports displaying web pages, dashboards (e.g., from AppDaemon or Home Assistant), external sites, or local images. The device will load and display the specified URL. Useful for static displays or default views. Note: This becomes the device's main view until changed."
+  example: "http://192.168.1.10:8123/lovelace/default_view"
+  fields:
+    device_id:
+      name: "Device"
+      description: "Select the Visionect device to send the command to."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    url:
+      name: "URL"
+      description: "Enter the full URL to display. Can be a web address or a predefined view name."
+      example: "http://192.168.1.10:8123/lovelace/dashboard"
+      selector:
+        text:
+    predefined_url:
+      name: "Predefined URL"
+      description: "Choose from saved view names configured in integration options."
+      selector:
+        text:
+
+send_text:
+  name: "Send Text Message"
+  description: "Sends a formatted text message with optional image to the e-ink device screen. Fully supports Jinja2 templates for dynamic content. This is a temporary view that can include text, images, colors, and interactive elements like webhooks. Optimized for e-ink displays. Allows customization of layout, colors, fonts, and sizing. Can add back buttons and auto-return functionality. Supports multiline text and templates like sensor values."
+  example: "Temperature: { states('sensor.temperature') } | Image: http://example.com/image.png"
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Visionect e-ink device to send the message to."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    message:
+      name: "Message"
+      description: "The text content to display. Supports Jinja2 templates for dynamic data."
+      required: true
+      example: "Meeting at 2:00 PM"
+      selector:
+        text:
+          multiline: true
+    layout:
+      name: "Layout"
+      description: "Determines where the image is placed relative to the text."
+      required: false
+      default: "text_only"
+      selector:
+        select:
+          options:
+            - label: "Text Only"
+              value: "text_only"
+            - label: "Image Above Text"
+              value: "image_top"
+            - label: "Image Below Text"
+              value: "image_bottom"
+            - label: "Image to the Left of Text"
+              value: "image_left"
+            - label: "Image to the Right of Text"
+              value: "image_right"
+            - label: "Image Only"
+              value: "image_only"
+    image_url:
+      name: "Image URL"
+      description: "URL of the image. Local files: Copy to \\\\<YOUR_HA_IP>\\config\\www\\ and use URL: http://<YOUR_HA_IP>:8123/local/image.png"
+      required: false
+      selector:
+        text:
+    image_zoom:
+      name: "Image Size"
+      description: "Scales the image. 100% is original size. Use smaller values to shrink, larger to magnify."
+      required: false
+      default: 100
+      selector:
+        number:
+          min: 50
+          max: 200
+          step: 5
+          mode: "slider"
+          unit_of_measurement: "%"
+    text_color:
+      name: "Text Color"
+      description: "Color of the font. E-ink screens support Black or White."
+      required: false
+      default: "black"
+      selector:
+        select:
+          options:
+            - label: "Black"
+              value: "black"
+            - label: "White"
+              value: "white"
+    background_color:
+      name: "Background Color"
+      description: "Background color of the screen. Standard is White."
+      required: false
+      default: "white"
+      selector:
+        select:
+          options:
+            - label: "White"
+              value: "white"
+            - label: "Black"
+              value: "black"
+    text_size:
+      name: "Text Size"
+      description: "Font size in pixels. Larger numbers mean bigger text."
+      required: false
+      default: 28
+      selector:
+        number:
+          min: 10
+          max: 150
+          step: 1
+          mode: "slider"
+          unit_of_measurement: "px"
+    text_align:
+      name: "Text Alignment"
+      description: "Aligns the text horizontally."
+      required: false
+      default: "center"
+      selector:
+        select:
+          options:
+            - label: "Left"
+              value: "left"
+            - label: "Center"
+              value: "center"
+            - label: "Right"
+              value: "right"
+    font_family:
+      name: "Font Family"
+      description: "Choose a font style optimized for readability on e-ink."
+      required: false
+      default: "Modern"
+      selector:
+        select:
+          options:
+            - label: "Modern"
+              value: "Modern"
+            - label: "Readable"
+              value: "Readable"
+            - label: "Archivo Black"
+              value: "Archivo Black"
+            - label: "Arbutus"
+              value: "Arbutus"
+            - label: "Asimovian"
+              value: "Asimovian"
+            - label: "Bangers"
+              value: "Bangers"
+            - label: "Blaka"
+              value: "Blaka"
+            - label: "Bungee"
+              value: "Bungee"
+            - label: "Bungee Shade"
+              value: "Bungee Shade"
+            - label: "Cherry Bomb One"
+              value: "Cherry Bomb One"
+            - label: "Cinzel Decorative"
+              value: "Cinzel Decorative"
+            - label: "Damion"
+              value: "Damion"
+            - label: "Diplomata SC"
+              value: "Diplomata SC"
+            - label: "Fascinate"
+              value: "Fascinate"
+            - label: "Joti One"
+              value: "Joti One"
+            - label: "Libertinus Keyboard"
+              value: "Libertinus Keyboard"
+            - label: "MedievalSharp"
+              value: "MedievalSharp"
+            - label: "Michroma"
+              value: "Michroma"
+            - label: "New Rocker"
+              value: "New Rocker"
+            - label: "Rubik Wet Paint"
+              value: "Rubik Wet Paint"
+            - label: "Spicy Rice"
+              value: "Spicy Rice"
+            - label: "Story Script"
+              value: "Story Script"
+    font_weight:
+      name: "Font Weight"
+      required: false
+      default: "normal"
+      selector:
+        select:
+          options:
+            - label: "Normal"
+              value: "normal"
+            - label: "Bold"
+              value: "bold"
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      description: "Check this if using a 6-inch device (e.g., Joan 6). Adjusts margins and sizes to better fit content on screen."
+      required: false
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      description: "ID of the webhook triggered when pressing the right button (arrow). Automatically detects internal address."
+      required: false
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      description: "ID of the webhook triggered when pressing the center button (check)."
+      required: false
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      description: "If checked, touching ANY part of the screen will trigger the designated Right Button Webhook (→) and hide other buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      description: "If checked, touching ANY part of the screen will trigger the Left Back Button (←) and hide other buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      description: "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+      required: false
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      description: "Automatically closes the panel after time. Returns to the return target configured in device options."
+      required: false
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+set_display_rotation:
+  name: "Set Display Rotation"
+  description: "Changes the physical orientation of the screen on the Visionect device. Options include Portrait (0°), Landscape (90°), Portrait (180°), Landscape (270°). Warning: The device will reboot to apply the change, which may take a few seconds."
+  example: "1 (for Landscape 90°)"
+  fields:
+    device_id:
+      name: "Device"
+      description: "The Joan device to change display rotation for."
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    display_rotation:
+      name: "Display Rotation"
+      description: "Select the desired orientation."
+      required: true
+      selector:
+        select:
+          options:
+            - label: "Portrait (0°)"
+              value: "0"
+            - label: "Landscape (90°)"
+              value: "1"
+            - label: "Portrait (180°)"
+              value: "2"
+            - label: "Landscape (270°)"
+              value: "3"
+
+force_refresh:
+  name: "Force Refresh"
+  description: "Sends a command to the device to wake up (if possible) and reload the current image from the server. Useful for updating stale content or ensuring the latest data is displayed."
+  example: "Use after clearing cache to refresh display."
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+
+clear_display:
+  name: "Clear Display"
+  description: "Forces the screen to flash and display a blank white page. Useful for removing 'ghosting' artifacts on e-ink screens caused by prolonged display of the same content."
+  example: "Clear after displaying static images for long periods."
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+
+sleep_device:
+  name: "Sleep Device"
+  description: "Commands the device to disconnect from Wi-Fi and enter deep sleep mode to save battery. Specify duration in seconds (1-604800, default 3600). Device will wake after the time or on polling."
+  example: "3600 (1 hour sleep)"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    duration:
+      name: "Duration"
+      description: "How long (in seconds) the device should sleep before waking up again."
+      required: false
+      default: 3600
+      selector:
+        number:
+          min: 1
+          max: 604800
+          mode: "box"
+          unit_of_measurement: "s"
+
+wake_device:
+  name: "Wake Device"
+  description: "Attempts to wake up a sleeping device immediately (Note: Use with caution, mostly works if device is polling). Useful for manual wake-up outside scheduled times."
+  example: "Wake device for immediate update."
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+
+send_qr_code:
+  name: "Send QR Code"
+  description: "Generates a QR code from the provided text/link and displays it on the screen with optional message. Supports customization of size, colors, border, and positioning. Useful for sharing WiFi passwords, URLs, or text data via scannable code."
+  example: "Data: WIFI:S:MyNetwork;T:WPA;P:password;; | Message: Scan for WiFi"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    data:
+      name: "Data"
+      description: "The content to encode (e.g., WiFi password string, a website URL, or text)."
+      required: true
+      selector:
+        text:
+    message:
+      name: "Message"
+      description: "Text to display above or below the QR code."
+      required: false
+      selector:
+        text:
+    qr_message_text_size:
+      name: "Message Text Size"
+      default: 24
+      selector:
+        number:
+          min: 10
+          max: 100
+          mode: "slider"
+          unit_of_measurement: "px"
+    qr_message_position:
+      name: "Message Position"
+      default: "below"
+      selector:
+        select:
+          options:
+            - label: "Below QR Code"
+              value: "below"
+            - label: "Above QR Code"
+              value: "above"
+    box_size:
+      name: "Box Size"
+      description: "Size of individual QR dots. Increase for bigger code."
+      default: 10
+      selector:
+        number:
+          min: 1
+          max: 30
+          mode: "slider"
+    border:
+      name: "Border"
+      description: "White margin around the QR code."
+      default: 4
+      selector:
+        number:
+          min: 0
+          max: 10
+          mode: "slider"
+    fill_color:
+      name: "QR Code Color"
+      default: "black"
+      selector:
+        select:
+          options:
+            - label: "Black"
+              value: "black"
+            - label: "White"
+              value: "white"
+    back_color:
+      name: "Background Color"
+      default: "white"
+      selector:
+        select:
+          options:
+            - label: "White"
+              value: "white"
+            - label: "Black"
+              value: "black"
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+send_calendar:
+  name: "Send Calendar"
+  description: "Displays events from a Home Assistant calendar entity. Choose between list view (up to 31 days) or monthly grid. Styles: Modern, Minimalist, Monthly Grid. Fetches events dynamically."
+  example: "Calendar: calendar.home | Days: 7 | Style: modern"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    calendar_entity:
+      name: "Calendar Entity"
+      description: "The calendar entity to fetch events from."
+      required: true
+      selector:
+        entity:
+          domain: "calendar"
+    duration_days:
+      name: "Duration (days)"
+      description: "For list view: How many days ahead to look for events."
+      default: 1
+      selector:
+        number:
+          min: 1
+          max: 31
+          mode: "slider"
+    display_style:
+      name: "Display Style"
+      description: "Choose between a list of events or a full monthly grid view."
+      default: "modern"
+      selector:
+        select:
+          options:
+            - label: "Modern (default)"
+              value: "modern"
+            - label: "Minimalist"
+              value: "minimalist"
+            - label: "Monthly Grid"
+              value: "monthly_grid"
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+send_weather:
+  name: "Send Weather"
+  description: "Formats and displays data from a weather entity on the device screen. Layouts: Detailed Summary, Daily Forecast List, Weather Panel with Graph. Pulls current conditions, forecasts, and more."
+  example: "Weather: weather.home | Layout: detailed_summary"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    weather_entity:
+      name: "Weather Entity"
+      description: "The weather entity to get data from."
+      required: true
+      selector:
+        entity:
+          domain: "weather"
+    layout:
+      name: "Layout"
+      description: "The visual layout for the weather display."
+      default: "detailed_summary"
+      selector:
+        select:
+          options:
+            - label: "Detailed Summary"
+              value: "detailed_summary"
+            - label: "Daily Forecast (List)"
+              value: "daily_forecast_list"
+            - label: "Weather Panel with Graph"
+              value: "weather_graph_panel"
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+send_energy_panel:
+  name: "Send Energy Panel"
+  description: "Displays a summary of your home's energy usage and production. Entities for power, consumption, production, import/export. Shows current and daily values."
+  example: "Power: sensor.power | Consumption: sensor.daily_energy | Production: sensor.solar_production"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    power_usage_entity:
+      name: "Current Power Usage"
+      selector:
+        entity:
+          device_class: "power"
+    daily_consumption_entity:
+      name: "Daily Energy Consumption"
+      selector:
+        entity:
+          device_class: "energy"
+    daily_production_entity:
+      name: "Daily Solar Production"
+      selector:
+        entity:
+          device_class: "energy"
+    daily_grid_import_entity:
+      name: "Daily Grid Import"
+      selector:
+        entity:
+          device_class: "energy"
+    daily_grid_export_entity:
+      name: "Daily Grid Export"
+      selector:
+        entity:
+          device_class: "energy"
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+send_todo_list:
+  name: "Send To-Do List"
+  description: "Formats and displays items from a selected to-do list (including Shopping List) on the device screen. Supports custom title. Can trigger webhooks on item click for task completion."
+  example: "To-Do: todo.shopping_list | Title: My List"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    todo_entity:
+      name: "To-Do List Entity"
+      required: true
+      selector:
+        entity:
+          domain: "todo"
+    title:
+      name: "Custom Title"
+      description: "Optional title to display above the list. If not provided, the entity's friendly name will be used."
+      selector:
+        text:
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+send_camera_snapshot:
+  name: "Send Camera Snapshot"
+  description: "Displays a snapshot from a selected camera on the device screen. Supports zoom and rotation. Optional caption. Fetches latest image."
+  example: "Camera: camera.front_door | Caption: Front Door | Zoom: 150"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    camera_entity:
+      name: "Camera Entity"
+      required: true
+      selector:
+        entity:
+          domain: "camera"
+    caption:
+      name: "Caption"
+      description: "Optional text to display below the image. Supports templates."
+      selector:
+        text:
+    image_zoom:
+      name: "Image Size"
+      default: 100
+      selector:
+        number:
+          min: 50
+          max: 200
+          step: 5
+          mode: "slider"
+          unit_of_measurement: "%"
+    display_rotation:
+      name: "Image Rotation"
+      default: "0"
+      selector:
+        select:
+          options:
+            - label: "No rotation"
+              value: "0"
+            - label: "90° Clockwise"
+              value: "90"
+            - label: "180°"
+              value: "180"
+            - label: "270° Clockwise"
+              value: "270"
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+send_status_panel:
+  name: "Send Status Panel"
+  description: "Displays a simple, readable list of selected entity states (e.g., open windows, temps, lights)."
+  example: "Title: Home Status | Entities: light.living_room, sensor.temperature"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    title:
+      name: "Title"
+      description: "Optional title to display at the top of the panel."
+      selector:
+        text:
+    entities:
+      name: "Entities"
+      required: true
+      selector:
+        entity:
+          multiple: true
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+send_sensor_graph:
+  name: "Send Sensor Graph"
+  description: "Generates a history chart for one or more numeric sensors."
+  example: "Entities: sensor.temperature | Duration: 24 | Type: line"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    entities:
+      name: "Entities"
+      required: true
+      selector:
+        entity:
+          domain: "sensor"
+          multiple: true
+    duration_hours:
+      name: "Graph Duration"
+      description: "The historical time period to fetch data from."
+      default: 24
+      selector:
+        number:
+          min: 1
+          max: 48
+          mode: "slider"
+          unit_of_measurement: "hours"
+    graph_type:
+      name: "Graph Type"
+      description: "The type of graph to generate."
+      default: "line"
+      selector:
+        select:
+          options:
+            - label: "Line Graph"
+              value: "line"
+            - label: "Bar Chart"
+              value: "bar"
+    show_points:
+      name: "Show Data Points"
+      description: "For line graphs, displays a marker for each data point."
+      default: false
+      selector:
+        boolean:
+    image_zoom:
+      name: "Image Size"
+      default: 100
+      selector:
+        number:
+          min: 50
+          max: 200
+          step: 5
+          mode: "slider"
+          unit_of_measurement: "%"
+    display_rotation:
+      name: "Image Rotation"
+      default: "0"
+      selector:
+        select:
+          options:
+            - label: "No rotation"
+              value: "0"
+            - label: "90° Clockwise"
+              value: "90"
+            - label: "180°"
+              value: "180"
+            - label: "270° Clockwise"
+              value: "270"
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+send_rss_feed:
+  name: "Send RSS Feed"
+  description: "Fetches latest news from provided RSS feed and displays headlines on screen."
+  example: "URL: https://example.com/rss | Title: News | Max Items: 5"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    feed_url:
+      name: "RSS Feed URL"
+      required: true
+      selector:
+        text:
+    title:
+      name: "Custom Title"
+      selector:
+        text:
+    max_items:
+      name: "Maximum Items"
+      default: 5
+      selector:
+        number:
+          min: 1
+          max: 20
+          mode: "slider"
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text:
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+clear_web_cache:
+  name: "Clear Web Cache"
+  description: "Clears browser cache on Visionect device. Helps when device fails to download new graphics despite refresh."
+  example: "Devices: Multiple | Restart: true"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+          multiple: true
+    restart_session:
+      name: "Restart Session"
+      default: false
+      selector:
+        boolean: {}
+
+start_slideshow:
+  name: "Start Slideshow"
+  description: "Begins cycling through provided views/URLs in a loop."
+  example: "Views: Dashboard1, Dashboard2 | Seconds: 30 | Loop: true"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+          multiple: true
+    views:
+      name: "Views/URLs"
+      description: "One view name or URL per line."
+      required: true
+      selector:
+        text:
+          multiline: true
+    seconds_per_slide:
+      name: "Seconds per slide"
+      default: 30
+      selector:
+        number:
+          min: 3
+          max: 3600
+          unit_of_measurement: "s"
+          mode: "box"
+          step: 1
+    loop:
+      name: "Loop"
+      default: true
+      selector:
+        boolean: {}
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean: {}
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text: {}
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text: {}
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean: {}
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean: {}
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean: {}
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text: {}
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+send_image_url:
+  name: "Send Image URL"
+  description: "Displays a single image file (JPG/PNG/SVG) fetched from provided web address."
+  example: "Image URL: http://example.com/image.png | Zoom: 100"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+          multiple: true
+    image_url:
+      name: "Image URL"
+      description: "URL of the image. Local files: Copy to \\\\<YOUR_HA_IP>\\config\\www\\ and use URL: http://<YOUR_HA_IP>:8123/local/image.png"
+      required: true
+      selector:
+        text: {}
+    image_zoom:
+      name: "Zoom"
+      default: 100
+      selector:
+        number:
+          min: 50
+          max: 200
+          step: 1
+          unit_of_measurement: "%"
+          mode: "box"
+    display_rotation:
+      name: "Image Rotation"
+      default: "0"
+      selector:
+        select:
+          options:
+            - "0"
+            - "90"
+            - "180"
+            - "270"
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text: {}
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text: {}
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean: {}
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean: {}
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean: {}
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text: {}
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+
+set_session_options:
+  name: "Set Session Options"
+  description: "Advanced configuration of how server processes image for the device."
+  example: "Encoding: 4 | Dithering: bayer"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+          multiple: true
+    encoding:
+      name: "Encoding"
+      selector:
+        select:
+          custom_value: true
+          options:
+            - "1"
+            - "2"
+            - "4"
+            - "8"
+    dithering:
+      name: "Dithering"
+      selector:
+        select:
+          custom_value: true
+          options:
+            - "none"
+            - "bayer"
+            - "floyd-steinberg"
+
+send_keypad:
+  name: "Send PIN Keypad"
+  description: "Displays screen with numeric keypad. User can enter code which is sent to Home Assistant. Requires a Webhook automation to be configured. The automation trigger must use this ID. The entered code will be available in the template as trigger.json.pin. Example condition: trigger.json.pin == 1234."
+  example: "Title: Enter PIN | Webhook: joan_pin"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    title:
+      name: "Title"
+      default: "Enter PIN"
+      selector:
+        text:
+    action_webhook_id:
+      name: "Receiver Webhook ID"
+      description: "The ID of the webhook automation that will receive the PIN. The trigger must use this ID. Entered code available as trigger.json.pin."
+      required: true
+      selector:
+        text:
+
+send_button_panel:
+  name: "Send Button Panel"
+  description: "Displays configurable grid of buttons (up to 12). Each button can trigger a different action in Home Assistant. Requires Webhook automation, set button does not show current HA state."
+  example: "Title: Controls | Button 1: Light On | Webhook: light_on"
+  fields:
+    device_id:
+      name: "Device"
+      required: true
+      selector:
+        device:
+          integration: "visionect_joan"
+    title:
+      name: "Title"
+      required: false
+      selector:
+        text:
+    button_1_webhook_id:
+      name: "Button 1 Webhook"
+      selector:
+        text:
+    button_1_name:
+      name: "Button 1 Name"
+      selector:
+        text:
+    button_1_icon:
+      name: "Button 1 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    button_2_webhook_id:
+      name: "Button 2 Webhook"
+      selector:
+        text:
+    button_2_name:
+      name: "Button 2 Name"
+      selector:
+        text:
+    button_2_icon:
+      name: "Button 2 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    button_3_webhook_id:
+      name: "Button 3 Webhook"
+      selector:
+        text:
+    button_3_name:
+      name: "Button 3 Name"
+      selector:
+        text:
+    button_3_icon:
+      name: "Button 3 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    button_4_webhook_id:
+      name: "Button 4 Webhook"
+      selector:
+        text:
+    button_4_name:
+      name: "Button 4 Name"
+      selector:
+        text:
+    button_4_icon:
+      name: "Button 4 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    button_5_webhook_id:
+      name: "Button 5 Webhook"
+      selector:
+        text:
+    button_5_name:
+      name: "Button 5 Name"
+      selector:
+        text:
+    button_5_icon:
+      name: "Button 5 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    button_6_webhook_id:
+      name: "Button 6 Webhook"
+      selector:
+        text:
+    button_6_name:
+      name: "Button 6 Name"
+      selector:
+        text:
+    button_6_icon:
+      name: "Button 6 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    button_7_webhook_id:
+      name: "Button 7 Webhook"
+      selector:
+        text:
+    button_7_name:
+      name: "Button 7 Name"
+      selector:
+        text:
+    button_7_icon:
+      name: "Button 7 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    button_8_webhook_id:
+      name: "Button 8 Webhook"
+      selector:
+        text:
+    button_8_name:
+      name: "Button 8 Name"
+      selector:
+        text:
+    button_8_icon:
+      name: "Button 8 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    button_9_webhook_id:
+      name: "Button 9 Webhook"
+      selector:
+        text:
+    button_9_name:
+      name: "Button 9 Name"
+      selector:
+        text:
+    button_9_icon:
+      name: "Button 9 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    button_10_webhook_id:
+      name: "Button 10 Webhook"
+      selector:
+        text:
+    button_10_name:
+      name: "Button 10 Name"
+      selector:
+        text:
+    button_10_icon:
+      name: "Button 10 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    button_11_webhook_id:
+      name: "Button 11 Webhook"
+      selector:
+        text:
+    button_11_name:
+      name: "Button 11 Name"
+      selector:
+        text:
+    button_11_icon:
+      name: "Button 11 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    button_12_webhook_id:
+      name: "Button 12 Webhook"
+      selector:
+        text:
+    button_12_name:
+      name: "Button 12 Name"
+      selector:
+        text:
+    button_12_icon:
+      name: "Button 12 Icon"
+      selector:
+        select:
+          options:
+            - "account-user-avatar.svg"
+            - "audio-mute.svg"
+            - "bright-button.svg"
+            - "bulb-off.svg"
+            - "bulb-on.svg"
+            - "button-add.svg"
+            - "button-add2.svg"
+            - "button-check.svg"
+            - "button-circle-round-arrow-down.svg"
+            - "button-circle-round-arrow-left.svg"
+            - "button-circle-round-arrow-next.svg"
+            - "button-circle-round-arrow-previous.svg"
+            - "button-circle-round-arrow-rightsvg.svg"
+            - "button-circle-round-arrow-up.svg"
+            - "button-close.svg"
+            - "button-home.svg"
+            - "button-remove.svg"
+            - "button.svg"
+            - "clapperboard-with-playsvg.svg"
+            - "clock.svg"
+            - "counterclockwise-arrows-button.svg"
+            - "display-with-video-play.svg"
+            - "door-closed.svg"
+            - "door-open.svg"
+            - "energy.svg"
+            - "extractor-hood.svg"
+            - "fan.svg"
+            - "fire.svg"
+            - "garage-closed.svg"
+            - "garage-open.svg"
+            - "gate-closed.svg"
+            - "heart.svg"
+            - "heating.svg"
+            - "info.svg"
+            - "lamp-off.svg"
+            - "lamp-on.svg"
+            - "light.svg"
+            - "lock-keyhole-unlocked.svg"
+            - "lock-keyhole.svg"
+            - "logout.svg"
+            - "motor.svg"
+            - "motor2.svg"
+            - "ok-button.svg"
+            - "open-gate.svg"
+            - "play.svg"
+            - "power-plug.svg"
+            - "power.svg"
+            - "repeat-button-1.svg"
+            - "robot.svg"
+            - "run.svg"
+            - "smart-home-smart.svg"
+            - "socket-off.svg"
+            - "socket-on.svg"
+            - "socket.svg"
+            - "sos-button.svg"
+            - "stop.svg"
+            - "switch-circle.svg"
+            - "system.svg"
+            - "volume.svg"
+            - "water.svg"
+            - "window-blind.svg"
+            - "zigbee.svg"
+          custom_value: true
+    small_screen_optimized:
+      name: "Optimization for Joan 6\""
+      default: false
+      selector:
+        boolean:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_action:
+      name: "Click Triggers Action"
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      selector:
+        text:
+    action_webhook_id:
+      name: "Webhook ID (Right Button) (→)"
+      selector:
+        text:
+    action_webhook_2_id:
+      name: "Webhook ID (Center Button) (✓)"
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
