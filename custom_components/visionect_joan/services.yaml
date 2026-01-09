@@ -1329,6 +1329,44 @@ send_keypad:
       required: true
       selector:
         text:
+    add_back_button:
+      name: "Show Back Button on Left (←)"
+      description: "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings -> Devices & Services -> Visionect Joan -> Configure -> Menu 'Views'."
+      required: false
+      default: false
+      selector:
+        boolean:
+    click_anywhere_to_return:
+      name: "Click Triggers Back"
+      description: "If checked, touching ANY part of the screen will trigger the Left Back Button (←) and hide other buttons."
+      required: false
+      default: false
+      selector:
+        boolean:
+    back_button_url:
+      name: "Override Back Button Target"
+      description: "Sets a custom URL as the back button target for this panel only, overriding the device's configured return URL."
+      required: false
+      selector:
+        text:
+    auto_return_seconds:
+      name: "Auto Return Back (seconds)"
+      description: "Automatically closes the panel after time. Returns to the return target configured in device options."
+      required: false
+      default: 0
+      selector:
+        number:
+          min: 0
+          max: 86400
+          mode: "box"
+          unit_of_measurement: "s"
+    small_screen_optimized:
+      name: "Small Screen Layout"
+      description: "For 6-inch devices, uses slightly smaller fonts and spacing."
+      required: false
+      default: false
+      selector:
+        boolean:
 
 send_button_panel:
   name: "Send Button Panel"
