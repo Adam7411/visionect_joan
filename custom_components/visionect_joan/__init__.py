@@ -304,6 +304,7 @@ SERVICE_SET_SESSION_OPTIONS_SCHEMA = SERVICE_DEVICE_SCHEMA.extend({
 SERVICE_SEND_KEYPAD_SCHEMA = SERVICE_DEVICE_SCHEMA.extend({
     vol.Required(ATTR_TITLE, default="Enter PIN"): cv.string,
     vol.Required(ATTR_ACTION_WEBHOOK_ID): cv.string,
+    **INTERACTIVE_SCHEMA_EXTENSION,
 })
 
 BUTTON_PANEL_SCHEMA_DICT = {
@@ -367,6 +368,19 @@ async def _process_final_url(hass: HomeAssistant, url: str) -> str:
     try:
         encoded_content = url[len("data:text/html,"):]
         html_content = urllib.parse.unquote(encoded_content)
+        
+        # Size safety: limit decoded HTML to ~512 KB to avoid heavy disk usage
+        MAX_HTML_SIZE = 512 * 1024  # 512 KB
+        html_size = len(html_content.encode("utf-8"))
+        
+        if html_size > MAX_HTML_SIZE:
+            _LOGGER.error(
+                "Decoded HTML size (%d bytes) exceeds limit (%d bytes). "
+                "Skipping file write to avoid heavy disk usage. Returning original URL.",
+                html_size, MAX_HTML_SIZE
+            )
+            return url
+        
         content_hash = hashlib.md5(html_content.encode("utf-8")).hexdigest()
         filename = f"{content_hash}.html"
         www_path = Path(hass.config.path("www"))
@@ -683,9 +697,26 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         
         def _parse():
             try:
-                f = feedparser.parse(feed_url)
+                # Add lightweight fetch with timeout and status validation before parsing
+                import requests
+                try:
+                    response = requests.get(feed_url, timeout=10)
+                    response.raise_for_status()
+                except requests.exceptions.Timeout:
+                    _LOGGER.warning("RSS feed fetch timeout for URL: %s", feed_url)
+                    return []
+                except requests.exceptions.RequestException as e:
+                    _LOGGER.warning("RSS feed fetch error for URL %s: %s", feed_url, e)
+                    return []
+                
+                # Parse the fetched content
+                f = feedparser.parse(response.content)
+                if not f.entries:
+                    _LOGGER.warning("No entries found in RSS feed: %s", feed_url)
                 return [{"title": e.title} for e in f.entries[:max_items]]
-            except Exception: return []
+            except Exception as e:
+                _LOGGER.warning("RSS feed parsing error for URL %s: %s", feed_url, e)
+                return []
             
         items = await hass.async_add_executor_job(_parse)
         content_url = await create_rss_feed_url(hass, title, items, lang, small_screen)
@@ -1059,7 +1090,16 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         content_url = await create_keypad_url(hass, title, webhook_url)
         
         for device_uuid in uuids:
-            interactive_url = await _add_interactive_layer_to_url(hass, content_url, None, False, False, False, None, None, call.data.get(ATTR_AUTO_RETURN_SECONDS, 0))
+            back_url = _get_back_url_for_uuid(device_uuid, call.data)
+            add_back = _effective_add_back_button(call, back_url)
+            interactive_url = await _add_interactive_layer_to_url(
+                hass, content_url, back_url, add_back,
+                call.data.get(ATTR_CLICK_ANYWHERE_TO_RETURN),
+                call.data.get(ATTR_CLICK_ANYWHERE_TO_ACTION),
+                None,  # action_webhook_id not used for keypad (already has its own webhook)
+                None,  # action_webhook_2_id not used for keypad
+                call.data.get(ATTR_AUTO_RETURN_SECONDS, 0)
+            )
             final_url = await _process_final_url(hass, interactive_url)
             status = "success" if await api.async_set_device_url(device_uuid, final_url) else "failure"
             hass.bus.async_fire(EVENT_COMMAND_RESULT, {"uuid": device_uuid, "service": SERVICE_SEND_KEYPAD, "status": status})

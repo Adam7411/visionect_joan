@@ -71,6 +71,7 @@ class VisionectAPI:
           - are not live image or backend paths
           - have no query string
           - do not look like file resources with an extension
+          - are not command/batch/action endpoints
         """
         try:
             if not endpoint.startswith("/api/"):
@@ -82,6 +83,18 @@ class VisionectAPI:
             lower = endpoint.lower()
             if any(lower.endswith(ext) for ext in (".png", ".jpg", ".jpeg", ".gif", ".svg", ".webp")):
                 return endpoint
+            
+            # Do not add trailing slash to command/batch/action endpoints
+            # Command endpoints: /api/session/{uuid}/restart, /api/device/{uuid}/reboot
+            # Batch endpoints: /api/session/restart, /api/device/reboot
+            # Cache clearing: /api/session/webkit-clear-cache
+            action_suffixes = (
+                "/restart", "/reboot", "/webkit-clear-cache",
+                "-restart", "-reboot", "-clear-cache"
+            )
+            if any(endpoint.endswith(suffix) for suffix in action_suffixes):
+                return endpoint
+            
             if not endpoint.endswith("/"):
                 return endpoint + "/"
             return endpoint
