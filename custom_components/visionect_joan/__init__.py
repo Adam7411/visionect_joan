@@ -7,6 +7,7 @@ import uuid
 import hashlib
 from functools import partial
 import asyncio
+
 import feedparser
 import json
 import requests
@@ -55,6 +56,8 @@ _LOGGER = logging.getLogger(__name__)
 PLATFORMS = ["sensor", "binary_sensor", "number", "text", "button", "select", "camera"]
 URL_LENGTH_LIMIT = 4096
 CACHE_DIR_NAME = "visionect_cache"
+MAX_HTML_SIZE = 512 * 1024  # 512 KB limit for cached HTML content
+RSS_FETCH_TIMEOUT = 10  # seconds
 
 def _parse_views(views_data) -> list[dict]:
     if isinstance(views_data, list): return views_data
@@ -370,8 +373,7 @@ async def _process_final_url(hass: HomeAssistant, url: str) -> str:
         encoded_content = url[len("data:text/html,"):]
         html_content = urllib.parse.unquote(encoded_content)
         
-        # Size safety: limit decoded HTML to ~512 KB to avoid heavy disk usage
-        MAX_HTML_SIZE = 512 * 1024  # 512 KB
+        # Size safety: limit decoded HTML to avoid heavy disk usage
         html_size = len(html_content.encode("utf-8"))
         
         if html_size > MAX_HTML_SIZE:
@@ -527,9 +529,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     def _effective_add_back_button(call: ServiceCall, back_url: str | None) -> bool:
         cd = call.data
-        if cd.get(ATTR_CLICK_ANYWHERE_TO_RETURN) or cd.get(ATTR_CLICK_ANYWHERE_TO_ACTION): return False
-        if cd.get(ATTR_ADD_BACK_BUTTON): return True
-        if cd.get(ATTR_BACK_BUTTON_URL): return True
+        if (cd.get(ATTR_CLICK_ANYWHERE_TO_RETURN) or cd.get(ATTR_CLICK_ANYWHERE_TO_ACTION)):
+            return False
+        if cd.get(ATTR_ADD_BACK_BUTTON):
+            return True
+        if cd.get(ATTR_BACK_BUTTON_URL):
+            return True
         return False
 
     async def get_uuids_from_call(call: ServiceCall) -> list[str]:
@@ -699,7 +704,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             try:
                 # Add lightweight fetch with timeout and status validation before parsing
                 try:
-                    response = requests.get(feed_url, timeout=10)
+                    response = requests.get(feed_url, timeout=RSS_FETCH_TIMEOUT)
                     response.raise_for_status()
                 except requests.exceptions.Timeout:
                     _LOGGER.warning("RSS feed fetch timeout for URL: %s", feed_url)
