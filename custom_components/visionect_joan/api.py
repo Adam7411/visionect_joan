@@ -85,13 +85,11 @@ class VisionectAPI:
                 return endpoint
             
             # Do not add trailing slash to command/batch/action endpoints
-            # Command endpoints: /api/session/{uuid}/restart, /api/device/{uuid}/reboot
-            # Batch endpoints: /api/session/restart, /api/device/reboot
-            # Cache clearing: /api/session/webkit-clear-cache
-            action_suffixes = (
-                "/restart", "/reboot", "/webkit-clear-cache",
-                "-restart", "-reboot", "-clear-cache"
-            )
+            # These endpoints expect exact paths without trailing slashes:
+            # - Command endpoints: /api/session/{uuid}/restart, /api/device/{uuid}/reboot
+            # - Batch endpoints: /api/session/restart, /api/device/reboot
+            # - Cache clearing: /api/session/webkit-clear-cache
+            action_suffixes = ("/restart", "/reboot", "/webkit-clear-cache")
             if any(endpoint.endswith(suffix) for suffix in action_suffixes):
                 return endpoint
             

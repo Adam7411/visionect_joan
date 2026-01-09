@@ -9,6 +9,7 @@ from functools import partial
 import asyncio
 import feedparser
 import json
+import requests
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall, ServiceResponse
@@ -529,7 +530,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         if cd.get(ATTR_CLICK_ANYWHERE_TO_RETURN) or cd.get(ATTR_CLICK_ANYWHERE_TO_ACTION): return False
         if cd.get(ATTR_ADD_BACK_BUTTON): return True
         if cd.get(ATTR_BACK_BUTTON_URL): return True
-        if call.service == SERVICE_SEND_KEYPAD and cd.get(ATTR_ADD_BACK_BUTTON) and back_url: return True
         return False
 
     async def get_uuids_from_call(call: ServiceCall) -> list[str]:
@@ -698,7 +698,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         def _parse():
             try:
                 # Add lightweight fetch with timeout and status validation before parsing
-                import requests
                 try:
                     response = requests.get(feed_url, timeout=10)
                     response.raise_for_status()
