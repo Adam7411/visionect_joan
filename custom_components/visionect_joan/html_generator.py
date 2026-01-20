@@ -524,7 +524,18 @@ def create_text_message_url(message: str, text_color: str = "black", background_
         """
         body_html = f'<img src="{image_url}" />'
     else:
-        image_html = f'<div class="image-container"><img src="{image_url}" style="{transform_style}" /></div>' if layout != "text_only" and image_url else ""
+        # Prepare image style based on layout and zoom
+        img_style = f"transform: rotate({image_rotation}deg);"
+        # For vertical layouts, width percentage works best for zoom
+        # For horizontal layouts, we might need more care, but let's prioritize vertical as requested
+        if layout in ["image_top", "image_bottom"]:
+            img_style += f" width: {image_zoom}%; height: auto;"
+        else:
+            img_style += f" max-width: {'45%' if layout in ['image_left', 'image_right'] else '100%'}; max-height: 100%;"
+            if image_zoom != 100: # Scale still useful for horizontal or as fallback
+                img_style += f" transform: scale({image_zoom/100.0}) rotate({image_rotation}deg);"
+
+        image_html = f'<img src="{image_url}" class="main-image" style="{img_style}" />' if layout != "text_only" and image_url else ""
         flex_direction = "column"
         if layout == "image_bottom": flex_direction = "column-reverse"
         elif layout == "image_left": flex_direction = "row"
@@ -532,33 +543,23 @@ def create_text_message_url(message: str, text_color: str = "black", background_
         
         style_css = f"""
             {font_import_rule}
-            /* ZMIANA: Zmniejszono padding z 20px na 5px, żeby zyskać miejsce przy krawędziach */
-            body {{ font-family: {font_family_css}; color: {text_color}; background-color: {background_color}; margin: 0; padding: 5px; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: {text_align}; box-sizing: border-box; -webkit-font-smoothing: none; font-smooth: never; }}
+            body {{ font-family: {font_family_css}; color: {text_color}; background-color: {background_color}; margin: 0; padding: 0; width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; text-align: {text_align}; box-sizing: border-box; -webkit-font-smoothing: none; font-smooth: never; overflow: hidden; }}
             
-            /* ZMIANA: Zmniejszono gap z 20px na 5px (odstęp między obrazkiem a tekstem) */
-            .container {{ display: flex; flex-direction: {flex_direction}; align-items: center; justify-content: center; width: 100%; height: 100%; gap: 5px; }}
+            .container {{ display: flex; flex-direction: {flex_direction}; align-items: center; justify-content: center; max-width: 100%; max-height: 100%; gap: 0px; }}
             
-            .text-container {{ font-size: {text_size}; font-weight: {font_weight}; line-height: 1.2; word-wrap: break-word; flex-shrink: 1; }}
+            .text-container {{ font-size: {text_size}; font-weight: {font_weight}; line-height: 1.2; word-wrap: break-word; padding: 5px; }}
             
-            /* ZMIANA: Zwiększono limity max-width/max-height do 100%, aby obrazek mógł wypełnić ekran */
-            .image-container {{ 
-                flex-shrink: 0; 
-                max-width: {'45%' if layout in ['image_left', 'image_right'] else '100%'}; 
-                max-height: {'100%' if layout in ['image_left', 'image_right'] else '100%'}; 
-                display: flex; align-items: center; justify-content: center;
-                flex-grow: 1; /* Pozwala kontenerowi rosnąć */
+            .main-image {{ 
+                flex-shrink: 0;
+                object-fit: contain;
+                display: block;
             }}
-            
-            img {{ max-width: 100%; max-height: 100%; object-fit: contain; }}
-            .timestamp {{ position: absolute; bottom: 10px; right: 10px; font-size: 16px; opacity: 0.8; font-family: 'Courier New', Courier, monospace; font-weight: 700; }}
-
         """
         body_html = f"""
             <div class="container">
                 {image_html}
                 <div class="text-container">{escaped_message}</div>
             </div>
-            <div class="timestamp">{time.strftime("%Y-%m-%d %H:%M")}</div>
         """
 
     cache_buster_comment = f'<!-- cb:{int(time.time())} -->'
