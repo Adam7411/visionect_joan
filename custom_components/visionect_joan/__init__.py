@@ -192,7 +192,7 @@ SERVICE_SEND_TEXT_SCHEMA = vol.Schema({
     vol.Optional(ATTR_FONT_WEIGHT, default="normal"): vol.In(FONT_WEIGHTS),
     vol.Optional(ATTR_LAYOUT, default="text_only"): vol.In(LAYOUT_OPTIONS),
     vol.Optional(ATTR_IMAGE_URL): cv.string,
-    vol.Optional(ATTR_IMAGE_ZOOM, default=100): vol.All(vol.Coerce(int), vol.Range(min=50, max=200)),
+    vol.Optional(ATTR_IMAGE_ZOOM, default=100): vol.All(vol.Coerce(int), vol.Range(min=10, max=200)),
     **INTERACTIVE_SCHEMA_EXTENSION,
 })
 
@@ -250,7 +250,7 @@ SERVICE_SEND_TODO_LIST_SCHEMA = SERVICE_DEVICE_SCHEMA.extend({
 SERVICE_SEND_CAMERA_SNAPSHOT_SCHEMA = SERVICE_DEVICE_SCHEMA.extend({
     vol.Required(ATTR_CAMERA_ENTITY): cv.entity_id,
     vol.Optional(ATTR_CAPTION): cv.template,
-    vol.Optional(ATTR_IMAGE_ZOOM, default=100): vol.All(vol.Coerce(int), vol.Range(min=50, max=200)),
+    vol.Optional(ATTR_IMAGE_ZOOM, default=100): vol.All(vol.Coerce(int), vol.Range(min=10, max=200)),
     vol.Optional(ATTR_DISPLAY_ROTATION, default="0"): vol.In(["0", "90", "180", "270"]),
     **INTERACTIVE_SCHEMA_EXTENSION,
 })
@@ -266,7 +266,7 @@ SERVICE_SEND_SENSOR_GRAPH_SCHEMA = SERVICE_DEVICE_SCHEMA.extend({
     vol.Optional(ATTR_DURATION_HOURS, default=24): vol.All(vol.Coerce(int), vol.Range(min=1, max=48)),
     vol.Optional(ATTR_GRAPH_TYPE, default="line"): vol.In(["line", "bar"]),
     vol.Optional(ATTR_SHOW_POINTS, default=False): cv.boolean,
-    vol.Optional(ATTR_IMAGE_ZOOM, default=100): vol.All(vol.Coerce(int), vol.Range(min=50, max=200)),
+    vol.Optional(ATTR_IMAGE_ZOOM, default=100): vol.All(vol.Coerce(int), vol.Range(min=10, max=200)),
     vol.Optional(ATTR_DISPLAY_ROTATION, default="0"): vol.In(["0", "90", "180", "270"]),
     **INTERACTIVE_SCHEMA_EXTENSION,
 })
@@ -291,7 +291,7 @@ SERVICE_START_SLIDESHOW_SCHEMA = SERVICE_DEVICE_SCHEMA.extend({
 
 SERVICE_SEND_IMAGE_URL_SCHEMA = SERVICE_DEVICE_SCHEMA.extend({
     vol.Required(ATTR_IMAGE_URL): cv.string,
-    vol.Optional(ATTR_IMAGE_ZOOM, default=100): vol.All(vol.Coerce(int), vol.Range(min=50, max=200)),
+    vol.Optional(ATTR_IMAGE_ZOOM, default=100): vol.All(vol.Coerce(int), vol.Range(min=10, max=200)),
     vol.Optional(ATTR_DISPLAY_ROTATION, default="0"): vol.In(["0", "90", "180", "270"]),
     **INTERACTIVE_SCHEMA_EXTENSION,
 })
