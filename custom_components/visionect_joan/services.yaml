@@ -75,7 +75,7 @@ send_text:
       default: 100
       selector:
         number:
-          min: 50
+          min: 10
           max: 200
           step: 5
           mode: "slider"
@@ -789,7 +789,7 @@ send_camera_snapshot:
       default: 100
       selector:
         number:
-          min: 50
+          min: 10
           max: 200
           step: 5
           mode: "slider"
