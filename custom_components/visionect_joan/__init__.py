@@ -320,7 +320,22 @@ SERVICE_SEND_BUTTON_PANEL_SCHEMA = SERVICE_DEVICE_SCHEMA.extend(BUTTON_PANEL_SCH
 def _schedule_media_cleanup(hass: HomeAssistant) -> None:
     interval_h = max(1, int(hass.data[DOMAIN]["cleanup_interval_hours"]))
     async def _periodic_cleanup(now=None):
-        await _async_cleanup_media_files(hass)
+        """Periodic cleanup with error handling."""
+        try:
+            _LOGGER.debug("Starting periodic media cleanup")
+            await _async_cleanup_media_files(hass)
+            _LOGGER.debug("Media cleanup completed successfully")
+            
+        except PermissionError as e:
+            _LOGGER.error(f"Permission denied during cleanup: {e}")
+            # Don't crash - try again next interval
+            
+        except OSError as e:
+            _LOGGER.error(f"OS error during cleanup: {e}")
+            
+        except Exception as e:
+            _LOGGER.exception(f"Unexpected error during cleanup: {e}")
+            
     hass.async_create_task(_periodic_cleanup())
     async_track_time_interval(hass, _periodic_cleanup, timedelta(hours=interval_h))
 
