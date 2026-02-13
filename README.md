@@ -122,7 +122,7 @@ The integration acts as a bridge between Home Assistant and the Visionect Softwa
 ### Via HACS (recommended)
 1. Install [HACS](https://hacs.xyz/) if not already.
 2. In HACS → Integrations → ⋮ → Custom repositories.
-3. Add `Adam7411/visionect_joan` as “Integration”.
+3. Add `https://github.com/Adam7411/visionect_joan` as “Integration”.
 4. Search “Visionect Joan” → Install.
 5. Restart Home Assistant.
 
