@@ -8,6 +8,7 @@ import hmac
 import hashlib
 import wsgiref.handlers
 import random
+import asyncio
 from typing import Optional, Dict, List, Any
 from urllib.parse import urlparse
 
@@ -61,6 +62,9 @@ class VisionectAPI:
         self.api_key = api_key
         self.api_secret = api_secret
         self.authenticated_by = None
+        
+        # NEW: Limit concurrent API calls to prevent server overload
+        self._request_semaphore = asyncio.Semaphore(5)
 
     def _normalize_endpoint_for_hmac(self, endpoint: str) -> str:
         """
@@ -182,14 +186,16 @@ class VisionectAPI:
         return None
 
     async def _request(self, method, endpoint, silent=False, **kwargs):
-        """Asynchronous wrapper for _execute_request."""
-        try:
-            func = functools.partial(self._execute_request, method, endpoint, silent=silent, **kwargs)
-            return await self.hass.async_add_executor_job(func)
-        except Exception as e:
-            if not silent:
-                _LOGGER.error(f"Unexpected error in async request: {e}")
-            return None
+        """Asynchronous wrapper for _execute_request with rate limiting."""
+        # Acquire semaphore before making request
+        async with self._request_semaphore:
+            try:
+                func = functools.partial(self._execute_request, method, endpoint, silent=silent, **kwargs)
+                return await self.hass.async_add_executor_job(func)
+            except Exception as e:
+                if not silent:
+                    _LOGGER.error(f"Unexpected error in async request: {e}")
+                return None
 
     def validate_image_url(self, url: str) -> bool:
         """Checks if the URL contains a supported image format."""
@@ -337,10 +343,14 @@ class VisionectAPI:
         if "Backend" not in session_data: session_data["Backend"] = {}
         if "Fields" not in session_data["Backend"]: session_data["Backend"]["Fields"] = {}
         
-        # Fixed: use Name instead of Type according to Visionect API docs
+        # Set backend type and URL
         session_data["Backend"]["Name"] = "HTML"  
         session_data["Backend"]["Fields"]["url"] = url
-        session_data["Backend"]["Fields"]["ReloadTimeout"] = "86400"
+        
+        # FIX: Don't override user's ReloadTimeout setting
+        # Only set default for new sessions
+        if "ReloadTimeout" not in session_data["Backend"]["Fields"]:
+            session_data["Backend"]["Fields"]["ReloadTimeout"] = "3600"  # 1h default
         
         endpoint = f"/api/session/{uuid}"
         response = await self._request("put", endpoint, json=session_data)
@@ -427,11 +437,9 @@ class VisionectAPI:
             device_data["Options"] = {}
         device_data["Options"][option_key] = value
         
-        # ZMIANA: Usuwamy sekcję Status przed wysłaniem, aby przypadkiem nie nadpisać
-        # świeżych danych o baterii starymi wartościami z momentu GET.
-        # Serwer Visionect powinien ignorować brak Statusu lub zachować obecny.
-        if "Status" in device_data:
-            del device_data["Status"]
+        # FIX: Keep Status field - API expects full device object.
+        # The server will ignore read-only field updates automatically.
+        # Don't delete it - this ensures battery/temperature data is preserved.
             
         payload = device_data
 

@@ -60,10 +60,16 @@ class VisionectBinarySensor(VisionectEntity, BinarySensorEntity):
             return value
 
         if self.sensor_type == "is_charging":
-            # FIX: We check the "Charger" field. We assume a value of '1' means charging.
             charger_status = _get_value_or_none(status.get("Charger"))
-            if charger_status is not None:
-                return str(charger_status) == "1"
-            return None
+            if charger_status is None:
+                return None
+            
+            # ROBUST: Handle multiple formats
+            charger_str = str(charger_status).lower().strip()
+            
+            # True if: "1", "true", "yes", "on", "plugged", "charging"
+            is_charging = charger_str in ("1", "true", "yes", "on", "plugged", "charging")
+            
+            return is_charging
         
         return None
