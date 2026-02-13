@@ -393,8 +393,8 @@
       "description": "Pobiera wydarzenia z wybranego kalendarza Home Assistant i wyświetla je w formie listy lub siatki miesięcznej.",
       "fields": {
         "calendar_entity": {
-          "name": "Encja kalendarza",
-          "description": "Wybierz encję kalendarza, z której mają być pobrane wydarzenia."
+          "name": "Encje kalendarza",
+          "description": "Wybierz jeden lub więcej kalendarzy do wyświetlenia. Wydarzenia ze wszystkich wybranych kalendarzy zostaną połączone i posortowane według czasu."
         },
         "duration_days": {
           "name": "Zakres dni",

@@ -1,7 +1,7 @@
 {
   "domain": "visionect_joan",
   "name": "Visionect Joan",
-  "version": "3.6.8",
+  "version": "3.7.1",
   "config_flow": true,
   "documentation": "https://github.com/Adam7411/visionect_joan",
   "issue_tracker": "https://github.com/Adam7411/visionect_joan/issues",

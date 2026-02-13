@@ -393,8 +393,8 @@
       "description": "Fetches events from a selected Home Assistant calendar and displays them as a list or monthly grid.",
       "fields": {
         "calendar_entity": {
-          "name": "Calendar Entity",
-          "description": "Select the calendar entity to source events from."
+          "name": "Calendar Entities",
+          "description": "Select one or more calendars to display. Events from all selected calendars will be merged and sorted by time."
         },
         "duration_days": {
           "name": "Day Range",

@@ -474,11 +474,12 @@ send_calendar:
           integration: "visionect_joan"
     calendar_entity:
       name: "Calendar Entity"
-      description: "The calendar entity to fetch events from."
+      description: "Select one or more calendars to display. Events from all selected calendars will be merged and sorted by time."
       required: true
       selector:
         entity:
           domain: "calendar"
+          multiple: true
     duration_days:
       name: "Duration (days)"
       description: "For list view: How many days ahead to look for events."

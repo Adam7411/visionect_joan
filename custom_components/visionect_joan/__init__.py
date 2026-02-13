@@ -218,7 +218,10 @@ SERVICE_SEND_QR_CODE_SCHEMA = SERVICE_DEVICE_SCHEMA.extend({
 })
 
 SERVICE_SEND_CALENDAR_SCHEMA = SERVICE_DEVICE_SCHEMA.extend({
-    vol.Required(ATTR_CALENDAR_ENTITY): cv.entity_id,
+    vol.Required(ATTR_CALENDAR_ENTITY): vol.Any(
+        cv.entity_id,           # Single calendar
+        [cv.entity_id]          # Multiple calendars
+    ),
     vol.Optional(ATTR_DURATION_DAYS, default=1): vol.All(vol.Coerce(int), vol.Range(min=1, max=31)),
     vol.Optional(ATTR_DISPLAY_STYLE, default="modern"): vol.In(["modern", "minimalist", "monthly_grid"]),
     **INTERACTIVE_SCHEMA_EXTENSION,
@@ -807,7 +810,14 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def handle_send_calendar(call: ServiceCall):
         uuids = await get_uuids_from_call(call)
-        calendar_entity_id = call.data[ATTR_CALENDAR_ENTITY]
+        
+        # Support single or multiple calendars
+        calendar_input = call.data[ATTR_CALENDAR_ENTITY]
+        calendar_entities = (
+            calendar_input if isinstance(calendar_input, list) 
+            else [calendar_input]
+        )
+        
         duration_days = call.data.get(ATTR_DURATION_DAYS, 1)
         style = call.data.get(ATTR_DISPLAY_STYLE, "modern")
         small_screen = call.data.get(ATTR_SMALL_SCREEN, False)
@@ -821,28 +831,61 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             start = now.replace(hour=0, minute=0, second=0)
             end = start + timedelta(days=duration_days)
 
-        try:
-            resp = await hass.services.async_call("calendar", "get_events", {"entity_id": calendar_entity_id, "start_date_time": start.isoformat(), "end_date_time": end.isoformat()}, blocking=True, return_response=True)
-            raw = resp.get(calendar_entity_id, {}).get("events", [])
-            events = []
-            for e in raw:
-                if not isinstance(e, dict): continue
-                # Basic parsing logic here, reusing logic from previous
-                s, en = e.get('start'), e.get('end')
-                ss, es = None, None
-                if isinstance(s, dict): ss = s.get('dateTime') or s.get('date')
-                elif isinstance(s, str): ss = s
-                if isinstance(en, dict): es = en.get('dateTime') or en.get('date')
-                elif isinstance(en, str): es = en
-                if ss: e['start'] = dt_util.parse_datetime(ss)
-                if es: e['end'] = dt_util.parse_datetime(es)
-                if 'start' in e: events.append(e)
-        except Exception: return
+        # Fetch events from all calendars
+        all_events = []
+        for calendar_entity_id in calendar_entities:
+            try:
+                resp = await hass.services.async_call(
+                    "calendar", "get_events", 
+                    {
+                        "entity_id": calendar_entity_id, 
+                        "start_date_time": start.isoformat(), 
+                        "end_date_time": end.isoformat()
+                    }, 
+                    blocking=True, 
+                    return_response=True
+                )
+                raw = resp.get(calendar_entity_id, {}).get("events", [])
+                
+                for e in raw:
+                    if not isinstance(e, dict): 
+                        continue
+                    # Basic parsing logic here, reusing logic from previous
+                    s, en = e.get('start'), e.get('end')
+                    ss, es = None, None
+                    if isinstance(s, dict): 
+                        ss = s.get('dateTime') or s.get('date')
+                    elif isinstance(s, str): 
+                        ss = s
+                    if isinstance(en, dict): 
+                        es = en.get('dateTime') or en.get('date')
+                    elif isinstance(en, str): 
+                        es = en
+                    if ss: 
+                        e['start'] = dt_util.parse_datetime(ss)
+                    if es: 
+                        e['end'] = dt_util.parse_datetime(es)
+                    
+                    # Add calendar name for identification
+                    if 'start' in e:
+                        calendar_state = hass.states.get(calendar_entity_id)
+                        if calendar_state:
+                            e['calendar_name'] = calendar_state.attributes.get('friendly_name', calendar_entity_id)
+                        else:
+                            e['calendar_name'] = calendar_entity_id
+                        all_events.append(e)
+                        
+            except Exception as ex:
+                _LOGGER.error(f"Failed to fetch events from {calendar_entity_id}: {ex}")
+                continue
+        
+        # Sort merged events by start time
+        all_events.sort(key=lambda x: x.get('start', now))
 
         if style == "monthly_grid":
-            content_url = create_monthly_calendar_url(now.year, now.month, events, lang=lang, small_screen=small_screen)
+            content_url = create_monthly_calendar_url(now.year, now.month, all_events, lang=lang, small_screen=small_screen)
         else:
-            content_url = create_calendar_url(events, style, lang=lang)
+            content_url = create_calendar_url(all_events, style, lang=lang)
 
         for device_uuid in uuids:
             back_url = _get_back_url_for_uuid(device_uuid, call.data)
