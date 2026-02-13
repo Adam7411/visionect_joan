@@ -866,7 +866,9 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                     if es: 
                         e['end'] = dt_util.parse_datetime(es)
                     
-                    # Add calendar name for identification
+                    # Add calendar name for identification (when multiple calendars are selected)
+                    # Note: Currently prepared for future HTML display enhancements.
+                    # The calendar display functions can use this field to differentiate events.
                     if 'start' in e:
                         calendar_state = hass.states.get(calendar_entity_id)
                         if calendar_state:
