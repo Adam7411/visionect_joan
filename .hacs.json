@@ -1,5 +1,8 @@
 {
   "name": "Visionect Joan",
+  "content_in_root": false,
+  "filename": "visionect_joan",
   "render_readme": true,
-  "brand_icon": "mdi:tablet-dashboard"
+  "zip_release": false,
+  "homeassistant": "2024.1.0"
 }
