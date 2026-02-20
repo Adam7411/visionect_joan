@@ -11,12 +11,17 @@ import calendar
 import json
 from pathlib import Path
 
-# matplotlib for graphs (headless)
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
-from cycler import cycler
+# matplotlib is optional - imported lazily inside graph functions
+# This avoids crashes on platforms where matplotlib cannot be installed (e.g. RPi/ARM)
+try:
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import matplotlib.dates as mdates
+    from cycler import cycler
+    _MATPLOTLIB_AVAILABLE = True
+except ImportError:
+    _MATPLOTLIB_AVAILABLE = False
 
 # Network URLs
 from homeassistant.core import HomeAssistant
@@ -1585,7 +1590,14 @@ def _generate_weather_forecast_graph(
     if not hourly_forecast:
         return None
 
+    if not _MATPLOTLIB_AVAILABLE:
+        _LOGGER.warning("matplotlib is not installed - weather forecast graph unavailable")
+        return None
+
     try:
+        from matplotlib.figure import Figure
+        from matplotlib.backends.backend_agg import FigureCanvasAgg
+
         timestamps, temperatures = [], []
         for forecast in hourly_forecast[:25]:
             if 'datetime' in forecast and 'temperature' in forecast:
@@ -1594,11 +1606,6 @@ def _generate_weather_forecast_graph(
 
         if not timestamps:
             return None
-
-        # --- DODAJ TE DWIE LINIE PONIŻEJ JEŚLI ICH BRAKUJE ---
-        from matplotlib.figure import Figure
-        from matplotlib.backends.backend_agg import FigureCanvasAgg
-        # -----------------------------------------------------
 
         # Definiujemy parametry lokalnie
         my_params = {
@@ -1615,26 +1622,25 @@ def _generate_weather_forecast_graph(
         }
 
         if is_portrait:
-            figsize = (6.0, 6.0) 
+            figsize = (6.0, 6.0)
         else:
             figsize = (8.0, 5.0)
 
-        # Używamy kontekstu - ustawienia działają TYLKO wewnątrz tego wcięcia (bloku with)
         with plt.style.context(('grayscale', my_params)):
             fig = Figure(figsize=figsize, dpi=100, constrained_layout=False)
             canvas = FigureCanvasAgg(fig)
             ax = fig.add_subplot(111)
-            
+
             ax.plot(timestamps, temperatures, marker='o', linestyle='-', color='black')
 
             title = "Prognoza 24h" if lang == "pl" else "24h Forecast"
             ax.set_title(title, fontweight='bold')
-            
+
             ax.grid(True, which='major', linestyle='--', linewidth=1.5)
-            
+
             ax.xaxis.set_major_locator(mdates.HourLocator(interval=4))
             ax.xaxis.set_major_formatter(mdates.DateFormatter('%H:%M'))
-            
+
             if is_portrait:
                 fig.autofmt_xdate(rotation=45, ha='right')
                 fig.subplots_adjust(left=0.10, right=0.98, top=0.92, bottom=0.15)
@@ -1662,19 +1668,26 @@ def _generate_graph_image(
         _LOGGER.warning(f"No historical data provided for entities: {entity_ids}")
         return None
 
+    if not _MATPLOTLIB_AVAILABLE:
+        _LOGGER.warning("matplotlib is not installed - history graph unavailable")
+        return None
+
+    from matplotlib.figure import Figure
+    from matplotlib.backends.backend_agg import FigureCanvasAgg
+
     # --- KONFIGURACJA DLA JOAN 6 ---
     my_params = {
-        'font.size': 16,             
-        'axes.titlesize': 22,        
-        'axes.labelsize': 18,        
-        'xtick.labelsize': 14,       
-        'ytick.labelsize': 16,       
-        'lines.linewidth': 4,        
-        'lines.markersize': 10,      
+        'font.size': 16,
+        'axes.titlesize': 22,
+        'axes.labelsize': 18,
+        'xtick.labelsize': 14,
+        'ytick.labelsize': 16,
+        'lines.linewidth': 4,
+        'lines.markersize': 10,
         'figure.facecolor': 'white', 'axes.facecolor': 'white',
         'savefig.facecolor': 'white', 'text.color': 'black', 'axes.labelcolor': 'black',
         'xtick.color': 'black', 'ytick.color': 'black', 'axes.edgecolor': 'black',
-        'legend.fontsize': 18        
+        'legend.fontsize': 18
     }
 
     line_cycler = (cycler('linestyle', ['-', '--', ':', '-.']))
@@ -1683,14 +1696,9 @@ def _generate_graph_image(
     is_portrait = orientation in ["0", "2"]
 
     if is_portrait:
-        figsize = (6.0, 8.0) 
+        figsize = (6.0, 8.0)
     else:
         figsize = (8.0, 6.0)
-
-    # --- DODAJ TE DWIE LINIE PONIŻEJ JEŚLI ICH BRAKUJE ---
-    from matplotlib.figure import Figure
-    from matplotlib.backends.backend_agg import FigureCanvasAgg
-    # -----------------------------------------------------
 
     # Kontekst izolujący style
     with plt.style.context(('grayscale', my_params)):
