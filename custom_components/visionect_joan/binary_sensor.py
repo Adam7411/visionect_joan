@@ -17,10 +17,29 @@ async def async_setup_entry(hass, entry, async_add_entities):
     
     entities = []
     for device_uuid in coordinator.data:
+        entities.append(JoanOnlineBinarySensor(coordinator, device_uuid))
         entities.append(JoanHealthBinarySensor(coordinator, device_uuid))
         entities.append(JoanChargingBinarySensor(coordinator, device_uuid))
     
     async_add_entities(entities)
+
+class JoanOnlineBinarySensor(VisionectEntity, BinarySensorEntity):
+    """Binary sensor showing online/offline state of the device."""
+
+    _attr_device_class = BinarySensorDeviceClass.CONNECTIVITY
+    _attr_has_entity_name = True
+
+    def __init__(self, coordinator, device_uuid):
+        super().__init__(coordinator, device_uuid)
+        self._attr_unique_id = f"{device_uuid}_online"
+        self._attr_translation_key = "online"
+
+    @property
+    def is_on(self) -> bool:
+        """Return True if device is online."""
+        data = self.coordinator.data.get(self.uuid, {})
+        state = data.get("State", "")
+        return isinstance(state, str) and state.lower() == "online"
 
 class JoanHealthBinarySensor(VisionectEntity, BinarySensorEntity):
     """Binary sensor indicating if device has any diagnostic problems (orphaned session)."""
