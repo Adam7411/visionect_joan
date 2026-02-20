@@ -134,6 +134,9 @@
       }
     },
     "binary_sensor": {
+      "online": {
+        "name": "Online"
+      },
       "health_status": {
         "name": "Stan zdrowia urządzenia"
       },
@@ -147,6 +150,9 @@
       },
       "polling_time": {
         "name": "Częstotliwość wybudzania (Bateria)"
+      },
+      "sleep_schedule": {
+        "name": "Harmonogram uśpienia (minuty)"
       }
     },
     "text": {
@@ -189,6 +195,15 @@
         "state": {
           "1": "1-bit (Tylko czerń i biel - Szybkie)",
           "4": "4-bit (16 odcieni szarości - Ładne)"
+        }
+      },
+      "rotation_select": {
+        "name": "Orientacja ekranu",
+        "state": {
+          "Portrait": "Pionowy (domyślny)",
+          "Landscape, 90\u00b0": "Poziomy 90\u00b0",
+          "Portrait, 180\u00b0": "Pionowy 180\u00b0",
+          "Landscape, 270\u00b0": "Poziomy 270\u00b0"
         }
       },
       "back_view_select": {
