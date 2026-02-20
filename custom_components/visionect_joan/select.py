@@ -10,7 +10,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.storage import Store
 from homeassistant.components.persistent_notification import async_create
 
-from .const import DOMAIN, DITHERING_OPTIONS, ENCODING_OPTIONS
+from .const import DOMAIN, DITHERING_OPTIONS, ENCODING_OPTIONS, ROTATION_OPTIONS, ROTATION_TO_API, DISPLAY_ROTATIONS
 from .entity import VisionectEntity
 from .api import VisionectAPI
 
@@ -37,6 +37,7 @@ async def async_setup_entry(
         entities.append(VisionectViewSelect(coordinator, uuid, views))
         entities.append(VisionectDitheringSelect(coordinator, uuid))
         entities.append(VisionectEncodingSelect(coordinator, uuid))
+        entities.append(VisionectRotationSelect(coordinator, uuid))
         entities.append(VisionectBackViewSelect(hass, coordinator, entry, uuid, views))
 
     async_add_entities(entities)
@@ -273,3 +274,40 @@ class VisionectBackViewSelect(VisionectEntity, SelectEntity):
 
         _LOGGER.info(f"Saved Back target for {self.uuid}: {option} -> {url}")
         self.async_write_ha_state()
+
+
+class VisionectRotationSelect(VisionectEntity, SelectEntity):
+    """Select entity to change the display rotation of a Visionect device."""
+
+    def __init__(self, coordinator, uuid: str):
+        super().__init__(coordinator, uuid)
+        self._attr_translation_key = "rotation_select"
+        self._attr_unique_id = f"{uuid}_rotation_select"
+        self._attr_icon = "mdi:screen-rotation"
+        self._attr_options = ROTATION_OPTIONS
+
+    @property
+    def current_option(self) -> str | None:
+        device_data = self.coordinator.data.get(self.uuid, {})
+        # Rotacja jest przechowywana w Config.DisplayRotation jako int 0-3
+        rotation = device_data.get("Config", {}).get("DisplayRotation")
+        if rotation is None:
+            return None
+        return DISPLAY_ROTATIONS.get(str(rotation))
+
+    async def async_select_option(self, option: str) -> None:
+        api: VisionectAPI = self.hass.data[DOMAIN][self.coordinator.config_entry.entry_id]["api"]
+        rotation_num = ROTATION_TO_API.get(option)
+        if rotation_num is None:
+            _LOGGER.error(f"Unknown rotation option: {option}")
+            return
+
+        _LOGGER.info(f"Setting rotation for {self.uuid} to '{option}' (value: {rotation_num})")
+        if await api.async_set_display_rotation(self.uuid, rotation_num):
+            _LOGGER.info(f"Rotation for {self.uuid} changed successfully.")
+            if self.uuid in self.coordinator.data and "Config" in self.coordinator.data[self.uuid]:
+                self.coordinator.data[self.uuid]["Config"]["DisplayRotation"] = int(rotation_num)
+                self.async_write_ha_state()
+        else:
+            _LOGGER.error(f"Failed to change rotation for {self.uuid}.")
+        await self.coordinator.async_request_refresh()
