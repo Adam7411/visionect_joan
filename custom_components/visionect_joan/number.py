@@ -23,9 +23,13 @@ async def async_setup_entry(
         async_add_entities(
             VisionectReloadIntervalNumber(coordinator, uuid) for uuid in coordinator.data
         )
-        # Dodano nową encję dla PollingTime
+        # Polling time (częstotliwość połączeń urządzenia)
         async_add_entities(
             VisionectPollingTimeNumber(coordinator, uuid) for uuid in coordinator.data
+        )
+        # Harmonogram uśpienia (Sleep Schedule)
+        async_add_entities(
+            VisionectSleepScheduleNumber(coordinator, uuid) for uuid in coordinator.data
         )
 
 class VisionectReloadIntervalNumber(VisionectEntity, NumberEntity):
@@ -112,3 +116,39 @@ class VisionectPollingTimeNumber(VisionectEntity, NumberEntity):
         # Wymaga dodania metody async_set_device_option w api.py
         await api.async_set_device_option(self.uuid, "PollingTime", str(int(value)))
         await self.coordinator.async_request_refresh()
+
+
+class VisionectSleepScheduleNumber(VisionectEntity, NumberEntity):
+    """Czas uśpienia urządzenia w minutach (0 = wyłączone).
+    
+    Ustawia pole Options.SleepSchedule w API Visionect.
+    Przy PeriodicSleep=true: czas w minutach między wybudzeniami.
+    Przy PeriodicSleep=false: minuta dnia kiedy urządzenie się wybudza.
+    """
+
+    def __init__(self, coordinator, uuid: str):
+        super().__init__(coordinator, uuid)
+        self._attr_translation_key = "sleep_schedule"
+        self._attr_unique_id = f"{uuid}_sleep_schedule"
+        self._attr_icon = "mdi:sleep"
+        self._attr_native_unit_of_measurement = UnitOfTime.MINUTES
+        self._attr_native_min_value = 0
+        self._attr_native_max_value = 1440   # max 24h
+        self._attr_native_step = 5
+        self._attr_mode = NumberMode.BOX
+        self._attr_entity_registry_enabled_default = True
+
+    @property
+    def native_value(self) -> float | None:
+        opts = self.coordinator.data.get(self.uuid, {}).get("Options", {})
+        val = opts.get("SleepSchedule")
+        try:
+            return float(val) if val is not None else None
+        except (ValueError, TypeError):
+            return None
+
+    async def async_set_native_value(self, value: float) -> None:
+        api = self.hass.data[DOMAIN][self.coordinator.config_entry.entry_id]["api"]
+        await api.async_set_device_option(self.uuid, "SleepSchedule", str(int(value)))
+        await self.coordinator.async_request_refresh()
+
