@@ -29,26 +29,27 @@ UNKNOWN_STRINGS = {
     "unknown", "nieznany", "none", "", "n/a", "na", "unknown_value", "unavailable"
 }
 
-# Rotacje ekranu – zgodnie z dokumentacją Visionect
+# Rotacje ekranu – zgodnie z VSS Management Interface (NIE raw API docs, które są odwrócone)
+# VSS UI: 0=Landscape, 1=Portrait 90°, 2=Landscape 180°, 3=Portrait 270°
 DISPLAY_ROTATIONS = {
-    "0": "Portrait",
-    "1": "Landscape, 90°",
-    "2": "Portrait, 180°",
-    "3": "Landscape, 270°",
+    "0": "Landscape",
+    "1": "Portrait, 90°",
+    "2": "Landscape, 180°",
+    "3": "Portrait, 270°",
 }
 
 # Opcje dla dithering / enkodowania (bit depth)
 DITHERING_OPTIONS = ["none", "bayer", "floyd-steinberg"]
 ENCODING_OPTIONS = ["1", "4"]
 
-# Opcje rotacji ekranu dla Select entity (wartość → opis)
-ROTATION_OPTIONS = ["Portrait", "Landscape, 90°", "Portrait, 180°", "Landscape, 270°"]
-# Mapowanie opis → numer Rotation wysyłany do API
+# Opcje rotacji ekranu dla Select entity – zgodne z VSS Management Interface
+ROTATION_OPTIONS = ["Landscape", "Portrait, 90°", "Landscape, 180°", "Portrait, 270°"]
+# Mapowanie opis → numer Rotation wysyłany do API (0=Landscape to domyślne dla Joan 6)
 ROTATION_TO_API = {
-    "Portrait": "0",
-    "Landscape, 90°": "1",
-    "Portrait, 180°": "2",
-    "Landscape, 270°": "3",
+    "Landscape": "0",
+    "Portrait, 90°": "1",
+    "Landscape, 180°": "2",
+    "Portrait, 270°": "3",
 }
 
 # Opcje trybu Sleep (PeriodicSleep)
