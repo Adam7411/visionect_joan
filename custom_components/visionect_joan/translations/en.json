@@ -134,6 +134,9 @@
       }
     },
     "binary_sensor": {
+      "online": {
+        "name": "Online"
+      },
       "health_status": {
         "name": "Device Health Status"
       },
@@ -147,6 +150,9 @@
       },
       "polling_time": {
         "name": "Wake-up Frequency (Battery)"
+      },
+      "sleep_schedule": {
+        "name": "Sleep Schedule (minutes)"
       }
     },
     "text": {
@@ -189,6 +195,15 @@
         "state": {
           "1": "1-bit (Black and White only - Fast)",
           "4": "4-bit (16 shades of gray - Nice)"
+        }
+      },
+      "rotation_select": {
+        "name": "Screen Orientation",
+        "state": {
+          "Portrait": "Portrait (default)",
+          "Landscape, 90\u00b0": "Landscape 90\u00b0",
+          "Portrait, 180\u00b0": "Portrait 180\u00b0",
+          "Landscape, 270\u00b0": "Landscape 270\u00b0"
         }
       },
       "back_view_select": {
