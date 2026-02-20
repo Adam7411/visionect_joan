@@ -200,10 +200,10 @@
       "rotation_select": {
         "name": "Orientacja ekranu",
         "state": {
-          "Portrait": "Pionowy (domyślny)",
-          "Landscape, 90\u00b0": "Poziomy 90\u00b0",
-          "Portrait, 180\u00b0": "Pionowy 180\u00b0",
-          "Landscape, 270\u00b0": "Poziomy 270\u00b0"
+          "Landscape": "Poziomy (domyślny)",
+          "Portrait, 90\u00b0": "Pionowy 90\u00b0",
+          "Landscape, 180\u00b0": "Poziomy 180\u00b0",
+          "Portrait, 270\u00b0": "Pionowy 270\u00b0"
         }
       },
       "back_view_select": {
