@@ -41,6 +41,19 @@ DISPLAY_ROTATIONS = {
 DITHERING_OPTIONS = ["none", "bayer", "floyd-steinberg"]
 ENCODING_OPTIONS = ["1", "4"]
 
+# Opcje rotacji ekranu dla Select entity (wartość → opis)
+ROTATION_OPTIONS = ["Portrait", "Landscape, 90°", "Portrait, 180°", "Landscape, 270°"]
+# Mapowanie opis → numer Rotation wysyłany do API
+ROTATION_TO_API = {
+    "Portrait": "0",
+    "Landscape, 90°": "1",
+    "Portrait, 180°": "2",
+    "Landscape, 270°": "3",
+}
+
+# Opcje trybu Sleep (PeriodicSleep)
+SLEEP_PERIODIC_OPTIONS = ["periodic", "at_time", "disabled"]
+
 # Atrybut dla usług z wyborem wstępnie zdefiniowanego widoku
 ATTR_PREDEFINED_URL = "predefined_url"
 
@@ -70,6 +83,8 @@ API_CLEAR_WEB_CACHE = "/api/session/webkit-clear-cache"
 API_REBOOT_BATCH = "/api/device/reboot"
 API_RESTART_SESSION_BATCH = "/api/session/restart"
 API_ORPHANS = "/api/orphans"
+API_TCLV_LIST = "/api/devicetclv/{uuid}"
+API_TCLV_PARAM = "/api/cmd/Param/{uuid}"
 
 # Nazwy usług (część podstawowa + nowe)
 SERVICE_FORCE_REFRESH = "force_refresh"
