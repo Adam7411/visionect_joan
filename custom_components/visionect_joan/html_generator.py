@@ -849,14 +849,10 @@ async def create_rss_feed_url(hass, title: str, items: list, lang: str, small_sc
     encoded = urllib.parse.quote(html_content, safe='')
     return f"data:text/html,{encoded}"
 
-async def create_energy_panel_url(hass, states: dict[str], orientation: str, lang: str, small_screen: bool) -> str:
-    panel_title = "Panel Energetyczny" if lang == "pl" else "Energy Panel"
-    current_usage_label = "Aktualne zużycie" if lang == "pl" else "Current Usage"
-    production_label = "Produkcja" if lang == "pl" else "Production"
-    import_label = "Pobór" if lang == "pl" else "Import"
-    export_label = "Eksport" if lang == "pl" else "Export"
-    consumption_label = "Zużycie" if lang == "pl" else "Consumption"
+async def create_energy_panel_url(hass, states: dict[str], orientation: str, lang: str, small_screen: bool, theme: str = "classic") -> str:
+    """Generates the energy panel HTML. theme='classic' or 'eink_donut'."""
 
+    # --- Helpers ---
     async def get_icon(name):
         return await async_get_icon_as_base64(hass, name)
 
@@ -867,73 +863,323 @@ async def create_energy_panel_url(hass, states: dict[str], orientation: str, lan
             return str(round(float(state.state), precision))
         except (ValueError, TypeError):
             return "---"
-    
-    icons = {
-        "usage": await get_icon("power-plug.svg"),
-        "solar": await get_icon("solar-power.svg"),
-        "import": await get_icon("transmission-tower-import.svg"),
-        "export": await get_icon("transmission-tower-export.svg"),
-        "home": await get_icon("home-lightning-bolt.svg"),
-    }
-    
+
+    def fv(key) -> float:
+        """Get float value from states dict, returns 0.0 if unavailable."""
+        st = states.get(key)
+        if st is None or st.state in UNKNOWN_STRINGS:
+            return 0.0
+        try:
+            return float(st.state)
+        except (ValueError, TypeError):
+            return 0.0
+
+    # --- Labels (bilingual) ---
+    pl = (lang == "pl")
+    panel_title        = "Panel Energetyczny" if pl else "Energy Panel"
+    current_usage_lbl  = "Moc bieżąca"         if pl else "Live Power"
+    production_lbl     = "Produkcja PV"         if pl else "Solar"
+    import_lbl         = "Pobór z sieci"        if pl else "Grid Import"
+    export_lbl         = "Eksport do sieci"     if pl else "Grid Export"
+    consumption_lbl    = "Zużycie"              if pl else "Consumption"
+    net_lbl            = "Bilans netto"         if pl else "Net Balance"
+    self_suf_lbl       = "Autarkia"             if pl else "Self-Suf."
+
+    # =====================================================================
+    # CLASSIC THEME (unchanged original)
+    # =====================================================================
+    if theme != "eink_donut":
+        icons = {
+            "usage":  await get_icon("power-plug.svg"),
+            "solar":  await get_icon("solar-power.svg"),
+            "import": await get_icon("transmission-tower-import.svg"),
+            "export": await get_icon("transmission-tower-export.svg"),
+            "home":   await get_icon("home-lightning-bolt.svg"),
+        }
+
+        is_portrait = orientation in ["0", "2"]
+        main_val_fs = "5.5em" if small_screen else "8em"
+        main_lbl_fs = "1.5em" if small_screen else "1.8em"
+        card_val_fs = "2.0em" if small_screen else "2.5em"
+        card_lbl_fs = "1.1em" if small_screen else "1.3em"
+        icon_size   = "48px"  if small_screen else "60px"
+        flex_direction   = "column" if is_portrait else "row"
+        main_stat_margin = "10px 0" if is_portrait else "20px 0"
+        stat_card_basis  = "45%"
+
+        style_css = f"""
+            body {{ font-family: sans-serif; background-color: white; color: black; margin: 0; padding: 20px; box-sizing: border-box; display: flex; flex-direction: {flex_direction}; height: 100vh; width: 100vw; }}
+            .main-stats {{ flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }}
+            .daily-stats {{ flex: 1; display: flex; flex-wrap: wrap; justify-content: space-around; align-content: center; gap: 15px; }}
+            .main-stat-value {{ font-size: {main_val_fs}; font-weight: bold; line-height: 1.1; }}
+            .main-stat-label {{ font-size: {main_lbl_fs}; opacity: 0.8; margin-top: 5px; }}
+            .stat-card {{ flex-basis: {stat_card_basis}; padding: 15px; display: flex; flex-direction: column; align-items: center; text-align: center; }}
+            .stat-card .icon {{ width: {icon_size}; height: {icon_size}; margin-bottom: 10px; }}
+            .stat-card .value {{ font-size: {card_val_fs}; font-weight: bold; }}
+            .stat-card .label {{ font-size: {card_lbl_fs}; opacity: 0.8; }}
+            .divider {{ border-left: 2px solid #000; margin: 20px; }}
+        """
+
+        main_stats_html, daily_stats_html = "", ""
+
+        if states.get("power_usage_entity"):
+            state = states["power_usage_entity"]
+            unit  = state.attributes.get("unit_of_measurement", "W")
+            value = get_state_val(state, 1 if unit == UnitOfPower.KILO_WATT else 0)
+            main_stats_html = f"""
+            <div class="main-stats" style="margin: {main_stat_margin};">
+                <div class="main-stat-value">{value} <span style="font-size: 0.5em;">{unit}</span></div>
+                <div class="main-stat-label">{current_usage_lbl}</div>
+            </div>"""
+
+        daily_cards = []
+        if states.get("daily_production_entity"):
+            daily_cards.append(f'<div class="stat-card"><img src="{icons["solar"]}" class="icon" /><div class="value">{get_state_val(states["daily_production_entity"])} kWh</div><div class="label">{production_lbl}</div></div>')
+        if states.get("daily_grid_import_entity"):
+            daily_cards.append(f'<div class="stat-card"><img src="{icons["import"]}" class="icon" /><div class="value">{get_state_val(states["daily_grid_import_entity"])} kWh</div><div class="label">{import_lbl}</div></div>')
+        if states.get("daily_grid_export_entity"):
+            daily_cards.append(f'<div class="stat-card"><img src="{icons["export"]}" class="icon" /><div class="value">{get_state_val(states["daily_grid_export_entity"])} kWh</div><div class="label">{export_lbl}</div></div>')
+        if states.get("daily_consumption_entity"):
+            daily_cards.append(f'<div class="stat-card"><img src="{icons["home"]}" class="icon" /><div class="value">{get_state_val(states["daily_consumption_entity"])} kWh</div><div class="label">{consumption_lbl}</div></div>')
+
+        if daily_cards:
+            daily_stats_html = f'<div class="daily-stats">{"".join(daily_cards)}</div>'
+
+        html_body = f"{main_stats_html}{'' if is_portrait else '<div class=divider></div>'}{daily_stats_html}"
+        cache_buster_comment = f'<!-- cb:{int(time.time())} -->'
+        html_content = f'<!DOCTYPE html><html><head><meta charset="UTF-8"><title>{panel_title}</title><style>{style_css}</style></head><body>{html_body}{cache_buster_comment}</body></html>'
+        encoded = urllib.parse.quote(html_content, safe='')
+        return f"data:text/html,{encoded}"
+
+    # =====================================================================
+    # EINK_DONUT THEME v4 – HTML/CSS narożniki + centralny SVG donut
+    # Używamy position:absolute – jedyna pewna metoda dla prawdziwych rogów
+    # =====================================================================
+    import math
+
     is_portrait = orientation in ["0", "2"]
-    main_val_fs = "5.5em" if small_screen else "8em"
-    main_lbl_fs = "1.5em" if small_screen else "1.8em"
-    card_val_fs = "2.0em" if small_screen else "2.5em"
-    card_lbl_fs = "1.1em" if small_screen else "1.3em"
-    icon_size = "48px" if small_screen else "60px"
-    flex_direction = "column" if is_portrait else "row"
-    main_stat_margin = "10px 0" if is_portrait else "20px 0"
-    stat_card_basis = "45%"
 
+    # --- Icons ---
+    ic_solar  = await get_icon("solar-power.svg")
+    ic_import = await get_icon("transmission-tower-import.svg")
+    ic_export = await get_icon("transmission-tower-export.svg")
+    ic_home   = await get_icon("home-lightning-bolt.svg")
+
+    # --- Values ---
+    prod = fv("daily_production_entity")
+    imp  = fv("daily_grid_import_entity")
+    exp  = fv("daily_grid_export_entity")
+    cons = fv("daily_consumption_entity")
+
+    power_state = states.get("power_usage_entity")
+    pw_arrow = ""
+    if power_state and power_state.state not in UNKNOWN_STRINGS:
+        try:
+            pw_raw  = float(power_state.state)
+            if pw_raw < 0:
+                pw_arrow = "↑ "
+                pw_raw = abs(pw_raw)
+            elif pw_raw > 0:
+                pw_arrow = "↓ "
+                
+            pw_unit = power_state.attributes.get("unit_of_measurement", "W")
+            if pw_unit == UnitOfPower.KILO_WATT:
+                pw_val  = f"{pw_raw:.2f}"
+                pw_unit_lbl = "kW"
+            elif pw_raw >= 1000:
+                pw_val  = f"{pw_raw/1000:.2f}"
+                pw_unit_lbl = "kW"
+            else:
+                pw_val  = f"{int(pw_raw)}"
+                pw_unit_lbl = "W"
+        except (ValueError, TypeError):
+            pw_val, pw_unit_lbl = "---", ""
+    else:
+        pw_val, pw_unit_lbl = "---", ""
+
+    # --- Self-sufficiency ---
+    self_suf_pct = int(min(prod / max(cons, 0.01), 1.0) * 100) if cons > 0 else 0
+    net_balance  = round(exp - imp, 2)
+    net_sign     = "+" if net_balance > 0 else ""
+
+    # --- Date/time ---
+    now_local = datetime.now()
+    if pl:
+        day_names = ["Pon","Wt","Sr","Czw","Pt","Sob","Nd"]
+        dt_str = f"{day_names[now_local.weekday()]} {now_local.day:02d}.{now_local.month:02d} {now_local.strftime('%H:%M')}"
+    else:
+        day_names = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"]
+        dt_str = f"{day_names[now_local.weekday()]} {now_local.strftime('%d %b')} {now_local.strftime('%H:%M')}"
+
+    # ─── Rozmiary zależne od orientacji i rozmiaru ekranu ────────────────
+    if is_portrait:
+        donut_px  = 480 if small_screen else 540  # powiększony
+        icon_px   = 66  if small_screen else 76
+        val_px    = 36  if small_screen else 42
+        lbl_px    = 21  if small_screen else 24
+        pw_px     = 52  if small_screen else 62   # jeszcze bardziej pomniejszona moc bieżąca
+        sub_px    = 44  if small_screen else 52
+        clbl_px   = 14  if small_screen else 16
+        info_px   = 15  if small_screen else 17
+    else:
+        donut_px  = 560 if small_screen else 640  # powiększony
+        icon_px   = 70  if small_screen else 80
+        val_px    = 40  if small_screen else 46
+        lbl_px    = 23  if small_screen else 26
+        pw_px     = 60  if small_screen else 74   # jeszcze bardziej pomniejszona moc bieżąca
+        sub_px    = 48  if small_screen else 56
+        clbl_px   = 15  if small_screen else 18
+        info_px   = 15  if small_screen else 17
+
+
+    def fmt_kwh(v):
+        return f"{v:.2f}" if v > 0 else "0.00"
+
+    # ─── SVG donuta (3 segmenty) ───────────────
+    DCX = donut_px // 2
+    DCY = donut_px // 2
+    DR  = int(donut_px * 0.37)
+    DSW = int(donut_px * 0.14)
+    DCIRC = 2 * math.pi * DR
+    DGAP  = 5.0
+
+    self_cons = max(prod - exp, 0.0)
+    total    = max(self_cons + exp + imp, 0.01)
+    
+    sc_arc   = max((self_cons / total) * DCIRC - DGAP, 0)
+    exp_arc  = max((exp / total) * DCIRC - DGAP, 0)
+    imp_arc  = max((imp  / total) * DCIRC - DGAP, 0)
+    
+    sc_offset  = DCIRC * 0.25
+    exp_offset = sc_offset - sc_arc - DGAP
+    imp_offset = exp_offset - exp_arc - DGAP
+
+    dsc_seg = (
+        f'<circle cx="{DCX}" cy="{DCY}" r="{DR}" fill="none" stroke="black" '
+        f'stroke-width="{DSW}" '
+        f'stroke-dasharray="{sc_arc:.2f} {DCIRC - sc_arc:.2f}" '
+        f'stroke-dashoffset="{sc_offset:.2f}" stroke-linecap="butt"/>'
+    ) if self_cons > 0 else ""
+
+    dexp_seg = (
+        f'<circle cx="{DCX}" cy="{DCY}" r="{DR}" fill="none" stroke="#666" '
+        f'stroke-width="{DSW}" '
+        f'stroke-dasharray="{exp_arc:.2f} {DCIRC - exp_arc:.2f}" '
+        f'stroke-dashoffset="{exp_offset:.2f}" stroke-linecap="butt"/>'
+    ) if exp > 0 else ""
+    
+    dimp_seg = (
+        f'<circle cx="{DCX}" cy="{DCY}" r="{DR}" fill="none" stroke="#bbb" '
+        f'stroke-width="{DSW}" '
+        f'stroke-dasharray="{imp_arc:.2f} {DCIRC - imp_arc:.2f}" '
+        f'stroke-dashoffset="{imp_offset:.2f}" stroke-linecap="butt"/>'
+    ) if imp > 0 else ""
+
+    pw_y1 = DCY - int(pw_px * 0.35)
+    pw_y2 = DCY + sub_px + 4
+    pw_y3 = DCY + sub_px * 2 + 6
+
+    donut_svg = f"""<svg viewBox="0 0 {donut_px} {donut_px}" xmlns="http://www.w3.org/2000/svg"
+     style="width:{donut_px}px;height:{donut_px}px;display:block;">
+  <circle cx="{DCX}" cy="{DCY}" r="{DR}" fill="none" stroke="#eee" stroke-width="{DSW}"/>
+  {dsc_seg}
+  {dexp_seg}
+  {dimp_seg}
+  <text x="{DCX}" y="{pw_y1}" text-anchor="middle"
+        font-family="Arial,sans-serif" font-size="{pw_px}" font-weight="bold" fill="black">{pw_arrow}{pw_val}</text>
+  <text x="{DCX}" y="{pw_y2}" text-anchor="middle"
+        font-family="Arial,sans-serif" font-size="{sub_px}" font-weight="bold" fill="#333">{pw_unit_lbl} | {self_suf_pct}%</text>
+  <text x="{DCX}" y="{pw_y3}" text-anchor="middle"
+        font-family="Arial,sans-serif" font-size="{clbl_px}" font-weight="bold" fill="#555">{current_usage_lbl}</text>
+</svg>"""
+
+
+    # ─── Sprawdzenie które encje są skonfigurowane ────────────────────────
+    has_prod = states.get("daily_production_entity") is not None
+    has_imp  = states.get("daily_grid_import_entity") is not None
+    has_exp  = states.get("daily_grid_export_entity") is not None
+    has_cons = states.get("daily_consumption_entity") is not None
+
+    # ─── Div narożnikowy ─────────────────────────────────────────────────
+    def corner_div(icon_b64, val, lbl):
+        return (
+            f'<img src="{icon_b64}" style="width:{icon_px}px;height:{icon_px}px;">'
+            f'<div style="font-size:{val_px}px;font-weight:900;line-height:1.15;">{val}&nbsp;kWh</div>'
+            f'<div style="font-size:{lbl_px}px;font-weight:700;line-height:1.15;">{lbl}</div>'
+        )
+
+    c_tl = corner_div(ic_solar,  fmt_kwh(prod), production_lbl) if has_prod else ""
+    c_tr = corner_div(ic_import, fmt_kwh(imp),  import_lbl)     if has_imp  else ""
+    c_bl = corner_div(ic_export, fmt_kwh(exp),  export_lbl)     if has_exp  else ""
+    c_br = corner_div(ic_home,   fmt_kwh(cons), consumption_lbl) if has_cons else ""
+
+    # Pasek dolny budujemy ZAWSZE – niezależnie od encji
+    info_parts = [dt_str]
+    if has_prod or has_imp:
+        info_parts.append(f"{self_suf_lbl}: {self_suf_pct}%")
+    if has_prod or has_imp:
+        info_parts.append(f"{net_lbl}: {net_sign}{net_balance} kWh")
+    info_content = " &nbsp;|&nbsp; ".join(info_parts)
+
+    # ─── CSS ─────────────────────────────────────────────────────────────
     style_css = f"""
-        body {{ font-family: sans-serif; background-color: white; color: black; margin: 0; padding: 20px; box-sizing: border-box; display: flex; flex-direction: {flex_direction}; height: 100vh; width: 100vw; }}
-        .main-stats {{ flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }}
-        .daily-stats {{ flex: 1; display: flex; flex-wrap: wrap; justify-content: space-around; align-content: center; gap: 15px; }}
-        .main-stat-value {{ font-size: {main_val_fs}; font-weight: bold; line-height: 1.1; }}
-        .main-stat-label {{ font-size: {main_lbl_fs}; opacity: 0.8; margin-top: 5px; }}
-        .stat-card {{ flex-basis: {stat_card_basis}; padding: 15px; display: flex; flex-direction: column; align-items: center; text-align: center; }}
-        .stat-card .icon {{ width: {icon_size}; height: {icon_size}; margin-bottom: 10px; }}
-        .stat-card .value {{ font-size: {card_val_fs}; font-weight: bold; }}
-        .stat-card .label {{ font-size: {card_lbl_fs}; opacity: 0.8; }}
-        .divider {{ border-left: 2px solid #000; margin: 20px; }}
-    """
-    
-    main_stats_html, daily_stats_html = "", ""
+* {{ box-sizing:border-box; margin:0; padding:0; }}
+body {{
+    position:relative; width:100vw; height:100vh;
+    background:white; color:black; overflow:hidden;
+    font-family:Arial,Helvetica,sans-serif;
+}}
+.corner {{
+    position:absolute;
+    display:flex; flex-direction:column;
+    align-items:center; text-align:center;
+}}
+.tl {{ top:10px;    left:10px;  }}
+.tr {{ top:10px;    right:10px; }}
+.bl {{ bottom:38px; left:10px;  }}
+.br {{ bottom:38px; right:10px; }}
+.donut-center {{
+    position:absolute; top:50%; left:50%;
+    transform:translate(-50%,-50%);
+}}
+.info-bar {{
+    position:absolute; bottom:0; left:0; right:0;
+    border-top:2px solid #333;
+    padding:4px 16px;
+    text-align:center;
+    font-size:{info_px}px; font-weight:600; color:#333;
+    background:white;
+}}
+"""
 
-    if states.get("power_usage_entity"):
-        state = states["power_usage_entity"]
-        unit = state.attributes.get("unit_of_measurement", "W")
-        value = get_state_val(state, 1 if unit == UnitOfPower.KILO_WATT else 0)
-        main_stats_html = f"""
-        <div class="main-stats" style="margin: {main_stat_margin};">
-            <div class="main-stat-value">{value} <span style="font-size: 0.5em;">{unit}</span></div>
-            <div class="main-stat-label">{current_usage_label}</div>
-        </div>"""
+    # Narożniki renderowane tylko jeśli encja jest skonfigurowana
+    tl_html = f'<div class="corner tl">{c_tl}</div>' if c_tl else ""
+    tr_html = f'<div class="corner tr">{c_tr}</div>' if c_tr else ""
+    bl_html = f'<div class="corner bl">{c_bl}</div>' if c_bl else ""
+    br_html = f'<div class="corner br">{c_br}</div>' if c_br else ""
 
-    daily_cards = []
-    if states.get("daily_production_entity"):
-        state = states["daily_production_entity"]
-        daily_cards.append(f'<div class="stat-card"><img src="{icons["solar"]}" class="icon" /><div class="value">{get_state_val(state)} kWh</div><div class="label">{production_label}</div></div>')
-    if states.get("daily_grid_import_entity"):
-        state = states["daily_grid_import_entity"]
-        daily_cards.append(f'<div class="stat-card"><img src="{icons["import"]}" class="icon" /><div class="value">{get_state_val(state)} kWh</div><div class="label">{import_label}</div></div>')
-    if states.get("daily_grid_export_entity"):
-        state = states["daily_grid_export_entity"]
-        daily_cards.append(f'<div class="stat-card"><img src="{icons["export"]}" class="icon" /><div class="value">{get_state_val(state)} kWh</div><div class="label">{export_label}</div></div>')
-    if states.get("daily_consumption_entity"):
-        state = states["daily_consumption_entity"]
-        daily_cards.append(f'<div class="stat-card"><img src="{icons["home"]}" class="icon" /><div class="value">{get_state_val(state)} kWh</div><div class="label">{consumption_label}</div></div>')
+    html_body = f"""
+{tl_html}
+{tr_html}
+{bl_html}
+{br_html}
+<div class="donut-center">{donut_svg}</div>
+<div class="info-bar">{info_content}</div>
+"""
 
-    if daily_cards:
-        daily_stats_html = f'<div class="daily-stats">{"".join(daily_cards)}</div>'
-    
-    html_body = f"{main_stats_html}{'' if is_portrait else '<div class=divider></div>'}{daily_stats_html}"
 
     cache_buster_comment = f'<!-- cb:{int(time.time())} -->'
-    html_content = f'<!DOCTYPE html><html><head><meta charset="UTF-8"><title>{panel_title}</title><style>{style_css}</style></head><body>{html_body}{cache_buster_comment}</body></html>'
+    html_content = (
+        f'<!DOCTYPE html><html><head><meta charset="UTF-8">'
+        f'<title>{panel_title}</title>'
+        f'<style>{style_css}</style></head>'
+        f'<body>{html_body}{cache_buster_comment}</body></html>'
+    )
     encoded = urllib.parse.quote(html_content, safe='')
     return f"data:text/html,{encoded}"
+
+
+
 
 def create_qr_code_url(qr_data: str, message: str = "", qr_message_text_size: int = 24, qr_message_position: str = "below", box_size: int = 10, border: int = 4, fill_color: str = "black", back_color: str = "white") -> str:
     try:
@@ -1609,11 +1855,11 @@ def _generate_weather_forecast_graph(
 
         # Definiujemy parametry lokalnie
         my_params = {
-            'font.size': 16,
-            'axes.titlesize': 22,
-            'axes.labelsize': 16,
-            'xtick.labelsize': 14,
-            'ytick.labelsize': 14,
+            'font.size': 18,
+            'axes.titlesize': 26,
+            'axes.labelsize': 18,
+            'xtick.labelsize': 16,
+            'ytick.labelsize': 16,
             'lines.linewidth': 4,
             'lines.markersize': 10,
             'figure.facecolor': 'white', 'axes.facecolor': 'white',
@@ -1622,12 +1868,12 @@ def _generate_weather_forecast_graph(
         }
 
         if is_portrait:
-            figsize = (6.0, 6.0)
+            figsize = (7.5, 11.5)
         else:
-            figsize = (8.0, 5.0)
+            figsize = (10.0, 8.5)
 
         with plt.style.context(('grayscale', my_params)):
-            fig = Figure(figsize=figsize, dpi=100, constrained_layout=False)
+            fig = Figure(figsize=figsize, dpi=120, constrained_layout=False)
             canvas = FigureCanvasAgg(fig)
             ax = fig.add_subplot(111)
 
@@ -1643,10 +1889,10 @@ def _generate_weather_forecast_graph(
 
             if is_portrait:
                 fig.autofmt_xdate(rotation=45, ha='right')
-                fig.subplots_adjust(left=0.10, right=0.98, top=0.92, bottom=0.15)
+                fig.subplots_adjust(left=0.06, right=0.99, top=0.94, bottom=0.10)
             else:
                 fig.autofmt_xdate(rotation=0, ha='center')
-                fig.subplots_adjust(left=0.08, right=0.99, top=0.90, bottom=0.15)
+                fig.subplots_adjust(left=0.06, right=0.99, top=0.94, bottom=0.10)
 
             buf = io.BytesIO()
             canvas.print_png(buf)
@@ -1837,16 +2083,16 @@ async def create_weather_url(
     is_portrait = orientation in ["0", "2"]
 
     style_css = f"""
-        body {{ font-family: sans-serif; background-color: white; color: black; margin: 0; padding: 25px; box-sizing: border-box; display: flex; flex-direction: column; height: 100vh; width: 100vw; }}
+        body {{ font-family: sans-serif; background-color: white; color: black; margin: 0; padding: 10px; box-sizing: border-box; display: flex; flex-direction: column; height: 100vh; width: 100vw; }}
         hr {{ border: 0; border-top: 2px solid black; margin: 15px 0; }}
         .flex {{ display: flex; }} .col {{ flex-direction: column; }} .center {{ align-items: center; justify-content: center; }}
         .space-around {{ justify-content: space-around; }} .space-between {{ justify-content: space-between; }}
         .icon {{ width: 1em; height: 1em; vertical-align: middle; }}
         
         .weather-graph-panel {{ display: flex; flex-direction: column; height: 100%; width: 100%; }}
-        .graph-section {{ flex: 7; display: flex; align-items: center; justify-content: center; width: 100%; }}
-        .graph-section img {{ max-width: 100%; max-height: 100%; object-fit: contain; }}
-        .current-conditions-section {{ flex: 2; border-top: 3px solid black; margin-top: 20px; padding-top: 15px; }}
+        .graph-section {{ flex: 10; display: flex; align-items: center; justify-content: center; width: 100%; overflow: hidden; padding: 0; }}
+        .graph-section img {{ max-width: 100%; max-height: 100%; object-fit: fill; }}
+        .current-conditions-section {{ flex: 1.5; border-top: 3px solid black; margin-top: 5px; padding-top: 10px; }}
         
         .summary-header {{ width: 100%; text-align: center; }}
         .summary-main {{ display: flex; align-items: center; justify-content: center; margin: 10px 0; }}
@@ -1856,6 +2102,7 @@ async def create_weather_url(
         
         .summary-details {{ font-size: {'1.5em' if small_screen else '1.8em'}; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; text-align: left; padding: 0 10px; }}
         .detail-item {{ display: flex; align-items: center; }}
+        .summary-details > .detail-item:nth-child(even) {{ justify-content: flex-end; text-align: right; }}
         .detail-item .icon {{ width: 2em; height: 2em; margin-right: 10px; }}
         
         .hourly-forecast {{ text-align: center; }}
