@@ -1,7 +1,7 @@
 {
   "domain": "visionect_joan",
   "name": "Visionect Joan",
-  "version": "3.7.6",
+  "version": "3.7.7",
   "config_flow": true,
   "documentation": "https://github.com/Adam7411/visionect_joan",
   "issue_tracker": "https://github.com/Adam7411/visionect_joan/issues",
@@ -18,4 +18,5 @@
   "integration_type": "hub",
   "icon": "mdi:tablet-dashboard"
 }
+
 
