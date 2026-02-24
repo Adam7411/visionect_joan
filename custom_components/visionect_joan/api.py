@@ -154,6 +154,14 @@ class VisionectAPI:
         while retry_count < MAX_RETRY_ATTEMPTS:
             try:
                 response = self.session.request(method, url, timeout=15, headers=headers, **kwargs)
+                # Traktuj przekierowania 3xx jako błąd autoryzacji (VSS zwraca 302 do /login
+                # gdy klucz jest niepoprawny lub endpoint nie istnieje)
+                if 300 <= response.status_code < 400:
+                    if not silent:
+                        _LOGGER.warning(
+                            f"Got redirect {response.status_code} from {url} – likely auth failure or wrong endpoint"
+                        )
+                    return None
                 response.raise_for_status()
                 content_type = response.headers.get('Content-Type', '')
                 if 'application/json' in content_type:
@@ -448,7 +456,7 @@ class VisionectAPI:
 
     async def async_get_device_screenshot(self, uuid: str) -> bytes | None:
         """Fetches the device screenshot as binary data."""
-        endpoint = f"/api/live/device/{uuid}/image.png"
+        endpoint = f"/api/live/device/{uuid}/cached"
         return await self._request("get", endpoint)
 
     async def async_get_orphans(self) -> dict[str, str]:
