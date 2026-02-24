@@ -455,9 +455,13 @@ class VisionectAPI:
         return await self.async_set_device_option(uuid, "Name", name)
 
     async def async_get_device_screenshot(self, uuid: str) -> bytes | None:
-        """Fetches the device screenshot as binary data."""
-        endpoint = f"/api/live/device/{uuid}/cached"
-        return await self._request("get", endpoint)
+        """Fetches the device screenshot as binary data, gracefully handling 500 errors from VSS."""
+        endpoint = f"/api/live/device/{uuid}/cached.png"
+        try:
+            return await self._request("get", endpoint, silent=True)
+        except Exception as e:
+            _LOGGER.debug(f"Could not fetch screenshot for {uuid}, VSS might be returning 500 for sleeping devices: {e}")
+            return None
 
     async def async_get_orphans(self) -> dict[str, str]:
         """
