@@ -13,15 +13,13 @@ from pathlib import Path
 
 # matplotlib is optional - imported lazily inside graph functions
 # This avoids crashes on platforms where matplotlib cannot be installed (e.g. RPi/ARM)
-try:
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-    import matplotlib.dates as mdates
-    from cycler import cycler
-    _MATPLOTLIB_AVAILABLE = True
-except ImportError:
-    _MATPLOTLIB_AVAILABLE = False
+def _check_matplotlib():
+    """Checks if matplotlib is available without importing it at top level."""
+    try:
+        import matplotlib
+        return True
+    except ImportError:
+        return False
 
 # Network URLs
 from homeassistant.core import HomeAssistant
@@ -1836,11 +1834,15 @@ def _generate_weather_forecast_graph(
     if not hourly_forecast:
         return None
 
-    if not _MATPLOTLIB_AVAILABLE:
+    if not _check_matplotlib():
         _LOGGER.warning("matplotlib is not installed - weather forecast graph unavailable")
         return None
 
     try:
+        import matplotlib
+        matplotlib.use("Agg")
+        import matplotlib.pyplot as plt
+        import matplotlib.dates as mdates
         from matplotlib.figure import Figure
         from matplotlib.backends.backend_agg import FigureCanvasAgg
 
@@ -1914,10 +1916,15 @@ def _generate_graph_image(
         _LOGGER.warning(f"No historical data provided for entities: {entity_ids}")
         return None
 
-    if not _MATPLOTLIB_AVAILABLE:
+    if not _check_matplotlib():
         _LOGGER.warning("matplotlib is not installed - history graph unavailable")
         return None
 
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    import matplotlib.dates as mdates
+    from cycler import cycler
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_agg import FigureCanvasAgg
 
