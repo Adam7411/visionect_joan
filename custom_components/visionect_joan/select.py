@@ -19,6 +19,8 @@ from .const import (
     DISPLAY_ROTATIONS,
     SLEEP_PERIODIC_OPTIONS,
     SLEEP_PERIODIC_TO_API,
+    SLEEP_SCHEDULE_OPTIONS,
+    SLEEP_SCHEDULE_TO_API,
     PUSH_MODE_OPTIONS,
     PUSH_MODE_TO_API
 )
@@ -50,6 +52,8 @@ async def async_setup_entry(
         entities.append(VisionectEncodingSelect(coordinator, uuid))
         entities.append(VisionectRotationSelect(coordinator, uuid))
         entities.append(VisionectBackViewSelect(hass, coordinator, entry, uuid, views))
+        # NOWE: Harmonogram uśpienia w minutach (0 = Always Online, >0 = cykliczne spanie)
+        entities.append(VisionectSleepScheduleSelect(coordinator, uuid))
 
     async_add_entities(entities)
 
@@ -403,6 +407,71 @@ class VisionectPushModeSelect(VisionectEntity, SelectEntity):
 
 
         _LOGGER.info(f"Setting Push mode for {self.uuid} to {option} ({val})")
+        if await api.async_set_device_options(self.uuid, options_to_set):
+            if self.uuid in self.coordinator.data and "Options" in self.coordinator.data[self.uuid]:
+                for k, v in options_to_set.items():
+                    self.coordinator.data[self.uuid]["Options"][k] = v
+                self.async_write_ha_state()
+        await self.coordinator.async_request_refresh()
+
+
+class VisionectSleepScheduleSelect(VisionectEntity, SelectEntity):
+    """Select entity for sleep schedule in minutes (0 = Always Online, >0 = cyclic sleep)."""
+
+    def __init__(self, coordinator, uuid: str):
+        super().__init__(coordinator, uuid)
+        self._attr_translation_key = "sleep_schedule_select"
+        self._attr_name = "Cykliczny harmonogram uśpienia (minuty)"
+        self._attr_unique_id = f"{uuid}_sleep_schedule_select"
+        self._attr_icon = "mdi:sleep"
+        self._attr_options = SLEEP_SCHEDULE_OPTIONS
+
+    @property
+    def current_option(self) -> str | None:
+        """Return current sleep schedule based on SleepSchedule value."""
+        device_data = self.coordinator.data.get(self.uuid, {})
+        opts = device_data.get("Options", {})
+        
+        try:
+            sched_val = int(float(str(opts.get("SleepSchedule", "0")).replace(',', '.')))
+        except (ValueError, TypeError):
+            sched_val = 0
+        
+        # Map API value back to option name
+        for name, api_val in SLEEP_SCHEDULE_TO_API.items():
+            if sched_val == int(api_val):
+                return name
+        return "0 (Always Online)"
+
+    async def async_select_option(self, option: str) -> None:
+        """Handle sleep schedule selection."""
+        api: VisionectAPI = self.hass.data[DOMAIN][self.coordinator.config_entry.entry_id]["api"]
+        minutes = SLEEP_SCHEDULE_TO_API.get(option, "0")
+        
+        if minutes is None:
+            return
+        
+        minutes_int = int(minutes)
+        
+        # Przygotuj opcje do ustawienia
+        if minutes_int == 0:
+            # 0 minut = ALWAYS ONLINE (tablet nigdy nie śpi)
+            # Push=false aby tablet nie wchodził w żaden tryb snu
+            options_to_set = {
+                "SleepSchedule": "0",
+                "PeriodicSleep": "false",
+                "Push": "false"  # Nigdy nie śpi
+            }
+            _LOGGER.info(f"Setting sleep schedule for {self.uuid} to ALWAYS ONLINE (0 min = nigdy nie śpi)")
+        else:
+            # >0 minut = cykliczne spanie (Periodic Sleep)
+            options_to_set = {
+                "SleepSchedule": str(minutes_int),
+                "PeriodicSleep": "true",
+                "Push": "false"  # Wyłączamy Push - tablet budzi się tylko cyklicznie
+            }
+            _LOGGER.info(f"Setting sleep schedule for {self.uuid} to {minutes_int} minutes (cyclic sleep)")
+        
         if await api.async_set_device_options(self.uuid, options_to_set):
             if self.uuid in self.coordinator.data and "Options" in self.coordinator.data[self.uuid]:
                 for k, v in options_to_set.items():

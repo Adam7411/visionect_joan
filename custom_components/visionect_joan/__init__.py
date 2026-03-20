@@ -13,7 +13,7 @@ import aiohttp
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall, ServiceResponse
-from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, ATTR_DEVICE_ID
+from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, ATTR_DEVICE_ID, EVENT_HOMEASSISTANT_STARTED
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers import device_registry as dr
@@ -519,31 +519,13 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 else:
                      device_details["OrphanError"] = None
 
-                # AUTO-ENFORCE Continuous Awake for SleepSchedule 0
+                # Status urządzenia - dokumentacja Visionect definiuje tylko: online/offline
                 state_val = device_details.get("State", "").lower()
-                status_state_val = device_details.get("Status", {}).get("State", "")
-                if isinstance(status_state_val, int):
-                    if status_state_val == 1: status_state_val = "online"
+                is_online = state_val == "online"
                 
-                is_online = (state_val == "online" or str(status_state_val).lower() == "online")
-                sleep_sched = device_details.get("Options", {}).get("SleepSchedule")
+                # VSS sam zarządza urządzeniami przez DeviceStatePolling - nie wysyłaj niepotrzebnych TCLV
+                # które mogą zakłócać pracę e-ink i zużywać baterię
                 
-                # Default the structure so it never throws KeyError during the first run
-                domain_data = hass.data.setdefault(DOMAIN, {})
-                entry_data = domain_data.setdefault(entry.entry_id, {})
-                enforced_dict = entry_data.setdefault("awake_enforced", {})
-                
-                if is_online and str(sleep_sched) == "0":
-                    if not enforced_dict.get(uuid_val):
-                        _LOGGER.info(f"Device {uuid_val} is awake with SleepSchedule 0. Sending TCLV 52=0 to enforce continuous online mode.")
-                        tclv_payload = {"Data": [{"Type": 52, "Control": 1, "Value": "0"}]}
-                        # Use API_TCLV_PARAM to ensure trailing slash for HMAC consistency
-                        hass.loop.create_task(api._request("post", API_TCLV_PARAM.format(uuid=uuid_val), json=tclv_payload, silent=True))
-                        enforced_dict[uuid_val] = True
-                elif is_online and sleep_sched is not None and str(sleep_sched) != "0":
-                    # Reset flag if sleep schedule is no longer 0
-                    enforced_dict[uuid_val] = False
-
                 final_data = device_details
                 if "Config" not in final_data: final_data["Config"] = {}
                 device_name = device_details.get("Options", {}).get("Name")
@@ -566,6 +548,25 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     coordinator.api = api
     
     await coordinator.async_config_entry_first_refresh()
+
+    # POPRAWKA: Automatyczne restartowanie sesji po starcie - naprawia biały ekran
+    # po restarcie HA. Tablet może mieć błąd "connection refused" jeśli restart
+    # nastąpił w momencie próby odświeżenia. Restart sesji wymusi ponowne
+    # połączenie z VSS.
+    if coordinator.data:
+        uuids = list(coordinator.data.keys())
+        if uuids:
+            _LOGGER.info(f"Auto-restarting sessions for {len(uuids)} devices after startup")
+            try:
+                # Restartuj sesje - to odświeży wszystkie tablety jednocześnie (1 mrugnięcie)
+                await api.async_restart_sessions_batch(uuids)
+                _LOGGER.info(f"Sessions restarted for {len(uuids)} devices - tablets should refresh once")
+                
+                # Krótkie opóźnienie aby tablety mogły się połączyć z VSS
+                await asyncio.sleep(5)
+                
+            except Exception as e:
+                _LOGGER.warning(f"Auto-restart sessions failed: {e}")
 
     store = Store(hass, 1, f"{DOMAIN}_{entry.entry_id}_prefs.json")
     prefs = await store.async_load() or {"back_targets": {}}
@@ -1574,6 +1575,64 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     _LOGGER.info("Visionect Joan config entry successfully initialized.")
+
+    # POPRAWKA: Nasłuchuj na zakończenie startup HA - wykonaj auto-refresh gdy VSS będzie gotowy
+    # To naprawia problem białego ekranu gdy VSS jest zainstalowany na tym samym HA
+    async def _async_on_hass_started(event):
+        """Handle HA started event - retry refresh until VSS is available."""
+        _LOGGER.info("HA startup completed, starting VSS health check and auto-refresh...")
+        
+        # Poczekaj chwilę na wstanie VSS (może startować dłużej niż HA)
+        await asyncio.sleep(5)
+        
+        max_retries = 45  # 45 prób co 10 sekund = 7.5 minut (dla restartów HA trwających 5-7 minut)
+        retry_delay = 10
+        
+        for attempt in range(1, max_retries + 1):
+            try:
+                # Sprawdź czy VSS odpowiada
+                _LOGGER.info(f"VSS health check attempt {attempt}/{max_retries}...")
+                is_healthy = await api.async_check_health()
+                
+                if is_healthy:
+                    _LOGGER.info("VSS is healthy! Performing auto-refresh of all devices...")
+                    
+                    # Pobierz aktualne UUID-e
+                    if coordinator.data:
+                        uuids = list(coordinator.data.keys())
+                        if uuids:
+                            # Zapisz aktualne URL-e przed restartem sesji
+                            uuid_urls = {}
+                            for uuid in uuids:
+                                try:
+                                    session_data = await api.async_get_session_data(uuid)
+                                    if session_data and "Backend" in session_data:
+                                        current_url = session_data["Backend"].get("Fields", {}).get("url", "")
+                                        if current_url:
+                                            uuid_urls[uuid] = current_url
+                                except Exception:
+                                    pass
+                            
+                            # Restartuj sesje - to odświeży wszystkie tablety jednocześnie (1 mrugnięcie)
+                            await api.async_restart_sessions_batch(uuids)
+                            _LOGGER.info("Sessions restarted after HA restart - tablets should refresh once")
+                            
+                            _LOGGER.info("Auto-refresh completed after HA restart!")
+                            return  # Sukces - wyjdź z funkcji
+                else:
+                    _LOGGER.info(f"VSS not ready yet, waiting {retry_delay}s...")
+                    
+            except Exception as e:
+                _LOGGER.debug(f"Health check error: {e}")
+                
+            await asyncio.sleep(retry_delay)
+        
+        _LOGGER.warning("VSS health check max retries reached. Manual refresh may be needed.")
+
+    # Zarejestruj listener na event startup HA
+    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STARTED, _async_on_hass_started)
+    _LOGGER.info("Registered VSS auto-refresh handler for HA startup")
+
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:

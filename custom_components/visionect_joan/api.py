@@ -24,6 +24,7 @@ from .const import (
     MAX_RETRY_ATTEMPTS, NETWORK_RETRY_DELAY, API_CLEAR_WEB_CACHE,
     API_REBOOT_BATCH, API_RESTART_SESSION_BATCH, API_ORPHANS,
     API_TCLV_PARAM, TCLV_SLEEP_MODE_ID, API_SCREENSHOT,
+    API_LIVE_IMAGE, API_DEVICE_STATUS,
 )
 
 _LOGGER = logging.getLogger(__name__)
@@ -89,8 +90,7 @@ class VisionectAPI:
         headers = kwargs.pop("headers", {}) or {}
         retry_count = 0
 
-        # Upewniamy się tylko, że ścieżka zaczyna się od ukośnika. 
-        # NIE dodajemy ukośnika na końcu (trailing slash), bo powoduje to błąd 400 Bad Request!
+        # Upewniamy się tylko, że ścieżka zaczyna się od ukośnika
         if not endpoint.startswith("/"):
             endpoint = "/" + endpoint
 
@@ -133,6 +133,10 @@ class VisionectAPI:
                         error_msg = response.text
                         _LOGGER.error(f"HTTP Error {response.status_code} from {url}: {error_msg}")
                 response.raise_for_status()
+                
+                # Handle 204 No Content - return True to indicate success
+                if response.status_code == 204:
+                    return True
                 
                 content_type = response.headers.get('Content-Type', '')
                 if 'application/json' in content_type:
@@ -266,7 +270,8 @@ class VisionectAPI:
 
     async def _post_command(self, endpoint_template: str, uuid: str, command_name: str) -> bool:
         response = await self._request("post", endpoint_template.format(uuid=uuid))
-        if response is not None:
+        # 204 No Content returns True (success), None indicates failure
+        if response is True or (response is not None and response != ""):
             _LOGGER.info(f"Command '{command_name}' for {uuid} executed successfully.")
             return True
         return False
@@ -276,7 +281,8 @@ class VisionectAPI:
         if not uuids:
             return True
         response = await self._request("post", endpoint, json=uuids)
-        if response is not None:
+        # 204 No Content returns True (success), None indicates failure
+        if response is True or (response is not None and response != ""):
             _LOGGER.info(f"Batch command '{command_name}' for {len(uuids)} devices executed successfully.")
             return True
         _LOGGER.error(f"Failed to execute batch command '{command_name}' for UUIDs: {uuids}")
@@ -294,6 +300,21 @@ class VisionectAPI:
     async def async_restart_sessions_batch(self, uuids: list[str]) -> bool:
         return await self._post_batch_command(API_RESTART_SESSION_BATCH, uuids, "Restart sessions")
 
+    async def async_check_health(self) -> bool:
+        """Sprawdź czy VSS (Visionect Software Suite) odpowiada.
+        
+        Używane do wykrycia kiedy VSS wstanie po restarcie HA.
+        Zwraca True jeśli VSS jest dostępny, False w przeciwnym razie.
+        """
+        try:
+            # Użyj prostego endpointu - lista urządzeń
+            response = await self._request("get", "/api/device/", silent=True)
+            # Jeśli dostaliśmy odpowiedź (nawet pustą listę), VSS działa
+            return response is not None
+        except Exception as e:
+            _LOGGER.debug(f"VSS health check failed: {e}")
+            return False
+
     async def async_clear_webkit_cache(self, uuids: list[str]) -> bool:
         return await self._post_batch_command(API_CLEAR_WEB_CACHE, uuids, "Clear Web Cache")
         
@@ -308,7 +329,7 @@ class VisionectAPI:
         
         session_data["Backend"]["Name"] = "HTML"  
         session_data["Backend"]["Fields"]["url"] = url
-        session_data["Backend"]["Fields"]["ReloadTimeout"] = "86400"
+        session_data["Backend"]["Fields"]["ReloadTimeout"] = "604800"  # 7 dni - mniej problemów przy restarcie HA
         
         response = await self._request("put", API_SESSION_DETAIL.format(uuid=uuid), json=session_data)
         if response is not None:
@@ -427,27 +448,101 @@ class VisionectAPI:
                 device_data["Options"][key] = str(value)
 
         # Logika zarządzania zasilaniem i wymuszaniem stanu ONLINE
-        if "SleepSchedule" in options or "PeriodicSleep" in options:
+        if "SleepSchedule" in options or "PeriodicSleep" in options or "Push" in options:
             sched = device_data["Options"].get("SleepSchedule")
             period = device_data["Options"].get("PeriodicSleep")
-
-            if str(sched) == "0" or str(period).lower() in ["disabled", "false", "0", "none"]:
-                _LOGGER.info(f"Enforcing Always Online mode for {uuid}. Disabling SleepManager.")
+            push_val = device_data["Options"].get("Push")
+            
+            # NOWA LOGIKA: Rozróżnij 3 tryby:
+            # 1. Push Mode: SleepSchedule=0 + Push=true (drzemie, budzi na komendy)
+            # 2. Always Online: SleepSchedule=0 + Push=false (nigdy nie śpi)
+            # 3. Periodic Sleep: SleepSchedule>0 (cykliczne spanie)
+            
+            is_push_mode = str(sched) == "0" and str(push_val).lower() == "true"
+            is_always_online = str(sched) == "0" and str(push_val).lower() != "true"
+            
+            if is_always_online:
+                # ALWAYS ONLINE: Tablet nigdy nie śpi (domyślne dla 0 minut)
+                _LOGGER.info(f"Enforcing ALWAYS ONLINE for {uuid}. Tablet nigdy nie śpi.")
                 device_data["Options"]["SleepSchedule"] = "0"
-                # Krytyczna poprawka - PeriodicSleep musi byc false/0
-                device_data["Options"]["PeriodicSleep"] = "false" 
+                device_data["Options"]["PeriodicSleep"] = "false"
+                device_data["Options"]["Push"] = "false"
+                send_tclv = "0"
+                target_sleep_manager = False  # Wyłączamy SleepManager - tablet nigdy nie śpi
+            elif is_push_mode:
+                # PUSH MODE: Tablet drzemie ale budzi się na komendy (opcjonalny tryb)
+                _LOGGER.info(f"Enabling PUSH MODE for {uuid}. Tablet drzemie, budzi na komendy.")
+                device_data["Options"]["SleepSchedule"] = "0"
+                device_data["Options"]["PeriodicSleep"] = "false"
                 device_data["Options"]["Push"] = "true"
                 send_tclv = "0"
-                target_sleep_manager = False # Wyłączamy go globalnie
+                target_sleep_manager = True  # SleepManager MUSI być włączony dla Push
             else:
+                # PERIODIC SLEEP: Cykliczne spanie (SleepSchedule > 0)
                 _LOGGER.info(f"Enforcing Periodic Sleep mode for {uuid}")
                 device_data["Options"]["PeriodicSleep"] = "true"
                 device_data["Options"]["Push"] = "false"
                 send_tclv = "1"
                 target_sleep_manager = True
 
+        # POPRAWKA: Jeśli przechodzimy na 0 minut (Always Online) z trybu cyklicznego,
+        # tablet może już spać - MUSIMY go wybudzić PRZED jakąkolwiek zmianą konfiguracji
+        needs_wakeup = False
+        if "SleepSchedule" in options:
+            new_sched = str(options.get("SleepSchedule", ""))
+            old_sched = str(device_data.get("Options", {}).get("SleepSchedule", "0"))
+            # Jeśli nowy harmonogram to 0, a stary > 0, tablet może być w śnie
+            if new_sched == "0" and old_sched != "0" and int(old_sched) > 0:
+                needs_wakeup = True
+                _LOGGER.info(f"Transitioning from {old_sched}min to 0min (Always Online) for {uuid}. Waking up FIRST...")
+        
+        if needs_wakeup:
+            # 1. Włącz SleepManager tymczasowo aby móc wysłać komendy
+            _LOGGER.info(f"Enabling SleepManager temporarily to wake {uuid}...")
+            await self.async_toggle_sleep_manager(True)
+            await asyncio.sleep(1)
+            
+            # 2. Wyślij komendę WAKEUP (TCLV 0) - to budzi tablet natychmiast
+            _LOGGER.info(f"Sending WAKEUP command to {uuid}...")
+            wakeup_payload = {"Data": [{"Type": 52, "Control": 1, "Value": "0"}]}
+            await self._request("post", API_TCLV_PARAM.format(uuid=uuid), json=wakeup_payload, silent=True)
+            await asyncio.sleep(5)  # Daj WIĘCEJ czasu na wybudzenie z głębokiego snu
+            
+            # 3. Restart sesji - tablet na nowo się łączy
+            _LOGGER.info(f"Restarting session for {uuid}...")
+            await self.async_restart_session(uuid)
+            await asyncio.sleep(5)  # Czekaj na ponowne połączenie
+            
+            # 4. Odśwież URL aby wymusić aktualizację ekranu
+            try:
+                session_data = await self.async_get_session_data(uuid)
+                if session_data and "Backend" in session_data:
+                    current_url = session_data["Backend"].get("Fields", {}).get("url", "")
+                    if current_url:
+                        _LOGGER.info(f"Refreshing URL for {uuid}...")
+                        await self.async_set_device_url(uuid, current_url)
+                        await asyncio.sleep(2)
+            except Exception as e:
+                _LOGGER.debug(f"Could not refresh URL for {uuid}: {e}")
+            
+            # 5. Pobierz ponownie device_data aby mieć aktualne dane po restarcie
+            _LOGGER.info(f"Re-fetching device data for {uuid} after wakeup...")
+            device_data = await self._request("get", API_DEVICE_DETAIL.format(uuid=uuid))
+            if not device_data:
+                _LOGGER.error(f"Could not re-fetch device data for {uuid} after wakeup")
+                return False
+            if "Options" not in device_data:
+                device_data["Options"] = {}
+            
+            # Ponownie zastosuj opcje do nowych danych
+            for key, value in options.items():
+                if value == "disabled":
+                    device_data["Options"][key] = "false"
+                else:
+                    device_data["Options"][key] = str(value)
+        
         # Jeśli chcemy włączyć uśpienie, musimy najpierw włączyć globalnego SleepManagera (inaczej VSS zwróci błąd 500)
-        if target_sleep_manager is True:
+        if target_sleep_manager is True and not needs_wakeup:
             await self.async_toggle_sleep_manager(True)
             await asyncio.sleep(1)
 
@@ -461,7 +556,9 @@ class VisionectAPI:
                 await asyncio.sleep(1)
                 await self.async_toggle_sleep_manager(False)
             
-            if send_tclv is not None:
+            # Dla trybu cyklicznego (Periodic Sleep) wyślij TCLV 1 (włączenie snu)
+            # Dla Push Mode i Always Online już wysłaliśmy TCLV 0 wyżej
+            if send_tclv == "1" and not needs_wakeup:
                 async def _send_tclv_task():
                     await asyncio.sleep(2)
                     payload = {"Data": [{"Type": 52, "Control": 1, "Value": send_tclv}]}
@@ -479,12 +576,70 @@ class VisionectAPI:
         """Sets a new name for the device."""
         return await self.async_set_device_option(uuid, "Name", name)
 
+# ... (rest of the code remains the same)
     async def async_get_device_screenshot(self, uuid: str) -> bytes | None:
         """Fetches the device screenshot as binary data, gracefully handling 500 errors from VSS."""
         try:
             return await self._request("get", API_SCREENSHOT.format(uuid=uuid), silent=True)
         except Exception as e:
             _LOGGER.debug(f"Could not fetch screenshot for {uuid}: {e}")
+            return None
+
+    async def async_get_device_live_image(self, uuid: str) -> bytes | None:
+        """Fetches the current LIVE image from device (not cached server-side).
+        
+        Unlike cached.png which returns server-side cache, image.png returns
+        the actual current display content from the device.
+        """
+        try:
+            return await self._request("get", API_LIVE_IMAGE.format(uuid=uuid), silent=True)
+        except Exception as e:
+            _LOGGER.debug(f"Could not fetch live image for {uuid}: {e}")
+            return None
+
+    async def async_get_device_status_history(
+        self, 
+        uuid: str, 
+        from_timestamp: int = None, 
+        to_timestamp: int = None,
+        group: bool = False
+    ) -> list[dict] | None:
+        """Fetches historical device status data from /api/devicestatus endpoint.
+        
+        Args:
+            uuid: Device UUID
+            from_timestamp: UNIX timestamp start (optional, defaults to 24h ago)
+            to_timestamp: UNIX timestamp end (optional, defaults to now)
+            group: If True, data is grouped by time intervals
+            
+        Returns:
+            List of status records with Battery, RSSI, Temperature, etc.
+            or None on error.
+        """
+        try:
+            # Build query parameters
+            params = []
+            if from_timestamp:
+                params.append(f"from={from_timestamp}")
+            if to_timestamp:
+                params.append(f"to={to_timestamp}")
+            if group:
+                params.append("group=true")
+            
+            query_string = "?" + "&".join(params) if params else ""
+            endpoint = f"{API_DEVICE_STATUS.format(uuid=uuid)}{query_string}"
+            
+            response = await self._request("get", endpoint, silent=True)
+            
+            if isinstance(response, list):
+                return response
+            elif isinstance(response, dict):
+                # Sometimes API returns dict with single key
+                return [response] if response else []
+            return None
+            
+        except Exception as e:
+            _LOGGER.error(f"Failed to fetch device status history for {uuid}: {e}")
             return None
 
     async def async_get_orphans(self) -> dict[str, str]:

@@ -50,6 +50,23 @@ SLEEP_PERIODIC_TO_API = {
     "Disabled": "false",
 }
 
+# NOWE: Harmonogram uśpienia w minutach (0 = Always Online, >0 = cykliczne spanie)
+SLEEP_SCHEDULE_OPTIONS = ["0 (Always Online)", "1 min", "2 min", "3 min", "5 min", "10 min", "15 min", "30 min", "60 min", "90 min", "120 min", "180 min"]
+SLEEP_SCHEDULE_TO_API = {
+    "0 (Always Online)": "0",
+    "1 min": "1",
+    "2 min": "2",
+    "3 min": "3",
+    "5 min": "5",
+    "10 min": "10",
+    "15 min": "15",
+    "30 min": "30",
+    "60 min": "60",
+    "90 min": "90",
+    "120 min": "120",
+    "180 min": "180",
+}
+
 PUSH_MODE_OPTIONS = ["Enabled", "Disabled"]
 PUSH_MODE_TO_API = {
     "Enabled": "true",
@@ -84,6 +101,8 @@ API_ORPHANS = "/api/orphans"
 API_TCLV_LIST = "/api/devicetclv/{uuid}"
 API_TCLV_PARAM = "/api/cmd/Param/{uuid}"
 API_SCREENSHOT = "/api/live/device/{uuid}/cached.png"
+API_LIVE_IMAGE = "/api/live/device/{uuid}/image.png"  # Aktualny obraz z urządzenia
+API_DEVICE_STATUS = "/api/devicestatus/{uuid}"  # Historyczne statusy urządzenia
 TCLV_SLEEP_MODE_ID = 52
 
 # Usługi
