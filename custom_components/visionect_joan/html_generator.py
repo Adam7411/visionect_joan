@@ -1,4 +1,4 @@
-﻿import logging
+import logging
 import time
 import urllib.parse
 import html
@@ -2452,7 +2452,8 @@ def _generate_graph_image(
             for state in states:
                 try:
                     if state.state not in UNKNOWN_STRINGS:
-                        values.append(float(state.state))
+                        val_str = str(state.state).replace(',', '.').strip()
+                        values.append(float(val_str))
                         timestamps.append(state.last_updated)
                 except (ValueError, TypeError): continue
             if not values: continue
