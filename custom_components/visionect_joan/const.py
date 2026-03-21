@@ -103,6 +103,7 @@ API_TCLV_PARAM = "/api/cmd/Param/{uuid}"
 API_SCREENSHOT = "/api/live/device/{uuid}/cached.png"
 API_LIVE_IMAGE = "/api/live/device/{uuid}/image.png"  # Aktualny obraz z urządzenia
 API_DEVICE_STATUS = "/api/devicestatus/{uuid}"  # Historyczne statusy urządzenia
+API_BACKEND_IMAGE = "/backend/{uuid}"  # HTTP Backend - push obrazu (bez trailing slash)
 TCLV_SLEEP_MODE_ID = 52
 
 # Usługi
