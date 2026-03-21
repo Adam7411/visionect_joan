@@ -119,7 +119,7 @@ class VisionectAPI:
             try:
                 response = self.session.request(method, url, timeout=15, headers=headers, **kwargs)
                 
-                # Traktuj przekierowania 3xx jako błąd autoryzacji
+                # Uważamy 3xx jako błąd autoryzacji
                 if 300 <= response.status_code < 400:
                     location = response.headers.get("Location", "unknown")
                     if not silent:
@@ -134,7 +134,6 @@ class VisionectAPI:
                         _LOGGER.error(f"HTTP Error {response.status_code} from {url}: {error_msg}")
                 response.raise_for_status()
                 
-                # Handle 204 No Content - return True to indicate success
                 if response.status_code == 204:
                     return True
                 
