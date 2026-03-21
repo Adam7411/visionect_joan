@@ -1,4 +1,4 @@
-﻿import logging
+import logging
 import urllib.parse
 import voluptuous as vol
 from datetime import datetime, timezone, timedelta, date
@@ -162,7 +162,6 @@ SERVICE_START_SLIDESHOW = "start_slideshow"
 SERVICE_SEND_IMAGE_URL = "send_image_url"
 SERVICE_SET_SESSION_OPTIONS = "set_session_options"
 SERVICE_SEND_CRYPTO = "send_crypto"
-SERVICE_SEND_EXCHANGE_RATES = "send_exchange_rates"
 
 EINK_COLORS = ["black", "white"]
 FONT_WEIGHTS = ["normal", "bold"]
@@ -356,15 +355,6 @@ SERVICE_SEND_CRYPTO_SCHEMA = SERVICE_DEVICE_SCHEMA.extend({
     vol.Required(ATTR_COINS): [cv.string],  # CoinGecko IDs or common symbols: ["bitcoin","ETH"]
     vol.Optional(ATTR_VS_CURRENCY, default="usd"): cv.string,  # e.g. usd, eur, pln
     vol.Optional(ATTR_HISTORY_HOURS, default=24): vol.All(vol.Coerce(int), vol.Range(min=0, max=168)),
-    vol.Optional(ATTR_SHOW_HEADER, default=True): cv.boolean,
-    **INTERACTIVE_SCHEMA_EXTENSION,
-})
-
-SERVICE_SEND_EXCHANGE_RATES_SCHEMA = SERVICE_DEVICE_SCHEMA.extend({
-    vol.Optional(ATTR_BASE_CURRENCY, default="EUR"): cv.string,  # base currency, e.g. EUR
-    vol.Required(ATTR_CURRENCIES): [cv.string],   # target currencies, e.g. ["PLN","USD"]
-    vol.Optional(ATTR_TITLE, default=""): cv.string,
-    vol.Optional(ATTR_HISTORY_DAYS, default=7): vol.All(vol.Coerce(int), vol.Range(min=0, max=30)),
     vol.Optional(ATTR_SHOW_HEADER, default=True): cv.boolean,
     **INTERACTIVE_SCHEMA_EXTENSION,
 })
@@ -1409,100 +1399,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             status = "success" if await api.async_set_device_url(device_uuid, final_url) else "failure"
             hass.bus.async_fire(EVENT_COMMAND_RESULT, {"uuid": device_uuid, "service": SERVICE_SEND_CRYPTO, "status": status})
 
-    async def handle_send_exchange_rates(call: ServiceCall):
-        """Fetch exchange rates from Frankfurter API (ECB data, free, no key) and display on Joan."""
-        uuids = await get_uuids_from_call(call)
-        base_currency = str(call.data.get(ATTR_BASE_CURRENCY, "EUR")).upper().strip()
-        currencies_raw = [str(c).upper().strip() for c in call.data.get(ATTR_CURRENCIES, [])]
-        
-        # Remove identical base and target currency to prevent API filtering them out
-        currencies = [c for c in currencies_raw if c != base_currency]
-        
-        title = call.data.get(ATTR_TITLE, "")
-        history_days = call.data.get(ATTR_HISTORY_DAYS, 7)
-        lang = _get_lang(hass)
-        screen_size = call.data.get(ATTR_SCREEN_SIZE, "joan6")
-        show_header = call.data.get(ATTR_SHOW_HEADER, True)
 
-        if not currencies:
-            _LOGGER.warning("send_exchange_rates: no valid target currencies specified.")
-            return
-
-        session = async_get_clientsession(hass)
-        syms_param = ",".join(currencies)
-
-        # --- Fetch current rates ---
-        current_rates = {}
-        try:
-            rate_url = f"https://api.frankfurter.app/latest?base={base_currency}&symbols={syms_param}"
-            async with session.get(rate_url, timeout=aiohttp.ClientTimeout(total=15)) as resp:
-                if resp.status == 200:
-                    rd = await resp.json()
-                    current_rates = rd.get("rates", {})
-                else:
-                    _LOGGER.warning("send_exchange_rates: Frankfurter returned HTTP %s", resp.status)
-        except Exception as exc:
-            _LOGGER.error("send_exchange_rates: rate fetch failed: %s", exc)
-
-        # --- Fetch historical rates for sparkline ---
-        hist_by_currency: dict = {c: [] for c in currencies}
-        if history_days > 0:
-            try:
-                today = dt_util.now().date()
-                start_date = today - timedelta(days=history_days)
-                hist_url = (
-                    f"https://api.frankfurter.app/{start_date}..{today}"
-                    f"?base={base_currency}&symbols={syms_param}"
-                )
-                async with session.get(hist_url, timeout=aiohttp.ClientTimeout(total=15)) as hr:
-                    if hr.status == 200:
-                        hist_json = await hr.json()
-                        for dt_str in sorted(hist_json.get("rates", {}).keys()):
-                            day_rates = hist_json["rates"][dt_str]
-                            for cur in currencies:
-                                if cur in day_rates:
-                                    hist_by_currency[cur].append(day_rates[cur])
-            except Exception:
-                pass  # sparkline is optional
-
-        pairs_out = []
-        for currency in currencies:
-            rate = current_rates.get(currency)
-            hist = hist_by_currency.get(currency, [])
-
-            # Calculate % change from last two historical data points
-            change_pct = None
-            if len(hist) >= 2 and hist[-2]:
-                change_pct = (hist[-1] - hist[-2]) / hist[-2] * 100
-
-            pairs_out.append({
-                "name": f"{base_currency}/{currency}",
-                "rate": rate,
-                "change_pct": change_pct,
-                "history": hist,
-            })
-
-        if not pairs_out:
-            _LOGGER.warning("send_exchange_rates: no rate data received.")
-            return
-
-        history_label = f"{history_days}d" if history_days > 0 else ""
-        content_url = await create_exchange_rates_url(hass, pairs_out, title, screen_size, lang, show_header, history_label)
-
-        for device_uuid in uuids:
-            back_url = _get_back_url_for_uuid(device_uuid, call.data)
-            add_back = _effective_add_back_button(call, back_url)
-            interactive_url = await _add_interactive_layer_to_url(
-                hass, content_url, back_url, add_back,
-                call.data.get(ATTR_CLICK_ANYWHERE_TO_RETURN),
-                call.data.get(ATTR_CLICK_ANYWHERE_TO_ACTION),
-                call.data.get(ATTR_ACTION_WEBHOOK_ID),
-                call.data.get(ATTR_ACTION_WEBHOOK_2_ID),
-                call.data.get(ATTR_AUTO_RETURN_SECONDS, 0)
-            )
-            final_url = await _process_final_url(hass, interactive_url)
-            status = "success" if await api.async_set_device_url(device_uuid, final_url) else "failure"
-            hass.bus.async_fire(EVENT_COMMAND_RESULT, {"uuid": device_uuid, "service": SERVICE_SEND_EXCHANGE_RATES, "status": status})
 
     async def handle_send_button_panel(call: ServiceCall):
         uuids = await get_uuids_from_call(call)
@@ -1571,22 +1468,30 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     hass.services.async_register(DOMAIN, SERVICE_SET_SESSION_OPTIONS, handle_set_session_options, schema=SERVICE_SET_SESSION_OPTIONS_SCHEMA)
     hass.services.async_register(DOMAIN, SERVICE_SEND_BUTTON_PANEL, handle_send_button_panel, schema=SERVICE_SEND_BUTTON_PANEL_SCHEMA)
     hass.services.async_register(DOMAIN, SERVICE_SEND_CRYPTO, handle_send_crypto, schema=SERVICE_SEND_CRYPTO_SCHEMA)
-    hass.services.async_register(DOMAIN, SERVICE_SEND_EXCHANGE_RATES, handle_send_exchange_rates, schema=SERVICE_SEND_EXCHANGE_RATES_SCHEMA)
+
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     _LOGGER.info("Visionect Joan config entry successfully initialized.")
 
     # POPRAWKA: Nasłuchuj na zakończenie startup HA - wykonaj auto-refresh gdy VSS będzie gotowy
-    # To naprawia problem białego ekranu gdy VSS jest zainstalowany na tym samym HA
+    # To naprawia problem białego ekranu gdy VSS jest zainstalowany na tym samym HA lub Proxmox
     async def _async_on_hass_started(event):
-        """Handle HA started event - retry refresh until VSS is available."""
+        """Handle HA started event - retry refresh until VSS is available.
+        
+        Adaptacyjny mechanizm działający optymalnie dla:
+        - VSS w HA: szybkie odświeżenie (2-15s)
+        - VSS w Proxmox: dłuższe oczekiwanie z backoff
+        """
         _LOGGER.info("HA startup completed, starting VSS health check and auto-refresh...")
         
-        # Poczekaj chwilę na wstanie VSS (może startować dłużej niż HA)
-        await asyncio.sleep(5)
+        # Początkowe krótkie opóźnienie - VSS w HA startuje prawie natychmiast
+        await asyncio.sleep(2)
         
-        max_retries = 45  # 45 prób co 10 sekund = 7.5 minut (dla restartów HA trwających 5-7 minut)
-        retry_delay = 10
+        # Adaptacyjne opóźnienia: zaczynamy szybko, wydłużamy jeśli VSS nie odpowiada
+        # Dla VSS w HA: odświeżenie w 2-15 sekund
+        # Dla VSS w Proxmox: czekamy do 10 minut z backoff
+        retry_delays = [3, 3, 5, 5, 8, 8, 10, 10, 15, 15]  # Pierwsze 10 prób (~90s)
+        max_retries = 60  # Razem ~10 minut dla długich restartów Proxmox
         
         for attempt in range(1, max_retries + 1):
             try:
@@ -1601,18 +1506,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                     if coordinator.data:
                         uuids = list(coordinator.data.keys())
                         if uuids:
-                            # Zapisz aktualne URL-e przed restartem sesji
-                            uuid_urls = {}
-                            for uuid in uuids:
-                                try:
-                                    session_data = await api.async_get_session_data(uuid)
-                                    if session_data and "Backend" in session_data:
-                                        current_url = session_data["Backend"].get("Fields", {}).get("url", "")
-                                        if current_url:
-                                            uuid_urls[uuid] = current_url
-                                except Exception:
-                                    pass
-                            
                             # Restartuj sesje - to odświeży wszystkie tablety jednocześnie (1 mrugnięcie)
                             await api.async_restart_sessions_batch(uuids)
                             _LOGGER.info("Sessions restarted after HA restart - tablets should refresh once")
@@ -1620,12 +1513,15 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                             _LOGGER.info("Auto-refresh completed after HA restart!")
                             return  # Sukces - wyjdź z funkcji
                 else:
-                    _LOGGER.info(f"VSS not ready yet, waiting {retry_delay}s...")
+                    # Wybierz opóźnienie: z listy dla pierwszych 10 prób, potem 15s
+                    retry_delay = retry_delays[attempt-1] if attempt <= len(retry_delays) else 15
+                    _LOGGER.info(f"VSS not ready yet, waiting {retry_delay}s... (adaptive backoff)")
+                    await asyncio.sleep(retry_delay)
                     
             except Exception as e:
                 _LOGGER.debug(f"Health check error: {e}")
-                
-            await asyncio.sleep(retry_delay)
+                # Krótkie opóźnienie przy błędzie, potem retry
+                await asyncio.sleep(3)
         
         _LOGGER.warning("VSS health check max retries reached. Manual refresh may be needed.")
 
