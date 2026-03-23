@@ -14,7 +14,7 @@ import aiohttp
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, ServiceCall, ServiceResponse
 from homeassistant.const import CONF_HOST, CONF_USERNAME, CONF_PASSWORD, ATTR_DEVICE_ID, EVENT_HOMEASSISTANT_STARTED
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 import homeassistant.helpers.config_validation as cv
 from homeassistant.helpers import device_registry as dr
 from homeassistant.helpers.typing import ConfigType
@@ -527,7 +527,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             return data
         except Exception as e:
             _LOGGER.error(f"Error during data update: {e}")
-            return {}
+            raise UpdateFailed(f"Connection to VSS failed: {e}")
 
     coordinator = DataUpdateCoordinator(
         hass, _LOGGER, name=f"visionect_{entry.entry_id}",
@@ -546,17 +546,23 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     if coordinator.data:
         uuids = list(coordinator.data.keys())
         if uuids:
-            _LOGGER.info(f"Auto-restarting sessions for {len(uuids)} devices after startup")
-            try:
-                # Restartuj sesje - to odświeży wszystkie tablety jednocześnie (1 mrugnięcie)
-                await api.async_restart_sessions_batch(uuids)
-                _LOGGER.info(f"Sessions restarted for {len(uuids)} devices - tablets should refresh once")
-                
-                # Krótkie opóźnienie aby tablety mogły się połączyć z VSS
-                await asyncio.sleep(5)
-                
-            except Exception as e:
-                _LOGGER.warning(f"Auto-restart sessions failed: {e}")
+            async def _delayed_restart():
+                _LOGGER.info(f"Auto-restarting sessions scheduled for {len(uuids)} devices. Waiting a bit for VSS to fully initialize...")
+                # Start by waiting 15 seconds, then retry every 1 minute up to 8 minutes total
+                await asyncio.sleep(15)
+                for attempt in range(8):
+                    try:
+                        # Test if VSS is fully up and accepting requests
+                        if await api.async_test_authentication():
+                            await api.async_restart_sessions_batch(uuids)
+                            _LOGGER.info(f"Sessions restarted for {len(uuids)} devices after startup - tablets should refresh.")
+                            return
+                    except Exception as e:
+                        _LOGGER.debug(f"Delayed auto-restart attempt {attempt + 1} failed: {e}. Retrying later.")
+                    await asyncio.sleep(60)
+                _LOGGER.warning("Could not auto-restart tablet sessions: VSS did not become ready within 10 minutes.")
+
+            entry.async_create_background_task(hass, _delayed_restart(), "visionect_delayed_restart")
 
     store = Store(hass, 1, f"{DOMAIN}_{entry.entry_id}_prefs.json")
     prefs = await store.async_load() or {"back_targets": {}}
