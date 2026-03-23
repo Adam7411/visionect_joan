@@ -554,6 +554,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                     try:
                         # Test if VSS is fully up and accepting requests
                         if await api.async_test_authentication():
+                            _LOGGER.info("VSS API is online. Waiting 60 seconds for WebKit rendering engines to warm up before refreshing tablets...")
+                            await asyncio.sleep(60)
+                            # Wymuszenie odświeżenia przez ustawienie opcji (aby zgubić ewentualny stan błędu WebKit)
+                            for u in uuids:
+                                await api.async_set_session_options(u, encoding="4")
+                            await asyncio.sleep(2)
                             await api.async_restart_sessions_batch(uuids)
                             _LOGGER.info(f"Sessions restarted for {len(uuids)} devices after startup - tablets should refresh.")
                             return
