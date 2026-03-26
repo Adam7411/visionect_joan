@@ -414,7 +414,7 @@ async def _add_interactive_layer_to_url(
             decoded_html = re.sub(r"(<body\b[^>]*>)", r"\1" + buttons_html, decoded_html, count=1, flags=re.IGNORECASE)
         
         interactive_scripts = ""
-        js_needs_navigate = (has_back_button) or (click_anywhere and back_url) or (auto_return_seconds and back_url)
+        js_needs_navigate = (has_back_button) or (click_anywhere and back_url) or (auto_return_seconds and has_back_button and back_url)
         js_needs_webhook = (has_webhook_1 or has_webhook_2) or (click_anywhere_to_action and webhook_url_1) or (auto_return_seconds and click_anywhere_to_action and webhook_url_1)
 
         if js_needs_navigate:
@@ -451,7 +451,7 @@ async def _add_interactive_layer_to_url(
         if auto_return_seconds and auto_return_seconds > 0:
             if click_anywhere_to_action and webhook_url_1:
                 interactive_scripts += f"setTimeout(function(){{ try{{ triggerWebhook(null, '{webhook_url_1}'); }}catch(e){{}} }}, {int(auto_return_seconds)*1000});"
-            elif back_url:
+            elif has_back_button and back_url:
                 interactive_scripts += f"setTimeout(function(){{ try{{ navigate(null, '{back_url}'); }}catch(e){{}} }}, {int(auto_return_seconds)*1000});"
 
         if interactive_scripts:
@@ -1299,7 +1299,9 @@ async def create_crypto_panel_url(
     icon_px  = _s(56, screen_size)
     trend_px = _s(26, screen_size)
     info_px  = _s(16, screen_size)
-    spark_w  = _s(260, screen_size)
+    # Joan 6 benefits from a visibly wider sparkline area.
+    # Keep Joan 13 proportional scaling unchanged.
+    spark_w  = 360 if screen_size == "joan6" else _s(260, screen_size)
     spark_h  = _s(75, screen_size)
 
     style_css = f"""
@@ -1329,7 +1331,7 @@ body {{
     flex: 1 1 0;
     display: flex;
     align-items: center;
-    gap: {_s(12, screen_size)}px;
+    gap: {_s(10, screen_size) if screen_size == "joan6" else _s(12, screen_size)}px;
     border-bottom: 2px solid #ddd;
 }}
 .row:last-child {{ border-bottom: none; }}
