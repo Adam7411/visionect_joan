@@ -267,8 +267,8 @@ class VisionectAPI:
     async def async_get_all_devices(self) -> Optional[List[Dict]]:
         return await self._request("get", API_DEVICES)
 
-    async def _post_command(self, endpoint_template: str, uuid: str, command_name: str) -> bool:
-        response = await self._request("post", endpoint_template.format(uuid=uuid))
+    async def _post_command(self, endpoint_template: str, uuid: str, command_name: str, silent: bool = False) -> bool:
+        response = await self._request("post", endpoint_template.format(uuid=uuid), silent=silent)
         # 204 No Content returns True (success), None indicates failure
         if response is True or (response is not None and response != ""):
             _LOGGER.info(f"Command '{command_name}' for {uuid} executed successfully.")
@@ -290,14 +290,44 @@ class VisionectAPI:
     async def async_reboot_device(self, uuid: str) -> bool:
         return await self._post_command(API_REBOOT, uuid, "Reboot device")
 
-    async def async_restart_session(self, uuid: str) -> bool:
-        return await self._post_command(API_RESTART_SESSION, uuid, "Restart session")
+    async def async_restart_session(self, uuid: str, silent: bool = False) -> bool:
+        return await self._post_command(API_RESTART_SESSION, uuid, "Restart session", silent=silent)
         
     async def async_reboot_devices_batch(self, uuids: list[str]) -> bool:
         return await self._post_batch_command(API_REBOOT_BATCH, uuids, "Reboot devices")
 
     async def async_restart_sessions_batch(self, uuids: list[str]) -> bool:
-        return await self._post_batch_command(API_RESTART_SESSION_BATCH, uuids, "Restart sessions")
+        """Restart sessions in batch with graceful fallback for missing sessions."""
+        if not uuids:
+            return True
+
+        # VSS may return 500 "no session found" for batch endpoint.
+        # Try batch first silently; then fallback to per-session restart.
+        batch_resp = await self._request("post", API_RESTART_SESSION_BATCH, silent=True, json=uuids)
+        if batch_resp is True or (batch_resp is not None and batch_resp != ""):
+            _LOGGER.info(f"Batch command 'Restart sessions' for {len(uuids)} devices executed successfully.")
+            return True
+
+        _LOGGER.debug(
+            "Batch restart sessions failed (likely missing sessions). Falling back to per-device restart for %d devices.",
+            len(uuids),
+        )
+
+        succeeded = 0
+        failed: list[str] = []
+        for uuid in uuids:
+            if await self.async_restart_session(uuid, silent=True):
+                succeeded += 1
+            else:
+                failed.append(uuid)
+
+        if failed:
+            _LOGGER.debug("Could not restart session for %d device(s): %s", len(failed), failed)
+
+        if succeeded:
+            _LOGGER.info("Restarted sessions for %d/%d device(s) using fallback.", succeeded, len(uuids))
+            return True
+        return False
 
     async def async_check_health(self) -> bool:
         """Sprawdź czy VSS (Visionect Software Suite) odpowiada.
