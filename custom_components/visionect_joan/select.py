@@ -44,7 +44,7 @@ async def async_setup_entry(
         return
 
     entities = []
-    views = hass.data[DOMAIN].get('views', [])
+    views = data.get("views", [])
 
     for uuid in coordinator.data:
         entities.append(VisionectViewSelect(coordinator, uuid, views))
