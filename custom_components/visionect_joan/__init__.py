@@ -21,6 +21,7 @@ from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers.template import Template
 from homeassistant.util import dt as dt_util
 from homeassistant.components.camera import async_get_image
+from homeassistant.components.persistent_notification import async_create as async_create_persistent_notification
 from homeassistant.helpers.network import get_url
 from homeassistant.components.recorder import history, get_instance
 from homeassistant.helpers.event import async_track_time_interval
@@ -478,6 +479,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER.error("Authentication failed. Cannot load integration.")
         return False
 
+    guard_state = hass.data[DOMAIN].setdefault("guard_state", {
+        "low_battery_notified": set(),
+        "offline_notified": set(),
+        "last_seen": {}
+    })
+
     async def async_update_data():
         try:
             # Pobierz listę wszystkich urządzeń
@@ -513,16 +520,74 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 state_val = device_details.get("State", "").lower()
                 is_online = state_val == "online"
                 
+                now_utc = datetime.now(timezone.utc)
+                if is_online:
+                    guard_state["last_seen"][uuid_val] = now_utc
+                    if uuid_val in guard_state["offline_notified"]:
+                        guard_state["offline_notified"].discard(uuid_val)
+                elif uuid_val not in guard_state["last_seen"]:
+                    # Inicjalizacja czasu "od startu HA", jeśli tablet nie był online
+                    guard_state["last_seen"][uuid_val] = now_utc
+
+                device_name = device_details.get("Options", {}).get("Name") or f"Device {uuid_val}"
+
+                # Strażnik Baterii (< 10%)
+                try:
+                    battery = device_details.get("Status", {}).get("Battery")
+                    if battery is not None:
+                        batt_val = float(battery)
+                        if batt_val <= 10.0:
+                            if uuid_val not in guard_state["low_battery_notified"]:
+                                _LOGGER.info(f"Battery guard triggered for {device_name} (<=10%)")
+                                guard_state["low_battery_notified"].add(uuid_val)
+                                try:
+                                    async_create_persistent_notification(
+                                        hass,
+                                        f"Bateria w urządzeniu **{device_name}** spadła do {batt_val}%. Proszę podłącz je do ładowania.",
+                                        title="Niski stan baterii (Visionect)",
+                                        notification_id=f"visionect_battery_{uuid_val}",
+                                    )
+                                except Exception as notify_err:
+                                    _LOGGER.debug(
+                                        "Could not create low-battery persistent notification for %s: %s",
+                                        device_name,
+                                        notify_err,
+                                    )
+                        elif batt_val >= 20.0:
+                            if uuid_val in guard_state["low_battery_notified"]:
+                                guard_state["low_battery_notified"].discard(uuid_val)
+                except (ValueError, TypeError):
+                    pass
+
+                # Strażnik Połączenia (> 4h offline)
+                offline_duration = now_utc - guard_state["last_seen"][uuid_val]
+                if offline_duration > timedelta(hours=4):
+                    if uuid_val not in guard_state["offline_notified"]:
+                        _LOGGER.info(f"Connection guard triggered for {device_name} (>4h offline)")
+                        guard_state["offline_notified"].add(uuid_val)
+                        try:
+                            async_create_persistent_notification(
+                                hass,
+                                f"Tablet **{device_name}** nie połączył się od ponad 4 godzin. Sprawdź, czy nie rozładowała się bateria lub czy nie stracił zasięgu Wi-Fi.",
+                                title="Utrata połączenia (Visionect)",
+                                notification_id=f"visionect_offline_{uuid_val}",
+                            )
+                        except Exception as notify_err:
+                            _LOGGER.debug(
+                                "Could not create offline persistent notification for %s: %s",
+                                device_name,
+                                notify_err,
+                            )
+                
                 # VSS sam zarządza urządzeniami przez DeviceStatePolling - nie wysyłaj niepotrzebnych TCLV
                 # które mogą zakłócać pracę e-ink i zużywać baterię
                 
                 final_data = device_details
                 if "Config" not in final_data: final_data["Config"] = {}
-                device_name = device_details.get("Options", {}).get("Name")
                 if device_name and device_name.lower() not in UNKNOWN_STRINGS:
                     final_data["Config"]["Name"] = device_name
                 final_data["Options"] = device_details.get("Options", {})
-                final_data["LastUpdated"] = datetime.now(timezone.utc)
+                final_data["LastUpdated"] = now_utc
                 data[uuid_val] = final_data
             return data
         except Exception as e:
@@ -539,43 +604,76 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     
     await coordinator.async_config_entry_first_refresh()
 
-    # POPRAWKA: Automatyczne restartowanie sesji po starcie - naprawia biały ekran
-    # po restarcie HA. Tablet może mieć błąd "connection refused" jeśli restart
-    # nastąpił w momencie próby odświeżenia. Restart sesji wymusi ponowne
-    # połączenie z VSS.
-    if coordinator.data:
-        uuids = list(coordinator.data.keys())
-        if uuids:
-            async def _delayed_restart():
-                _LOGGER.info(f"Auto-restarting sessions scheduled for {len(uuids)} devices. Waiting a bit for VSS to fully initialize...")
-                # Start by waiting 15 seconds, then retry every 1 minute up to 8 minutes total
+    # WATCHDOG: Continuously monitors VSS health and forces a session restart when VSS comes back online.
+    # This acts as a robust recovery mechanism after HA hard restarts (which take 3-7 minutes) or Addon restarts.
+    async def _async_vss_watchdog():
+        """Watches VSS API and handles auto-restarts when VSS recovers."""
+        # Initialize as True so that the very first successful connection triggers a recovery restart.
+        vss_was_offline = True
+        
+        while True:
+            try:
+                # Sprawdzamy co 15 sekund
                 await asyncio.sleep(15)
-                for attempt in range(8):
-                    try:
-                        # Test if VSS is fully up and accepting requests
-                        if await api.async_test_authentication():
-                            _LOGGER.info("VSS API is online. Waiting 60 seconds for WebKit rendering engines to warm up before refreshing tablets...")
-                            await asyncio.sleep(60)
-                            # Wymuszenie odświeżenia przez ustawienie opcji (aby zgubić ewentualny stan błędu WebKit)
+                
+                is_healthy = await api.async_check_health()
+                
+                if is_healthy and vss_was_offline:
+                    _LOGGER.info("VSS Watchdog: VSS is online! Fetching devices for recovery restart...")
+                    vss_was_offline = False
+                    
+                    devices = await api.async_get_all_devices()
+                    if devices:
+                        uuids = []
+                        for device_entry in devices:
+                            if isinstance(device_entry, str):
+                                uuids.append(str(device_entry).strip().rstrip("/"))
+                            else:
+                                uuid_val = str(device_entry.get("Uuid", "")).strip().rstrip("/")
+                                state_val = str(device_entry.get("State", "")).strip().lower()
+                                # Restart session only for online devices.
+                                # Offline devices often have no active session and trigger noisy 500s.
+                                if uuid_val and state_val == "online":
+                                    uuids.append(uuid_val)
+                        
+                        if uuids:
+                            _LOGGER.info(f"VSS Watchdog: Found {len(uuids)} devices. Waiting 30s for VSS WebKit to warm up...")
+                            await asyncio.sleep(30)
+                            
                             for u in uuids:
                                 await api.async_set_session_options(u, encoding="4")
                             await asyncio.sleep(2)
                             await api.async_restart_sessions_batch(uuids)
-                            _LOGGER.info(f"Sessions restarted for {len(uuids)} devices after startup - tablets should refresh.")
-                            return
-                    except Exception as e:
-                        _LOGGER.debug(f"Delayed auto-restart attempt {attempt + 1} failed: {e}. Retrying later.")
-                    await asyncio.sleep(60)
-                _LOGGER.warning("Could not auto-restart tablet sessions: VSS did not become ready within 10 minutes.")
+                            _LOGGER.info(f"VSS Watchdog: Sessions restarted for {len(uuids)} devices after VSS recovery.")
+                            
+                            # Force a coordinator refresh to ensure Home Assistant gets the latest data immediately
+                            await coordinator.async_request_refresh()
+                
+                elif not is_healthy:
+                    if not vss_was_offline:
+                        _LOGGER.warning("VSS Watchdog: VSS went offline. Waiting for recovery...")
+                    vss_was_offline = True
+                    
+            except asyncio.CancelledError:
+                break
+            except Exception as e:
+                if not vss_was_offline:
+                    _LOGGER.warning(f"VSS Watchdog connection error: {e}")
+                vss_was_offline = True
 
-            entry.async_create_background_task(hass, _delayed_restart(), "visionect_delayed_restart")
+    entry.async_create_background_task(hass, _async_vss_watchdog(), "visionect_vss_watchdog")
 
     store = Store(hass, 1, f"{DOMAIN}_{entry.entry_id}_prefs.json")
     prefs = await store.async_load() or {"back_targets": {}}
 
     hass.data[DOMAIN][entry.entry_id] = {
-        "api": api, "coordinator": coordinator,
-        "prefs_store": store, "prefs": prefs
+        "api": api,
+        "coordinator": coordinator,
+        "prefs_store": store,
+        "prefs": prefs,
+        "views": views,
+        "main_menu_url": main_menu,
+        "tablet_language": entry.options.get(CONF_TABLET_LANGUAGE, "auto"),
     }
 
     device_reg = dr.async_get(hass)
@@ -584,7 +682,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         if not predefined_name: return None
         candidate = str(predefined_name).strip()
         if candidate.startswith(("http", "data:")): return candidate
-        for view in hass.data[DOMAIN].get("views", []) or []:
+        for view in views or []:
             if str(view.get("name", "")).strip().lower() == candidate.lower():
                 return view.get("url")
         return None
@@ -611,7 +709,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         prefs_local = _get_prefs()
         stored_url = prefs_local.get("back_targets", {}).get(device_uuid)
         if stored_url: return stored_url
-        return hass.data[DOMAIN].get("main_menu_url")
+        return main_menu
 
     def _effective_add_back_button(call: ServiceCall, back_url: str | None) -> bool:
         cd = call.data
@@ -1485,61 +1583,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     _LOGGER.info("Visionect Joan config entry successfully initialized.")
 
-    # POPRAWKA: Nasłuchuj na zakończenie startup HA - wykonaj auto-refresh gdy VSS będzie gotowy
-    # To naprawia problem białego ekranu gdy VSS jest zainstalowany na tym samym HA lub Proxmox
-    async def _async_on_hass_started(event):
-        """Handle HA started event - retry refresh until VSS is available.
-        
-        Adaptacyjny mechanizm działający optymalnie dla:
-        - VSS w HA: szybkie odświeżenie (2-15s)
-        - VSS w Proxmox: dłuższe oczekiwanie z backoff
-        """
-        _LOGGER.info("HA startup completed, starting VSS health check and auto-refresh...")
-        
-        # Początkowe krótkie opóźnienie - VSS w HA startuje prawie natychmiast
-        await asyncio.sleep(2)
-        
-        # Adaptacyjne opóźnienia: zaczynamy szybko, wydłużamy jeśli VSS nie odpowiada
-        # Dla VSS w HA: odświeżenie w 2-15 sekund
-        # Dla VSS w Proxmox: czekamy do 10 minut z backoff
-        retry_delays = [3, 3, 5, 5, 8, 8, 10, 10, 15, 15]  # Pierwsze 10 prób (~90s)
-        max_retries = 60  # Razem ~10 minut dla długich restartów Proxmox
-        
-        for attempt in range(1, max_retries + 1):
-            try:
-                # Sprawdź czy VSS odpowiada
-                _LOGGER.info(f"VSS health check attempt {attempt}/{max_retries}...")
-                is_healthy = await api.async_check_health()
-                
-                if is_healthy:
-                    _LOGGER.info("VSS is healthy! Performing auto-refresh of all devices...")
-                    
-                    # Pobierz aktualne UUID-e
-                    if coordinator.data:
-                        uuids = list(coordinator.data.keys())
-                        if uuids:
-                            # Restartuj sesje - to odświeży wszystkie tablety jednocześnie (1 mrugnięcie)
-                            await api.async_restart_sessions_batch(uuids)
-                            _LOGGER.info("Sessions restarted after HA restart - tablets should refresh once")
-                            
-                            _LOGGER.info("Auto-refresh completed after HA restart!")
-                            return  # Sukces - wyjdź z funkcji
-                else:
-                    # Wybierz opóźnienie: z listy dla pierwszych 10 prób, potem 15s
-                    retry_delay = retry_delays[attempt-1] if attempt <= len(retry_delays) else 15
-                    _LOGGER.info(f"VSS not ready yet, waiting {retry_delay}s... (adaptive backoff)")
-                    await asyncio.sleep(retry_delay)
-                    
-            except Exception as e:
-                _LOGGER.debug(f"Health check error: {e}")
-                # Krótkie opóźnienie przy błędzie, potem retry
-                await asyncio.sleep(3)
-        
-        _LOGGER.warning("VSS health check max retries reached. Manual refresh may be needed.")
 
-    # Zarejestruj listener na event startup HA
-    hass.bus.async_listen_once(EVENT_HOMEASSISTANT_STARTED, _async_on_hass_started)
-    _LOGGER.info("Registered VSS auto-refresh handler for HA startup")
 
     return True
 
@@ -1552,7 +1596,7 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         SERVICE_SEND_CAMERA_SNAPSHOT, SERVICE_SEND_STATUS_PANEL, SERVICE_SEND_SENSOR_GRAPH,
         SERVICE_SEND_RSS_FEED, SERVICE_CLEAR_WEB_CACHE, SERVICE_START_SLIDESHOW, SERVICE_SEND_IMAGE_URL,
         SERVICE_SET_SESSION_OPTIONS, SERVICE_SEND_KEYPAD, SERVICE_SEND_BUTTON_PANEL,
-        SERVICE_SEND_CRYPTO, SERVICE_SEND_EXCHANGE_RATES,
+        SERVICE_SEND_CRYPTO,
     ]
     for service in services_to_remove:
         hass.services.async_remove(DOMAIN, service)
