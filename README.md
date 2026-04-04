@@ -10,11 +10,7 @@
 
 <!-- Badges -->
 <p align="center">
-
-  <a href="https://github.com/Adam7411/visionect_joan/releases"><img alt="Release" src="https://img.shields.io/github/v/release/Adam7411/visionect_joan?style=for-the-badge">
-  <img width="1366" height="768" alt="logo" src="https://github.com/user-attachments/assets/cd10ceb1-b2cc-434b-ab0e-3a532ff4abf6" />
-
-  </a>
+  <a href="https://github.com/Adam7411/visionect_joan/releases"><img alt="Wydanie" src="https://img.shields.io/github/v/release/Adam7411/visionect_joan?style=for-the-badge"></a>
   <a href="https://github.com/Adam7411/visionect_joan"><img alt="License" src="https://img.shields.io/github/license/Adam7411/visionect_joan?style=for-the-badge"></a>
   <a href="https://hacs.xyz/"><img alt="HACS" src="https://img.shields.io/badge/HACS-Custom-orange?style=for-the-badge"></a>
   <a href="https://github.com/Adam7411/visionect_joan/stargazers"><img alt="Stars" src="https://img.shields.io/github/stars/Adam7411/visionect_joan?style=for-the-badge"></a>
