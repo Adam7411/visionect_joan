@@ -10,6 +10,8 @@
 
 <!-- Badges -->
 <p align="center">
+  <img width="1366" height="768" alt="logo" src="https://github.com/user-attachments/assets/be5b476b-1e01-4d4d-8278-88b5fd4243fd" />
+
   <a href="https://github.com/Adam7411/visionect_joan/releases"><img alt="Release" src="https://img.shields.io/github/v/release/Adam7411/visionect_joan?style=for-the-badge"></a>
   <a href="https://github.com/Adam7411/visionect_joan"><img alt="License" src="https://img.shields.io/github/license/Adam7411/visionect_joan?style=for-the-badge"></a>
   <a href="https://hacs.xyz/"><img alt="HACS" src="https://img.shields.io/badge/HACS-Custom-orange?style=for-the-badge"></a>
