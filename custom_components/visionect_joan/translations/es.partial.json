@@ -1,0 +1,220 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Servidor Visionect Joan",
+        "description": "Datos de conexión del servidor Visionect. Usuario/contraseña o clave API/secreto.",
+        "data": {
+          "host": "Dirección del servidor (IP:8081)",
+          "username": "Usuario",
+          "password": "Contraseña",
+          "api_key": "Clave API",
+          "api_secret": "Secreto API"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Error de autenticación. Revise las credenciales.",
+      "unknown": "Ha ocurrido un error desconocido."
+    },
+    "abort": {
+      "already_configured": "Este servidor Visionect ya está configurado."
+    }
+  },
+  "options": {
+    "step": {
+      "menu": {
+        "title": "Configuración Visionect Joan",
+        "description": "Elija una sección — cada una tiene su propia página.",
+        "menu_options": {
+          "views_menu": "Gestionar vistas",
+          "cache_cleanup": "Caché y disco",
+          "tablet_language": "Idioma de la tableta",
+          "battery_alerts": "Notificaciones de batería",
+          "ollama": "Análisis de registros Ollama"
+        }
+      },
+      "views_menu": {
+        "title": "Gestión de vistas",
+        "description": "Defina nombres para URLs frecuentes (paneles). En servicios elija p. ej. Salón en lugar de una URL larga.",
+        "menu_options": {
+          "add_view": "Añadir vista",
+          "delete_view": "Eliminar vista",
+          "edit_view": "Editar vista"
+        }
+      },
+      "cache_cleanup": {
+        "title": "Caché y disco",
+        "description": "La integración guarda imágenes y HTML temporales. Ajuste antigüedad y frecuencia de limpieza.",
+        "data": {
+          "cleanup_max_age_hours": "Antigüedad máx. (horas) — se borran archivos más viejos",
+          "cleanup_interval_hours": "Frecuencia de limpieza (horas)"
+        }
+      },
+      "tablet_language": {
+        "title": "Idioma de la tableta",
+        "description": "Idioma de las páginas en la tablet Joan y de las notificaciones persistentes de Home Assistant (batería, pérdida de conexión, Safe Config, diagnóstico). Auto = idioma de la interfaz de Home Assistant.",
+        "data": { "tablet_language": "Idioma de la tableta" },
+        "data_description": {
+          "tablet_language": "Tras cambiar, ejecute visionect_joan.clear_web_cache con restart_session si sigue texto antiguo."
+        }
+      },
+      "battery_alerts": {
+        "title": "Notificaciones de batería",
+        "description": "Umbral bajo (5 / 10 / 15 %) e interruptores: tableta, HA batería baja, HA batería llena.",
+        "data": {
+          "battery_low_threshold_pct": "Umbral batería baja (%)",
+          "battery_tablet_alert_enabled": "Alerta en tableta",
+          "battery_ha_low_notification_enabled": "Notificación HA batería baja",
+          "battery_ha_full_notification_enabled": "Notificación HA batería llena (carga)"
+        },
+        "data_description": {
+          "battery_low_threshold_pct": "Alerta en este nivel o inferior (según opciones abajo).",
+          "battery_tablet_alert_enabled": "Activado: pantalla de batería baja hasta recuperación o carga. Desactivado: sin pantalla en tableta.",
+          "battery_ha_low_notification_enabled": "Activado: notificación persistente en HA. Desactivado: ninguna.",
+          "battery_ha_full_notification_enabled": "Activado: notificación al llenarse en carga. Desactivado: ninguna."
+        }
+      },
+      "ollama": {
+        "title": "Análisis de registros Ollama",
+        "description": "Opcional: enviar contexto Visionect a Ollama periódicamente. El idioma del análisis coincide con «Idioma de la tableta» (Auto = idioma de la interfaz de HA).",
+        "data": {
+          "ollama_enabled": "Activar análisis Ollama",
+          "ollama_url": "URL API Ollama (p. ej. http://192.168.1.10:11434)",
+          "ollama_api_key": "Clave API Ollama o proxy (opcional)",
+          "ollama_model": "Nombre del modelo (p. ej. llama3.1:8b)",
+          "ollama_interval_min": "Intervalo análisis (minutos) — mín. 2; puede requerir recargar la integración"
+        }
+      },
+      "add_view": {
+        "title": "Añadir vista",
+        "data": {
+          "view_name": "Nombre (p. ej. Panel salón)",
+          "view_url": "URL (http://...)"
+        }
+      },
+      "delete_view": {
+        "title": "Eliminar vista",
+        "data": { "view_to_delete": "Vista a eliminar" }
+      },
+      "edit_view": {
+        "title": "Elegir vista a editar",
+        "data": { "view_to_edit": "Vista de la lista" }
+      },
+      "edit_view_form": {
+        "title": "Editar vista",
+        "data": { "new_view_name": "Nuevo nombre", "new_view_url": "Nueva URL" }
+      }
+    },
+    "error": {
+      "invalid_format": "Error de formato al guardar.",
+      "name_exists": "Ya existe una vista con ese nombre.",
+      "invalid_data": "Nombre y URL son obligatorios."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "state": {
+        "name": "Estado",
+        "state": {
+          "online": "En línea",
+          "offline": "Fuera de línea",
+          "sleeping": "Durmiendo"
+        }
+      },
+      "battery": { "name": "Batería" },
+      "temperature": { "name": "Temperatura" },
+      "rssi": { "name": "Intensidad Wi-Fi" },
+      "uptime": { "name": "Tiempo sin reiniciar" },
+      "storage_free": { "name": "Almacenamiento libre" },
+      "battery_voltage": { "name": "Voltaje de batería" },
+      "uuid": { "name": "UUID del dispositivo" },
+      "display_rotation": { "name": "Orientación de pantalla" },
+      "application_version": { "name": "Versión de software" },
+      "storage_total": { "name": "Almacenamiento total" },
+      "storage_used": { "name": "Almacenamiento usado" },
+      "last_seen": { "name": "Visto por última vez" },
+      "configured_url": { "name": "URL mostrada" },
+      "connect_reason": { "name": "Motivo de conexión" },
+      "error_code": { "name": "Último código de error" }
+    },
+    "binary_sensor": {
+      "online": { "name": "En línea" },
+      "health_status": { "name": "Estado del dispositivo" },
+      "is_charging": { "name": "Cargando" }
+    },
+    "number": {
+      "reload_interval": { "name": "Actualizar sesión (servidor)" },
+      "polling_time": { "name": "Intervalo de sondeo" },
+      "sleep_schedule": {
+        "name": "Programación de sueño cíclico (minutos)",
+        "description": "0 = modo Push (fábrica): duerme, despierta al instante con contenido nuevo (Push activado). 1–1440 = despertar cada X min + Push. REQUIERE Sleep Manager en VSS."
+      }
+    },
+    "text": {
+      "device_name": { "name": "Nombre en Visionect" }
+    },
+    "button": {
+      "check_orphans": { "name": "Comprobar estado (huérfanos)" },
+      "force_refresh": { "name": "Forzar actualización" },
+      "reboot_device": { "name": "Reiniciar dispositivo" },
+      "clear_web_cache": { "name": "Borrar caché web" },
+      "ollama_analyze_logs": { "name": "Análisis de registros" }
+    },
+    "camera": {
+      "live_view": { "name": "Vista en vivo" }
+    },
+    "select": {
+      "view_select": {
+        "name": "Cambiar vista a…",
+        "state": {
+          "unconfigured_state": "Sin configurar",
+          "[Configuration]": "Ir a configuración…"
+        }
+      },
+      "dithering_select": { "name": "Método de tramado" },
+      "encoding_select": {
+        "name": "Profundidad de color",
+        "state": {
+          "1": "1 bit (blanco y negro — rápido)",
+          "4": "4 bits (16 grises)"
+        }
+      },
+      "rotation_select": {
+        "name": "Orientación",
+        "state": {
+          "Portrait": "Vertical (predeterminado)",
+          "Landscape, 90\u00b0": "Horizontal 90\u00b0",
+          "Portrait, 180\u00b0": "Vertical 180\u00b0",
+          "Landscape, 270\u00b0": "Horizontal 270\u00b0"
+        }
+      },
+      "back_view_select": {
+        "name": "Destino del botón Atrás",
+        "state": { "[Configuration]": "Ir a configuración…" }
+      },
+      "screen_size_select": {
+        "name": "Tamaño de pantalla (contenido generado)",
+        "state": {
+          "auto": "Automático (dispositivo)",
+          "joan6": "Joan 6\"",
+          "joan13": "Joan 13\""
+        },
+        "state_attributes": {
+          "effective_screen_size": { "name": "Diseño activo" }
+        }
+      },
+      "periodic_sleep_select": {
+        "name": "Modo sueño",
+        "state": { "Periodic": "Periódico", "Disabled": "Desactivado" }
+      },
+      "push_mode_select": {
+        "name": "Modo push",
+        "state": { "Enabled": "Activado", "Disabled": "Desactivado" }
+      },
+      "sleep_schedule_select": {
+        "name": "Sueño cíclico (minutos)"
+      }
+    }
+  }
+}
