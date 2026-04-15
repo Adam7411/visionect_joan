@@ -1,0 +1,1185 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Serwer Visionect Joan",
+        "description": "Wprowadź dane połączenia dla swojego serwera Visionect. Możesz użyć nazwy użytkownika/hasła lub klucza API/sekretu.",
+        "data": {
+          "host": "Adres serwera (IP:8081)",
+          "username": "Nazwa użytkownika",
+          "password": "Hasło",
+          "api_key": "Klucz API",
+          "api_secret": "Sekret API"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Uwierzytelnianie nie powiodło się. Sprawdź swoje dane.",
+      "unknown": "Wystąpił nieznany błąd."
+    },
+    "abort": {
+      "already_configured": "Ten serwer Visionect jest już skonfigurowany."
+    }
+  },
+  "options": {
+    "step": {
+      "menu": {
+        "title": "Konfiguracja Visionect Joan",
+        "description": "Wybierz jedną sekcję — każda ma osobną stronę ustawień (nic się nie miesza).",
+        "menu_options": {
+          "views_menu": "Zarządzaj widokami",
+          "recovery_page": "Domyślny adres URL",
+          "cache_cleanup": "Czyszczenie cache i dysku",
+          "tablet_language": "Język tabletu",
+          "battery_alerts": "Powiadomienia o baterii",
+          "ollama": "Analiza logów Ollama"
+        }
+      },
+      "recovery_page": {
+        "title": "Domyślny adres URL",
+        "description": "1. Kliknij **Zatwierdź**, aby wygenerować **twój domyślny adres URL**, następnie wróć na tę stronę. Zostaw pole tokena puste i zapisz formularz — zostanie wygenerowany losowy sekret. Jeśli token wycieknie, ustaw nowy tutaj i zaktualizuj adres w VSS.\n\n2. **Wejdź w ustawienia VSS** (**Settings**: **{vss_settings_url}**) → **HTML Backend** — wklej w pole **Default URL** poniższy **wygenerowany** adres i **zapisz ustawienia**. Integracja **nie może** sama zapisać ustawień globalnych VSS, **dlatego wykonujemy ten krok**.\n\n**Twój domyślny adres URL:**\n{recovery_url}",
+        "data": {
+          "recovery_page_token": "Token dostępu (tajny)"
+        }
+      },
+      "views_menu": {
+        "title": "Zarządzanie widokami",
+        "description": "Tutaj możesz zdefiniować nazwy dla swoich ulubionych adresów URL (np. dashboardów). Dzięki temu w usługach będziesz mógł wybierać 'Salon' zamiast wpisywać długi adres http.",
+        "menu_options": {
+          "add_view": "Dodaj nowy widok",
+          "delete_view": "Usuń istniejący widok",
+          "edit_view": "Edytuj istniejący widok"
+        }
+      },
+      "cache_cleanup": {
+        "title": "Czyszczenie cache i dysku",
+        "description": "Integracja zapisuje tymczasowe obrazy i HTML. Te ustawienia dotyczą tylko wieku plików i częstotliwości czyszczenia.",
+        "data": {
+          "cleanup_max_age_hours": "Maksymalny wiek plików (godziny) — starsze są usuwane",
+          "cleanup_interval_hours": "Jak często uruchamiać czyszczenie (godziny)"
+        }
+      },
+      "tablet_language": {
+        "title": "Język tabletu",
+        "description": "Język stron na tabletach Joan oraz treści trwałych powiadomień w Home Assistant (bateria, utrata połączenia, Safe Config, diagnostyka). Auto = język interfejsu użytkownika Home Assistant.",
+        "data": {
+          "tablet_language": "Język tabletu"
+        },
+        "data_description": {
+          "tablet_language": "Po zmianie uruchom usługę visionect_joan.clear_web_cache z restart_session, jeśli tablet nadal pokazuje stary tekst."
+        }
+      },
+      "battery_alerts": {
+        "title": "Powiadomienia o baterii",
+        "description": "Próg niskiej baterii (5 / 10 / 15 %) oraz osobne przełączniki: tablet, powiadomienia HA o niskim stanie i o pełnym naładowaniu.",
+        "data": {
+          "battery_low_threshold_pct": "Próg niskiej baterii (%)",
+          "battery_tablet_alert_enabled": "Alert dotyczący baterii tabletu",
+          "battery_ha_low_notification_enabled": "Powiadomienie w HA o niskim poziomie baterii",
+          "battery_ha_full_notification_enabled": "Powiadomienie w HA o naładowaniu baterii"
+        },
+        "data_description": {
+          "battery_low_threshold_pct": "Alert, gdy bateria jest na tym poziomie lub niżej (tylko dla włączonych opcji poniżej).",
+          "battery_tablet_alert_enabled": "Włączone: tablet pokazuje ekran niskiej baterii, aż poziom wróci lub trwa ładowanie. Wyłączone: brak tego komunikatu na tablecie.",
+          "battery_ha_low_notification_enabled": "Włączone: trwałe powiadomienie w Home Assistant przy niskiej baterii. Wyłączone: brak powiadomienia HA o niskim stanie.",
+          "battery_ha_full_notification_enabled": "Włączone: powiadomienie przy pełnym naładowaniu podczas ładowania. Wyłączone: brak powiadomienia o pełnym naładowaniu."
+        }
+      },
+      "ollama": {
+        "title": "Analiza logów Ollama",
+        "description": "Opcjonalnie: okresowe wysyłanie kontekstu Visionect do Ollama. Język treści analizy jest taki sam jak „Język tabletu” (przy Auto — język interfejsu HA).",
+        "data": {
+          "ollama_enabled": "Włącz analizę logów przez Ollama",
+          "ollama_url": "Adres API Ollama (np. http://192.168.1.10:11434)",
+          "ollama_api_key": "Klucz API Ollama / reverse proxy (opcjonalnie)",
+          "ollama_model": "Nazwa modelu (np. llama3.1:8b)",
+          "ollama_interval_min": "Interwał analizy (minuty) — min. 2; po zmianie może być potrzebne przeładowanie integracji"
+        }
+      },
+      "add_view": {
+        "title": "Dodaj widok",
+        "data": {
+          "view_name": "Nazwa widoku (np. Dashboard Salon)",
+          "view_url": "Adres URL widoku (http://...)"
+        }
+      },
+      "delete_view": {
+        "title": "Usuń widok",
+        "data": {
+          "view_to_delete": "Wybierz widok do usunięcia"
+        }
+      },
+      "edit_view": {
+        "title": "Wybierz widok do edycji",
+        "data": {
+          "view_to_edit": "Wybierz widok z listy"
+        }
+      },
+      "edit_view_form": {
+        "title": "Edytuj widok",
+        "data": {
+          "new_view_name": "Nowa nazwa widoku",
+          "new_view_url": "Nowy adres URL"
+        }
+      }
+    },
+    "error": {
+      "invalid_format": "Błąd formatu zapisu.",
+      "name_exists": "Widok o tej nazwie już istnieje.",
+      "invalid_data": "Musisz podać zarówno nazwę, jak i adres URL."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "state": {
+        "name": "Stan",
+        "state": {
+          "online": "Online",
+          "offline": "Offline",
+          "sleeping": "Śpi"
+        }
+      },
+      "battery": {
+        "name": "Bateria"
+      },
+      "temperature": {
+        "name": "Temperatura"
+      },
+      "rssi": {
+        "name": "Siła sygnału Wi-Fi"
+      },
+      "uptime": {
+        "name": "Czas pracy bez restartu"
+      },
+      "storage_free": {
+        "name": "Wolna pamięć"
+      },
+      "battery_voltage": {
+        "name": "Napięcie baterii"
+      },
+      "uuid": {
+        "name": "UUID Urządzenia"
+      },
+      "display_rotation": {
+        "name": "Obecna orientacja ekranu"
+      },
+      "application_version": {
+        "name": "Wersja oprogramowania"
+      },
+      "storage_total": {
+        "name": "Całkowita pamięć"
+      },
+      "storage_used": {
+        "name": "Użyta pamięć"
+      },
+      "last_seen": {
+        "name": "Ostatnio widziany"
+      },
+      "configured_url": {
+        "name": "Aktualnie wyświetlany URL"
+      },
+      "connect_reason": {
+        "name": "Przyczyna połączenia"
+      },
+      "error_code": {
+        "name": "Ostatni kod błędu"
+      }
+    },
+    "binary_sensor": {
+      "online": {
+        "name": "Online"
+      },
+      "health_status": {
+        "name": "Stan zdrowia urządzenia"
+      },
+      "is_charging": {
+        "name": "Ładowanie w toku"
+      }
+    },
+    "number": {
+      "reload_interval": {
+        "name": "Odświeżanie sesji (Serwer)"
+      },
+      "polling_time": {
+        "name": "Czas odpytywania"
+      },
+      "sleep_schedule": {
+        "name": "Cykliczny harmonogram uśpienia (minuty)",
+        "description": "0 = Tryb Push (domyślny fabryczny): tablet śpi, budzi się natychmiast gdy AppDaemon wyśle nowy obraz (wymaga Push=Włączony). 1-1440 = Cykliczne wybudzanie co X minut + Push. WYMAGANE: Sleep Manager w VSS."
+      }
+    },
+    "text": {
+      "device_name": {
+        "name": "Nazwa urządzenia w systemie Visionect"
+      }
+    },
+    "button": {
+      "check_orphans": {
+        "name": "Sprawdź stan zdrowia (Orphans)"
+      },
+      "force_refresh": {
+        "name": "Wymuś odświeżenie ekranu"
+      },
+      "reboot_device": {
+        "name": "Uruchom ponownie urządzenie"
+      },
+      "clear_web_cache": {
+        "name": "Wyczyść pamięć podręczną przeglądarki"
+      },
+      "ollama_analyze_logs": {
+        "name": "Analiza logów"
+      }
+    },
+    "camera": {
+      "live_view": {
+        "name": "Podgląd ekranu na żywo"
+      }
+    },
+    "select": {
+      "view_select": {
+        "name": "Zmień widok na...",
+        "state": {
+          "unconfigured_state": "Nie skonfigurowane",
+          "[Configuration]": "Idź do Konfiguracji..."
+        }
+      },
+      "dithering_select": {
+        "name": "Metoda ditheringu (jakość obrazu)"
+      },
+      "encoding_select": {
+        "name": "Głębia bitowa (kolory)",
+        "state": {
+          "1": "1-bit (Tylko czerń i biel - Szybkie)",
+          "4": "4-bit (16 odcieni szarości - Ładne)"
+        }
+      },
+      "rotation_select": {
+        "name": "Orientacja ekranu",
+        "state": {
+          "Portrait": "Pionowy (domyślny)",
+          "Landscape, 90°": "Poziomy 90°",
+          "Portrait, 180°": "Pionowy 180°",
+          "Landscape, 270°": "Poziomy 270°"
+        }
+      },
+      "back_view_select": {
+        "name": "Domyślny cel przycisku Wstecz",
+        "state": {
+          "[Configuration]": "Idź do Konfiguracji..."
+        }
+      },
+      "screen_size_select": {
+        "name": "Rozmiar ekranu (treści generowane)",
+        "state": {
+          "auto": "Automatyczny (wykryj z urządzenia)",
+          "joan6": "Joan 6\"",
+          "joan13": "Joan 13\""
+        },
+        "state_attributes": {
+          "effective_screen_size": {
+            "name": "Używany układ (skala)"
+          }
+        }
+      },
+      "periodic_sleep_select": {
+        "name": "Tryb uśpienia",
+        "state": {
+          "Periodic": "Cykliczny",
+          "Disabled": "Wyłączony"
+        }
+      },
+      "push_mode_select": {
+        "name": "Tryb Push",
+        "state": {
+          "Enabled": "Włączony",
+          "Disabled": "Wyłączony"
+        }
+      },
+      "sleep_schedule_select": {
+        "name": "Cykliczny harmonogram uśpienia (minuty)"
+      }
+    }
+  },
+  "services": {
+    "set_url": {
+      "name": "Ustaw niestandardowy URL",
+      "description": "Trwale zmienia stronę internetową lub obraz wyświetlany na ekranie urządzenia. Ustawiony adres staje się nowym 'Głównym' widokiem, do którego urządzenie będzie wracać.",
+      "fields": {
+        "url": {
+          "name": "Adres URL",
+          "description": "Wklej pełny adres strony (rozpoczynający się od http:// lub https://), którą chcesz wyświetlić. Może to być dashboard Home Assistant lub dowolna inna strona."
+        },
+        "predefined_url": {
+          "name": "Wybierz zdefiniowany widok",
+          "description": "Wybierz jeden z widoków, które wcześniej skonfigurowałeś w Opcjach integracji. Pozwala to na szybkie przełączanie między ulubionymi ekranami."
+        }
+      }
+    },
+    "send_text": {
+      "name": "Wyślij wiadomość tekstową",
+      "description": "Wysyła na ekran urządzenia sformatowany tekst wraz z opcjonalnym obrazkiem. Jest to widok tymczasowy, idealny do powiadomień. Obsługuje szablony Jinja2.",
+      "fields": {
+        "message": {
+          "name": "Treść wiadomości",
+          "description": "Tekst do wyświetlenia. Możesz używać szablonów Jinja2, aby dynamicznie wstawiać dane z Home Assistant, np. stan sensora temperatury."
+        },
+        "layout": {
+          "name": "Układ treści",
+          "description": "Wybierz, w jaki sposób obrazek ma być rozmieszczony względem tekstu (np. obrazek nad tekstem, obok tekstu itp.)."
+        },
+        "image_url": {
+          "name": "Adres URL obrazka (Opcjonalnie)",
+          "description": "Link do ikony lub zdjęcia, które ma pojawić się obok tekstu. Dla plików lokalnych w HA użyj formatu: http://ADRES_HA:8123/local/ikona.png (plik wgrywamy do katalogu //IP_HA/config/www/)."
+        },
+        "image_zoom": {
+          "name": "Powiększenie obrazka (%)",
+          "description": "100% to rozmiar oryginalny, wartości mniejsze pomniejszają, a większe powiększają grafikę."
+        },
+        "text_color": {
+          "name": "Kolor tekstu",
+          "description": "Ekran e-ink obsługuje zazwyczaj tylko Czerń i Biel."
+        },
+        "background_color": {
+          "name": "Kolor tła",
+          "description": "Wybierz kolor tła ekranu dla tej wiadomości. Zazwyczaj Biały."
+        },
+        "text_size": {
+          "name": "Rozmiar czcionki (px)",
+          "description": "Określ wielkość liter w pikselach. Im wyższa wartość, tym większy i wyraźniejszy tekst."
+        },
+        "text_align": {
+          "name": "Wyrównanie tekstu",
+          "description": "Ustaw wyrównanie tekstu: do lewej, wyśrodkowane lub do prawej strony ekranu."
+        },
+        "font_family": {
+          "name": "Krój czcionki",
+          "description": "Wybierz styl czcionki specjalnie zoptymalizowany pod kątem czytelności na ekranach e-papierowych."
+        },
+        "font_weight": {
+          "name": "Grubość czcionki",
+          "description": "Normalna lub Pogrubiona."
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6). Dostosuje to marginesy i rozmiary, aby treść lepiej wypełniała ekran."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka). Funkcja działa najlepiej z Visionect Server v3 (Add-on) i automatycznie wykrywa adres wewnętrzny."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan). Aby zarządzać widokami dostępnymi w listach Wybierz widok oraz Cel przycisku Wstecz: Przejdź do: Ustawienia, Urządzenia i usługi, Visionect Joan, Konfiguruj. Wybierz menu Widoki (Views)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Urządzenie powróci do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "set_display_rotation": {
+      "name": "Ustaw orientację ekranu",
+      "description": "Zmienia fizyczną orientację wyświetlania (Pionowo/Poziomo). Uwaga: Po zmianie urządzenie wykona restart, co może potrwać chwilę.",
+      "fields": {
+        "display_rotation": {
+          "name": "Kąt obrotu",
+          "description": "Wybierz pożądany kąt obrotu ekranu (0, 90, 180 lub 270 stopni)."
+        }
+      }
+    },
+    "force_refresh": {
+      "name": "Wymuś odświeżenie ekranu",
+      "description": "Wysyła komendę do urządzenia, aby natychmiast się wybudziło (jeśli to możliwe) i pobrało najnowszy obraz z serwera. Przydatne, gdy obraz jest nieaktualny."
+    },
+    "clear_display": {
+      "name": "Wyczyść ekran (Flash)",
+      "description": "Wymusza pełne odświeżenie ekranu poprzez mignięcie na biało/czarno. Służy do usuwania tzw. duchów (powidoków), które mogą pojawiać się na ekranach e-ink po długim czasie."
+    },
+    "sleep_device": {
+      "name": "Uśpij urządzenie",
+      "description": "Wymusza rozłączenie urządzenia z Wi-Fi i przejście w stan głębokiego uśpienia w celu oszczędzania energii.",
+      "fields": {
+        "duration": {
+          "name": "Czas uśpienia (sekundy)",
+          "description": "Określ, na jak długo urządzenie ma zasnąć. Po tym czasie wybudzi się ponownie, aby sprawdzić nowe zadania."
+        }
+      }
+    },
+    "wake_device": {
+      "name": "Wybudź urządzenie",
+      "description": "Próbuje natychmiast wybudzić urządzenie. Działa to niezawodnie tylko wtedy, gdy urządzenie jest podłączone do zasilania lub skonfigurowane w trybie częstego nasłuchiwania."
+    },
+    "send_qr_code": {
+      "name": "Wyślij kod QR",
+      "description": "Generuje kod QR z podanego tekstu (np. linku, hasła WiFi) i wyświetla go na ekranie urządzenia.",
+      "fields": {
+        "data": {
+          "name": "Dane do zakodowania",
+          "description": "Tekst, adres URL lub dane konfiguracyjne WiFi, które mają zostać zamienione na kod QR."
+        },
+        "message": {
+          "name": "Wiadomość tekstowa",
+          "description": "Dodatkowy tekst wyświetlany nad lub pod kodem QR, np. Zeskanuj, aby dołączyć do WiFi."
+        },
+        "qr_message_text_size": {
+          "name": "Rozmiar tekstu",
+          "description": "Wielkość czcionki dla wiadomości tekstowej."
+        },
+        "qr_message_position": {
+          "name": "Pozycja wiadomości",
+          "description": "Wybierz, czy tekst ma być nad czy pod kodem QR."
+        },
+        "box_size": {
+          "name": "Rozmiar modułu QR",
+          "description": "Określa wielkość pojedynczego kwadracika w kodzie QR. Zwiększ, aby uzyskać większy kod."
+        },
+        "border": {
+          "name": "Margines (ramka)",
+          "description": "Grubość białej ramki wokół kodu QR."
+        },
+        "fill_color": {
+          "name": "Kolor kodu",
+          "description": "Kolor elementów kodu QR (zazwyczaj czarny)."
+        },
+        "back_color": {
+          "name": "Kolor tła",
+          "description": "Kolor tła pod kodem QR (zazwyczaj biały)."
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "send_calendar": {
+      "name": "Wyślij kalendarz",
+      "description": "Pobiera wydarzenia z wybranego kalendarza Home Assistant i wyświetla je w formie listy lub siatki miesięcznej.",
+      "fields": {
+        "calendar_entity": {
+          "name": "Encja kalendarza",
+          "description": "Wybierz encję kalendarza, z której mają być pobrane wydarzenia."
+        },
+        "duration_days": {
+          "name": "Zakres dni",
+          "description": "Z ilu nadchodzących dni pobrać wydarzenia (dla widoku listy)."
+        },
+        "display_style": {
+          "name": "Styl wyświetlania",
+          "description": "Wybierz wygląd: Nowoczesna lista, Minimalistyczna lista, Pełny widok miesiąca lub Kalendarz z Pogodą."
+        },
+        "weather_entity": {
+          "name": "Encja Pogody (tylko Weather Calendar)",
+          "description": "Używane TYLKO ze stylem 'Weather Calendar'. Wybierz encję pogody, aby wyświetlić 5-dniową prognozę z ikonkami pogody."
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "send_weather": {
+      "name": "Wyślij pogodę",
+      "description": "Tworzy estetyczny ekran pogodowy na podstawie danych z wybranej encji pogodowej.",
+      "fields": {
+        "weather_entity": {
+          "name": "Encja pogody",
+          "description": "Wymagane dla stylu Kalendarz Pogodowy. Wybierz encję pogody dla prognoz."
+        },
+        "layout": {
+          "name": "Układ graficzny",
+          "description": "Styl prezentacji: Szczegółowe podsumowanie, Lista prognozy dziennej lub Panel z wykresem temperatury."
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "send_energy_panel": {
+      "name": "Wyślij panel energetyczny",
+      "description": "Generuje dashboard energetyczny pokazujący zużycie, produkcję, import i eksport energii w domu.",
+      "fields": {
+        "power_usage_entity": {
+          "name": "Obecne zużycie",
+          "description": "Sensor mocy chwilowej (W/kW), np. pobór domu."
+        },
+        "daily_consumption_entity": {
+          "name": "Dzienne zużycie",
+          "description": "Sensor energii pobranej dzisiaj (kWh)."
+        },
+        "daily_production_entity": {
+          "name": "Dzienna produkcja",
+          "description": "Sensor energii wyprodukowanej dzisiaj przez panele PV (kWh)."
+        },
+        "daily_grid_import_entity": {
+          "name": "Pobór z sieci (Dziś)",
+          "description": "Ilość energii pobranej z sieci energetycznej."
+        },
+        "daily_grid_export_entity": {
+          "name": "Eksport do sieci (Dziś)",
+          "description": "Ilość energii oddanej do sieci energetycznej."
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "send_todo_list": {
+      "name": "Wyślij listę zadań",
+      "description": "Wyświetla interaktywną listę zadań (To-Do) lub listę zakupów.",
+      "fields": {
+        "todo_entity": {
+          "name": "Encja listy zadań",
+          "description": "Wybierz listę (domena todo), którą chcesz wyświetlić."
+        },
+        "title": {
+          "name": "Własny tytuł",
+          "description": "Opcjonalnie podaj inny nagłówek listy. Jeśli puste, użyta zostanie nazwa encji."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "send_camera_snapshot": {
+      "name": "Wyślij zrzut z kamery",
+      "description": "Pobiera aktualną klatkę (zdjęcie) z wybranej kamery monitoringu i wyświetla ją na urządzeniu.",
+      "fields": {
+        "camera_entity": {
+          "name": "Wybierz kamerę",
+          "description": "Encja kamery w Home Assistant, z której ma zostać pobrany obraz."
+        },
+        "caption": {
+          "name": "Podpis zdjęcia",
+          "description": "Tekst wyświetlany pod zdjęciem (opcjonalny)."
+        },
+        "image_zoom": {
+          "name": "Powiększenie (%)",
+          "description": "Skalowanie zdjęcia. 100% to oryginał. Możesz użyć np. 150%, aby przybliżyć obraz."
+        },
+        "display_rotation": {
+          "name": "Obrót zdjęcia",
+          "description": "Obraca samo zdjęcie (nie cały ekran) o wybrany kąt."
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "send_status_panel": {
+      "name": "Wyślij panel statusu",
+      "description": "Wyświetla prostą, czytelną listę stanów wybranych encji (np. otwarte okna, temperatury, światła).",
+      "fields": {
+        "title": {
+          "name": "Tytuł panelu",
+          "description": "Nagłówek wyświetlany na górze ekranu."
+        },
+        "entities": {
+          "name": "Lista encji",
+          "description": "Wybierz encje, które chcesz pokazać na liście. Zostaną wyświetlone ich nazwy i aktualne stany."
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "send_sensor_graph": {
+      "name": "Wyślij wykres czujnika",
+      "description": "Generuje wykres historii dla jednego lub kilku czujników numerycznych.",
+      "fields": {
+        "entities": {
+          "name": "Wybierz sensory",
+          "description": "Lista czujników (np. temperatury, wilgotności), które mają znaleźć się na wykresie."
+        },
+        "duration_hours": {
+          "name": "Zakres czasu (godziny)",
+          "description": "Z ilu godzin wstecz pobrać dane do wykresu."
+        },
+        "graph_type": {
+          "name": "Typ wykresu",
+          "description": "Wybierz między wykresem liniowym (ciągłym) a słupkowym."
+        },
+        "show_points": {
+          "name": "Pokaż punkty pomiarowe",
+          "description": "Czy zaznaczać kropkami poszczególne odczyty na linii wykresu?"
+        },
+        "image_zoom": {
+          "name": "Powiększenie obrazka (%)",
+          "description": "100% to rozmiar oryginalny, wartości mniejsze pomniejszają, a większe powiększają grafikę."
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6)."
+        },
+        "display_rotation": {
+          "name": "Obrót zdjęcia",
+          "description": "Obraca samo zdjęcie (nie cały ekran) o wybrany kąt."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "send_rss_feed": {
+      "name": "Wyślij kanał RSS",
+      "description": "Pobiera najnowsze wiadomości z podanego kanału RSS i wyświetla nagłówki na ekranie.",
+      "fields": {
+        "feed_url": {
+          "name": "Adres kanału RSS",
+          "description": "Link do źródła RSS (plik .xml lub .rss)."
+        },
+        "title": {
+          "name": "Tytuł sekcji",
+          "description": "Twój własny nagłówek dla wyświetlanych wiadomości."
+        },
+        "max_items": {
+          "name": "Liczba artykułów",
+          "description": "Ile najnowszych nagłówków wyświetlić na liście."
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "clear_web_cache": {
+      "name": "Wyczyść Cache (WWW)",
+      "description": "Czyści pamięć podręczną przeglądarki na urządzeniu Visionect. Pomaga, gdy urządzenie nie pobiera nowych grafik mimo odświeżania.",
+      "fields": {
+        "restart_session": {
+          "name": "Zrestartuj sesję",
+          "description": "Zalecane: Jeśli zaznaczone, po wyczyszczeniu cache sesja zostanie zrestartowana, co wymusi ponowne pobranie strony."
+        }
+      }
+    },
+    "start_slideshow": {
+      "name": "Uruchom pokaz slajdów",
+      "description": "Rozpoczyna cykliczne wyświetlanie podanych widoków/URLi, zmieniając je w pętli.",
+      "fields": {
+        "views": {
+          "name": "Lista widoków",
+          "description": "Wpisz nazwy zdefiniowanych widoków lub pełne adresy URL - każdy w nowej linii."
+        },
+        "seconds_per_slide": {
+          "name": "Czas wyświetlania slajdu (s)",
+          "description": "Co ile sekund zmieniać ekran. Ostrzeżenie: Bardzo częste zmiany (np. co 60s) mogą szybko zużyć baterię!"
+        },
+        "loop": {
+          "name": "Zapętl pokaz",
+          "description": "Czy po wyświetleniu ostatniego slajdu wrócić do pierwszego? Jeśli odznaczone, pokaz zatrzyma się na ostatnim."
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "send_image_url": {
+      "name": "Wyślij obrazek z URL",
+      "description": "Wyświetla pojedynczy plik graficzny (JPG/PNG/SVG) pobrany z podanego adresu internetowego.",
+      "fields": {
+        "image_url": {
+          "name": "Adres obrazka",
+          "description": "Bezpośredni link do pliku. Może być z internetu lub lokalny (http://IP_HA:8123/local/foto.jpg). Plik zdjęcia wgrywamy do //IP_HA/config/www/."
+        },
+        "image_zoom": {
+          "name": "Powiększenie (%)",
+          "description": "Skalowanie obrazu."
+        },
+        "display_rotation": {
+          "name": "Obrót obrazka",
+          "description": "Obraca tylko wyświetlaną grafikę."
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        }
+      }
+    },
+    "set_session_options": {
+      "name": "Ustaw opcje sesji",
+      "description": "Zaawansowana konfiguracja sposobu, w jaki serwer przetwarza obraz dla urządzenia.",
+      "fields": {
+        "encoding": {
+          "name": "Kodowanie (Głębia kolorów)",
+          "description": "Wybierz 4-bit, aby uzyskać odcienie szarości (ładniejszy obraz), lub 1-bit dla samej czerni i bieli (szybsze odświeżanie)."
+        },
+        "dithering": {
+          "name": "Metoda Ditheringu",
+          "description": "Algorytm symulujący odcienie szarości za pomocą kropek. Wpływa na jakość zdjęć."
+        }
+      }
+    },
+    "send_keypad": {
+      "name": "Wyślij klawiaturę PIN",
+      "description": "Wyświetla ekran z klawiaturą numeryczną. Użytkownik może wpisać kod, który zostanie wysłany do Home Assistant. Wymaga skonfigurowania automatyzacji Webhook. Wyzwalacz automatyzacji musi używać tego identyfikatora. Wpisany kod będzie dostępny w szablonie jako trigger.json.pin. Przykładowy warunek szablonu: trigger.json.pin == 1234.",
+      "fields": {
+        "title": {
+          "name": "Tytuł ekranu",
+          "description": "Tekst zachęty, np. Podaj Kod Alarmu."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Odbiorczy)",
+          "description": "ID automatyzacji webhook, która otrzyma PIN. Wyzwalacz automatyzacji musi używać tego ID. Wpisany kod dostępny jako trigger.json.pin."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Czas na wpisanie kodu przed automatycznym zamknięciem."
+        }
+      }
+    },
+    "send_button_panel": {
+      "name": "Wyślij panel przycisków",
+      "description": "Wyświetla konfigurowalną siatkę przycisków (do 12). Każdy przycisk może uruchamiać inną akcję w Home Assistant. Wymaga automatyzacji Webhook, ustawiony przycisk nie pokazuje aktualnego stanu z Home Assistant.",
+      "fields": {
+        "title": {
+          "name": "Tytuł panelu",
+          "description": "Nagłówek widoczny na górze strony."
+        },
+        "button_1_webhook_id": {
+          "name": "Przycisk 1 - Webhook ID",
+          "description": "ID webhooka dla pierwszego przycisku."
+        },
+        "button_1_name": {
+          "name": "Przycisk 1 - Etykieta",
+          "description": "Podpis pod ikoną przycisku."
+        },
+        "button_1_icon": {
+          "name": "Przycisk 1 - Ikona",
+          "description": "Ikona MDI dla przycisku."
+        },
+        "button_2_webhook_id": {
+          "name": "Przycisk 2 - Webhook ID"
+        },
+        "button_2_name": {
+          "name": "Przycisk 2 - Etykieta"
+        },
+        "button_2_icon": {
+          "name": "Przycisk 2 - Ikona"
+        },
+        "button_3_webhook_id": {
+          "name": "Przycisk 3 - Webhook ID"
+        },
+        "button_3_name": {
+          "name": "Przycisk 3 - Etykieta"
+        },
+        "button_3_icon": {
+          "name": "Przycisk 3 - Ikona"
+        },
+        "small_screen_optimized": {
+          "name": "Optymalizacja dla Joan 6\"",
+          "description": "Zaznacz tę opcję, jeśli korzystasz z urządzenia 6-calowego (np. Joan 6)."
+        },
+        "add_back_button": {
+          "name": "Pokaż przycisk Wstecz z lewej strony (←)",
+          "description": "Dodaje przycisk wyjścia z panelu. Dla każdego urządzenia przycisk konfigurujemy w Konfiguracja widoków (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Kliknięcie wyzwala wstecz",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Lewego Przycisku Wstecz (←)."
+        },
+        "back_button_url": {
+          "name": "Nadpisz cel przycisku Wstecz",
+          "description": "Najwyższy priorytet. Jeśli podasz tu URL lub Nazwę Widoku, przycisk Wstecz (←) przeniesie właśnie tam."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Prawy przycisk) (→)",
+          "description": "ID webhooka uruchamianego po naciśnięciu prawego przycisku (strzałka)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Środkowy przycisk) (✓)",
+          "description": "ID webhooka uruchamianego po naciśnięciu środkowego przycisku (ptaszek)."
+        },
+        "auto_return_seconds": {
+          "name": "Auto powrót wstecz (sekundy)",
+          "description": "Automatyczne zamknięcie panelu po czasie. Do ustawionego celu powrotu w opcjach urządzenia."
+        },
+        "click_anywhere_to_action": {
+          "name": "Kliknięcie wyzwala akcję",
+          "description": "Jeśli zaznaczone ukrywa inne przyciski, dotknięcie ekranu w DOWOLNYM miejscu uruchomi Webhook przypisany do Prawego Przycisku (→)."
+        }
+      }
+    },
+    "read_safe_device_config": {
+      "name": "Safe Config — krok 1/3: odczyt TCLV",
+      "description": "Krok 1/3 (opcjonalny, diagnostyczny): odczyt z VSS listy TCLV oraz heart beat, ekranów systemowych i dotyku. Część firmware nie ma live readback — po kroku 2 mogą być widoczne wartości z cache. Zwykle potem krok 2 (apply).",
+      "fields": {
+        "device_id": {
+          "name": "Urządzenie",
+          "description": "Tablet Visionect, dla którego odczytujesz bezpieczne pola TCLV."
+        }
+      }
+    },
+    "apply_safe_device_config": {
+      "name": "Safe Config — krok 2/3: zapis TCLV",
+      "description": "Krok 2/3 (właściwa zmiana): zapisuje heart beat, ekrany systemowe i tryb dotyku przez TCLV. Przed zapisem robi kopię poprzednich wartości na to urządzenie (używa jej krok 3). Krok 1 (odczyt) jest opcjonalny. Domyślny heart beat: 3 min.",
+      "fields": {
+        "heart_beat_interval": {
+          "name": "Interwał Heart Beat",
+          "description": "Co ile minut tablet wysyła heartbeat/status do serwera. Domyślnie: 3 min."
+        },
+        "system_screens": {
+          "name": "Ekrany systemowe",
+          "description": "Ekrany systemowe firmware (TCLV 49). Określa, co tablet pokaże przy niskiej baterii / braku połączenia."
+        },
+        "touch_mode": {
+          "name": "Tryb dotyku",
+          "description": "Tryb dotyku (TCLV 50). Wartości zgodne z VSS: 0 = Off, 1 = On, 3 = On + Beep."
+        }
+      }
+    },
+    "restore_safe_device_config": {
+      "name": "Safe Config — krok 3/3: przywróć kopię",
+      "description": "Krok 3/3 (opcjonalny): przywraca wartości TCLV z kopii utworzonej tuż przed ostatnim apply na tym urządzeniu. Bez wcześniejszego apply nie ma kopii — najpierw krok 2.",
+      "fields": {
+        "device_id": {
+          "name": "Urządzenie",
+          "description": "To samo urządzenie co przy apply_safe_device_config; przywraca zapisaną dla niego kopię."
+        }
+      }
+    },
+    "send_crypto": {
+      "name": "Wyślij panel krypto",
+      "description": "Wyświetla panel kryptowalut z cenami, trendami i opcjonalnym wykresem historii (sparkline).",
+      "fields": {
+        "coins": {
+          "name": "Kryptowaluty",
+          "description": "Lista kryptowalut do wyświetlenia, np. bitcoin, ethereum."
+        },
+        "vs_currency": {
+          "name": "Waluta wyświetlania",
+          "description": "Waluta używana do cen, np. usd, eur, pln."
+        },
+        "history_hours": {
+          "name": "Historia wykresu (godziny)",
+          "description": "Ile godzin historii pokazać na wykresie sparkline. Ustaw 0, aby wyłączyć."
+        },
+        "show_header": {
+          "name": "Pokaż nagłówek",
+          "description": "Pokaż lub ukryj tytuł/nagłówek panelu."
+        }
+      }
+    }
+  }
+}
