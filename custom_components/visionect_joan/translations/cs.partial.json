@@ -1,0 +1,220 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Server Visionect Joan",
+        "description": "Údaje pro připojení k serveru Visionect. Uživatelské jméno/heslo nebo API klíč/tajemství.",
+        "data": {
+          "host": "Adresa serveru (IP:8081)",
+          "username": "Uživatelské jméno",
+          "password": "Heslo",
+          "api_key": "API klíč",
+          "api_secret": "API tajemství"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Ověření selhalo. Zkontrolujte přihlašovací údaje.",
+      "unknown": "Došlo k neznámé chybě."
+    },
+    "abort": {
+      "already_configured": "Tento server Visionect je již nakonfigurován."
+    }
+  },
+  "options": {
+    "step": {
+      "menu": {
+        "title": "Nastavení Visionect Joan",
+        "description": "Vyberte sekci — každá má vlastní stránku.",
+        "menu_options": {
+          "views_menu": "Správa pohledů",
+          "cache_cleanup": "Mezipaměť a disk",
+          "tablet_language": "Jazyk tabletu",
+          "battery_alerts": "Upozornění na baterii",
+          "ollama": "Analýza logů Ollama"
+        }
+      },
+      "views_menu": {
+        "title": "Správa pohledů",
+        "description": "Pojmenujte často používané URL (např. panely). Ve službách vyberte např. Obývák místo dlouhé http adresy.",
+        "menu_options": {
+          "add_view": "Přidat pohled",
+          "delete_view": "Smazat pohled",
+          "edit_view": "Upravit pohled"
+        }
+      },
+      "cache_cleanup": {
+        "title": "Mezipaměť a disk",
+        "description": "Integrace ukládá dočasné obrázky a HTML. Nastavte stáří souborů a četnost úklidu.",
+        "data": {
+          "cleanup_max_age_hours": "Max. stáří souborů (hodiny) — starší se smažou",
+          "cleanup_interval_hours": "Jak často úklid (hodiny)"
+        }
+      },
+      "tablet_language": {
+        "title": "Jazyk tabletu",
+        "description": "Jazyk stránek na tabletech Joan a trvalých oznámení v Home Assistant (baterie, ztráta spojení, Safe Config, diagnostika). Auto = jazyk rozhraní Home Assistant.",
+        "data": { "tablet_language": "Jazyk tabletu" },
+        "data_description": {
+          "tablet_language": "Po změně spusťte službu visionect_joan.clear_web_cache s restart_session, pokud tablet stále zobrazuje starý text."
+        }
+      },
+      "battery_alerts": {
+        "title": "Upozornění na baterii",
+        "description": "Práh nízké baterie (5 / 10 / 15 %) a samostatné přepínače: tablet, HA při nízké, HA při plné.",
+        "data": {
+          "battery_low_threshold_pct": "Práh nízké baterie (%)",
+          "battery_tablet_alert_enabled": "Upozornění na tabletu",
+          "battery_ha_low_notification_enabled": "Oznámení HA při nízké baterii",
+          "battery_ha_full_notification_enabled": "Oznámení HA při plné baterii (nabíjení)"
+        },
+        "data_description": {
+          "battery_low_threshold_pct": "Upozornění při této úrovni nebo níže (podle voleb níže).",
+          "battery_tablet_alert_enabled": "Zapnuto: obrazovka nízké baterie do obnovy nebo nabíjení. Vypnuto: žádná obrazovka na tabletu.",
+          "battery_ha_low_notification_enabled": "Zapnuto: trvalé oznámení v HA. Vypnuto: žádné.",
+          "battery_ha_full_notification_enabled": "Zapnuto: oznámení při plné baterii při nabíjení. Vypnuto: žádné."
+        }
+      },
+      "ollama": {
+        "title": "Analýza logů Ollama",
+        "description": "Volitelné: pravidelně posílat kontext Visionect na Ollama. Jazyk výstupu analýzy odpovídá nastavení jazyka tabletu (Auto = jazyk rozhraní HA).",
+        "data": {
+          "ollama_enabled": "Zapnout analýzu Ollama",
+          "ollama_url": "URL API Ollama (např. http://192.168.1.10:11434)",
+          "ollama_api_key": "API klíč Ollama nebo proxy (volitelné)",
+          "ollama_model": "Název modelu (např. llama3.1:8b)",
+          "ollama_interval_min": "Interval analýzy (minuty) — min. 2; po změně může být potřeba znovu načíst integraci"
+        }
+      },
+      "add_view": {
+        "title": "Přidat pohled",
+        "data": {
+          "view_name": "Název (např. Panel obývák)",
+          "view_url": "URL (http://...)"
+        }
+      },
+      "delete_view": {
+        "title": "Smazat pohled",
+        "data": { "view_to_delete": "Pohled ke smazání" }
+      },
+      "edit_view": {
+        "title": "Vybrat pohled k úpravě",
+        "data": { "view_to_edit": "Pohled ze seznamu" }
+      },
+      "edit_view_form": {
+        "title": "Upravit pohled",
+        "data": { "new_view_name": "Nový název", "new_view_url": "Nová URL" }
+      }
+    },
+    "error": {
+      "invalid_format": "Chyba formátu uložení.",
+      "name_exists": "Pohled s tímto názvem již existuje.",
+      "invalid_data": "Je nutný název i URL."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "state": {
+        "name": "Stav",
+        "state": {
+          "online": "Online",
+          "offline": "Offline",
+          "sleeping": "Spí"
+        }
+      },
+      "battery": { "name": "Baterie" },
+      "temperature": { "name": "Teplota" },
+      "rssi": { "name": "Síla signálu Wi-Fi" },
+      "uptime": { "name": "Doba bez restartu" },
+      "storage_free": { "name": "Volné úložiště" },
+      "battery_voltage": { "name": "Napětí baterie" },
+      "uuid": { "name": "UUID zařízení" },
+      "display_rotation": { "name": "Orientace obrazovky" },
+      "application_version": { "name": "Verze softwaru" },
+      "storage_total": { "name": "Celkové úložiště" },
+      "storage_used": { "name": "Využité úložiště" },
+      "last_seen": { "name": "Naposledy viděn" },
+      "configured_url": { "name": "Zobrazovaná URL" },
+      "connect_reason": { "name": "Důvod připojení" },
+      "error_code": { "name": "Poslední chybový kód" }
+    },
+    "binary_sensor": {
+      "online": { "name": "Online" },
+      "health_status": { "name": "Stav zařízení" },
+      "is_charging": { "name": "Probíhá nabíjení" }
+    },
+    "number": {
+      "reload_interval": { "name": "Obnovení relace (server)" },
+      "polling_time": { "name": "Interval dotazování" },
+      "sleep_schedule": {
+        "name": "Cyklický režim spánku (minuty)",
+        "description": "0 = režim Push (výchozí): tablet spí, probudí se okamžitě při novém obsahu (Push zapnuto). 1–1440 = cyklické probuzení každých X min + Push. VYŽADUJE Sleep Manager ve VSS."
+      }
+    },
+    "text": {
+      "device_name": { "name": "Název ve Visionect" }
+    },
+    "button": {
+      "check_orphans": { "name": "Zkontrolovat stav (sirotci)" },
+      "force_refresh": { "name": "Vynutit obnovení obrazovky" },
+      "reboot_device": { "name": "Restartovat zařízení" },
+      "clear_web_cache": { "name": "Vymazat mezipaměť webu" },
+      "ollama_analyze_logs": { "name": "Analýza logů" }
+    },
+    "camera": {
+      "live_view": { "name": "Náhled obrazovky" }
+    },
+    "select": {
+      "view_select": {
+        "name": "Změnit pohled na…",
+        "state": {
+          "unconfigured_state": "Nenakonfigurováno",
+          "[Configuration]": "Přejít do nastavení…"
+        }
+      },
+      "dithering_select": { "name": "Metoda ditheringu" },
+      "encoding_select": {
+        "name": "Barevná hloubka",
+        "state": {
+          "1": "1 bit (černobíle — rychlé)",
+          "4": "4 bity (16 odstínů šedi)"
+        }
+      },
+      "rotation_select": {
+        "name": "Orientace obrazovky",
+        "state": {
+          "Portrait": "Na výšku (výchozí)",
+          "Landscape, 90\u00b0": "Na šířku 90\u00b0",
+          "Portrait, 180\u00b0": "Na výšku 180\u00b0",
+          "Landscape, 270\u00b0": "Na šířku 270\u00b0"
+        }
+      },
+      "back_view_select": {
+        "name": "Výchozí cíl tlačítka Zpět",
+        "state": { "[Configuration]": "Přejít do nastavení…" }
+      },
+      "screen_size_select": {
+        "name": "Velikost obrazovky (generovaný obsah)",
+        "state": {
+          "auto": "Automaticky (ze zařízení)",
+          "joan6": "Joan 6\"",
+          "joan13": "Joan 13\""
+        },
+        "state_attributes": {
+          "effective_screen_size": { "name": "Aktivní rozvržení" }
+        }
+      },
+      "periodic_sleep_select": {
+        "name": "Režim spánku",
+        "state": { "Periodic": "Periodický", "Disabled": "Vypnuto" }
+      },
+      "push_mode_select": {
+        "name": "Režim Push",
+        "state": { "Enabled": "Zapnuto", "Disabled": "Vypnuto" }
+      },
+      "sleep_schedule_select": {
+        "name": "Cyklický spánek (minuty)"
+      }
+    }
+  }
+}
