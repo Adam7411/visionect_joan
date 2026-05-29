@@ -1,0 +1,1205 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Visionect Joan Server",
+        "description": "Verbindungsdaten für Ihren Visionect-Server. Benutzername/Passwort oder API-Schlüssel/Geheimnis möglich.",
+        "data": {
+          "host": "Serveradresse (IP:8081)",
+          "username": "Benutzername",
+          "password": "Passwort",
+          "api_key": "API-Schlüssel",
+          "api_secret": "API-Geheimnis"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Anmeldung fehlgeschlagen. Zugangsdaten prüfen.",
+      "unknown": "Ein unbekannter Fehler ist aufgetreten."
+    },
+    "abort": {
+      "already_configured": "Dieser Visionect-Server ist bereits eingerichtet."
+    }
+  },
+  "options": {
+    "step": {
+      "menu": {
+        "title": "Visionect Joan Einstellungen",
+        "description": "Bereich wählen — jeder hat eine eigene Seite (nichts vermischt).",
+        "menu_options": {
+          "views_menu": "Ansichten verwalten",
+          "recovery_page": "Standard-URL",
+          "cache_cleanup": "Cache & Speicher",
+          "tablet_language": "Tablet-Sprache",
+          "battery_alerts": "Akku-Benachrichtigungen",
+          "ollama": "Ollama Log-Analyse"
+        }
+      },
+      "recovery_page": {
+        "title": "Standard-URL",
+        "description": "1. Klicken Sie auf **Absenden**, um **Ihre Standard-URL** zu erzeugen, und öffnen Sie diesen Schritt erneut. Lassen Sie das Token-Feld leer und speichern Sie — ein zufälliges Secret wird erstellt. Wenn das Token bekannt wird, hier neu setzen und in VSS aktualisieren.\n\n2. Öffnen Sie VSS **Settings** (**{vss_settings_url}**) -> **HTML Backend** — fügen Sie die unten angezeigte erzeugte Adresse in **Default URL** ein und speichern Sie. Die Integration kann globale VSS-Einstellungen **nicht** für Sie speichern, **dieser Schritt ist daher erforderlich**.\n\n**Ihre Standard-URL:**\n{recovery_url}",
+        "data": {
+          "recovery_page_token": "Zugriffstoken (geheim)"
+        }
+      },
+      "views_menu": {
+        "title": "Ansichten",
+        "description": "Namen für häufige URLs (z. B. Dashboards). In Diensten wählen Sie z. B. Wohnzimmer statt langer http-Adresse.",
+        "menu_options": {
+          "add_view": "Ansicht hinzufügen",
+          "delete_view": "Ansicht löschen",
+          "edit_view": "Ansicht bearbeiten"
+        }
+      },
+      "cache_cleanup": {
+        "title": "Cache & Speicher",
+        "description": "Die Integration speichert temporäre Bilder und HTML. Hier steuern Sie Dateialter und Aufräum-Intervall.",
+        "data": {
+          "cleanup_max_age_hours": "Max. Dateialter (Stunden) — ältere Dateien werden gelöscht",
+          "cleanup_interval_hours": "Aufräumen alle (Stunden)"
+        }
+      },
+      "tablet_language": {
+        "title": "Tablet-Sprache",
+        "description": "Sprache für Joan-Tablet-Seiten und dauerhafte Home-Assistant-Benachrichtigungen (Akku, Verbindungsverlust, Safe Config, Diagnose). Auto = Sprache der HA-Oberfläche.",
+        "data": {
+          "tablet_language": "Tablet-Sprache"
+        },
+        "data_description": {
+          "tablet_language": "Nach Änderung Dienst visionect_joan.clear_web_cache mit restart_session ausführen, falls das Tablet noch alten Text zeigt."
+        }
+      },
+      "battery_alerts": {
+        "title": "Akku-Benachrichtigungen",
+        "description": "Schwelle niedrig (5 / 10 / 15 %) und getrennte Schalter: Tablet, HA bei niedrigem Akku, HA bei vollem Akku.",
+        "data": {
+          "battery_low_threshold_pct": "Schwelle niedriger Akku (%)",
+          "battery_tablet_alert_enabled": "Tablet-Akkuwarnung",
+          "battery_ha_low_notification_enabled": "Home Assistant: Benachrichtigung bei niedrigem Akku",
+          "battery_ha_full_notification_enabled": "Home Assistant: Benachrichtigung bei vollem Akku (Laden)",
+          "battery_guard_interval_sec": "Battery-Guard-Intervall (Sekunden)"
+        },
+        "data_description": {
+          "battery_low_threshold_pct": "Warnung bei diesem Stand oder darunter (nur wenn unten aktiviert).",
+          "battery_tablet_alert_enabled": "Ein: Niedrig-Akku-Bildschirm auf dem Joan bis Erholung oder Laden. Aus: kein Tablet-Hinweis.",
+          "battery_ha_low_notification_enabled": "Ein: dauerhafte HA-Benachrichtigung bei niedrigem Akku. Aus: keine.",
+          "battery_ha_full_notification_enabled": "Ein: Benachrichtigung bei vollem Akku beim Laden. Aus: keine.",
+          "battery_guard_interval_sec": "Mindestabstand zwischen unterschiedlichen URL-Inhaltswechseln am Tablet. Höherer Wert = besserer Batterieschutz."
+        }
+      },
+      "ollama": {
+        "title": "Ollama Log-Analyse",
+        "description": "Optional: Visionect-Kontext periodisch an Ollama senden. Formulierung folgt der Tablet-Sprache oben (Auto = HA-Oberflächensprache).",
+        "data": {
+          "ollama_enabled": "Ollama Log-Analyse aktivieren",
+          "ollama_url": "Ollama API-URL (z. B. http://192.168.1.10:11434)",
+          "ollama_api_key": "API-Schlüssel für Ollama oder Reverse-Proxy (optional)",
+          "ollama_model": "Modellname (z. B. llama3.1:8b)",
+          "ollama_interval_min": "Analyseintervall (Minuten) — min. 2; nach Änderung ggf. Integration neu laden"
+        }
+      },
+      "add_view": {
+        "title": "Ansicht hinzufügen",
+        "data": {
+          "view_name": "Name (z. B. Dashboard Wohnzimmer)",
+          "view_url": "URL (http://...)"
+        }
+      },
+      "delete_view": {
+        "title": "Ansicht löschen",
+        "data": {
+          "view_to_delete": "Zu löschende Ansicht"
+        }
+      },
+      "edit_view": {
+        "title": "Ansicht zum Bearbeiten wählen",
+        "data": {
+          "view_to_edit": "Ansicht aus Liste"
+        }
+      },
+      "edit_view_form": {
+        "title": "Ansicht bearbeiten",
+        "data": {
+          "new_view_name": "Neuer Name",
+          "new_view_url": "Neue URL"
+        }
+      }
+    },
+    "error": {
+      "invalid_format": "Speicherformatfehler.",
+      "name_exists": "Eine Ansicht mit diesem Namen existiert bereits.",
+      "invalid_data": "Name und URL sind erforderlich."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "state": {
+        "name": "Status",
+        "state": {
+          "online": "Online",
+          "offline": "Offline",
+          "sleeping": "Schläft"
+        }
+      },
+      "battery": {
+        "name": "Akku"
+      },
+      "temperature": {
+        "name": "Temperatur"
+      },
+      "rssi": {
+        "name": "WLAN-Signalstärke"
+      },
+      "uptime": {
+        "name": "Laufzeit ohne Neustart"
+      },
+      "storage_free": {
+        "name": "Freier Speicher"
+      },
+      "battery_voltage": {
+        "name": "Akkuspannung"
+      },
+      "uuid": {
+        "name": "Geräte-UUID"
+      },
+      "display_rotation": {
+        "name": "Aktuelle Bildschirmausrichtung"
+      },
+      "application_version": {
+        "name": "Softwareversion"
+      },
+      "storage_total": {
+        "name": "Speicher gesamt"
+      },
+      "storage_used": {
+        "name": "Speicher belegt"
+      },
+      "last_seen": {
+        "name": "Zuletzt gesehen"
+      },
+      "configured_url": {
+        "name": "Aktuell angezeigte URL"
+      },
+      "connect_reason": {
+        "name": "Verbindungsgrund"
+      },
+      "error_code": {
+        "name": "Letzter Fehlercode"
+      }
+    },
+    "binary_sensor": {
+      "online": {
+        "name": "Online"
+      },
+      "health_status": {
+        "name": "Gerätezustand"
+      },
+      "is_charging": {
+        "name": "Wird geladen"
+      }
+    },
+    "number": {
+      "reload_interval": {
+        "name": "Sitzung aktualisieren (Server)"
+      },
+      "polling_time": {
+        "name": "Abfrageintervall"
+      },
+      "sleep_schedule": {
+        "name": "Zyklischer Schlafplan (Minuten)",
+        "description": "0 = Push-Modus (Werk): Tablet schläft, wacht sofort bei neuem Inhalt (Push=EIN). 1–1440 = zyklisch alle X Min + Push. ERFORDERLICH: Sleep Manager in VSS."
+      }
+    },
+    "text": {
+      "device_name": {
+        "name": "Gerätename im Visionect-System"
+      }
+    },
+    "button": {
+      "check_orphans": {
+        "name": "Zustand prüfen (Orphans)"
+      },
+      "force_refresh": {
+        "name": "Bildschirm erzwingen"
+      },
+      "reboot_device": {
+        "name": "Gerät neu starten"
+      },
+      "clear_web_cache": {
+        "name": "Web-Cache leeren"
+      },
+      "ollama_analyze_logs": {
+        "name": "Log-Analyse"
+      }
+    },
+    "camera": {
+      "live_view": {
+        "name": "Live-Bildschirm"
+      }
+    },
+    "select": {
+      "view_select": {
+        "name": "Ansicht wechseln zu…",
+        "state": {
+          "unconfigured_state": "Nicht konfiguriert",
+          "[Configuration]": "Zur Konfiguration…"
+        }
+      },
+      "dithering_select": {
+        "name": "Dithering (Bildqualität)"
+      },
+      "encoding_select": {
+        "name": "Farbtiefe",
+        "state": {
+          "1": "1 Bit (nur Schwarz/Weiß — schnell)",
+          "4": "4 Bit (16 Graustufen — schöner)"
+        }
+      },
+      "rotation_select": {
+        "name": "Bildschirmausrichtung",
+        "state": {
+          "Portrait": "Hochformat (Standard)",
+          "Landscape, 90°": "Querformat 90°",
+          "Portrait, 180°": "Hochformat 180°",
+          "Landscape, 270°": "Querformat 270°"
+        }
+      },
+      "back_view_select": {
+        "name": "Standard-Ziel Zurück",
+        "state": {
+          "[Configuration]": "Zur Konfiguration…"
+        }
+      },
+      "screen_size_select": {
+        "name": "Bildschirmgröße (generierte Inhalte)",
+        "state": {
+          "auto": "Automatisch (vom Gerät)",
+          "joan6": "Joan 6\"",
+          "joan13": "Joan 13\""
+        },
+        "state_attributes": {
+          "effective_screen_size": {
+            "name": "Aktives Layout"
+          }
+        }
+      },
+      "periodic_sleep_select": {
+        "name": "Schlafmodus",
+        "state": {
+          "Periodic": "Periodisch",
+          "Disabled": "Aus"
+        }
+      },
+      "push_mode_select": {
+        "name": "Push-Modus",
+        "state": {
+          "Enabled": "Ein",
+          "Disabled": "Aus"
+        }
+      },
+      "sleep_schedule_select": {
+        "name": "Zyklischer Schlafplan (Minuten)"
+      },
+      "refresh_profile_select": {
+        "name": "Synchronisationsmodus mit Home Assistant",
+        "state": {
+          "eco": "Eco (Akkufokus)",
+          "normal": "Normal (ausgewogen)",
+          "alert": "Alert (schnellere Updates)"
+        }
+      }
+    }
+  },
+  "services": {
+    "set_url": {
+      "name": "Set Custom URL",
+      "description": "Permanently changes the website or image displayed on the device screen. The set URL becomes the new Main view that the device will default to.",
+      "fields": {
+        "url": {
+          "name": "URL Address",
+          "description": "Enter the full URL (starting with http:// or https://) you want to display. This can be a Home Assistant dashboard or any other website."
+        },
+        "predefined_url": {
+          "name": "Select Predefined View",
+          "description": "Choose one of the views you previously configured in the Integration Options. Allows for quick switching between favorite screens."
+        }
+      }
+    },
+    "send_text": {
+      "name": "Send Text Message",
+      "description": "Sends formatted text with an optional image to the device screen. This is a temporary view, perfect for notifications. Supports Jinja2 templates.",
+      "fields": {
+        "message": {
+          "name": "Message Content",
+          "description": "Enter the text to display. You can use Jinja2 templates to dynamically insert data from Home Assistant, for example sensor states."
+        },
+        "layout": {
+          "name": "Content Layout",
+          "description": "Choose how the image should be positioned relative to the text (e.g., image above text, beside text, etc.)."
+        },
+        "image_url": {
+          "name": "Image URL (Optional)",
+          "description": "Link to an icon or photo to appear next to the text. For local HA files use format: http://HA_IP:8123/local/icon.png (upload file to //HA_IP/config/www/)."
+        },
+        "image_zoom": {
+          "name": "Image Zoom (%)",
+          "description": "Adjust image size. 100% is original size, smaller values shrink, larger values enlarge the graphic."
+        },
+        "text_color": {
+          "name": "Text Color",
+          "description": "Select font color. E-ink screens typically support only Black and White."
+        },
+        "background_color": {
+          "name": "Background Color",
+          "description": "Select screen background color for this message. Usually White."
+        },
+        "text_size": {
+          "name": "Font Size (px)",
+          "description": "Define font size in pixels. Higher values mean larger and clearer text."
+        },
+        "text_align": {
+          "name": "Text Alignment",
+          "description": "Set text alignment: Left, Center, or Right."
+        },
+        "font_family": {
+          "name": "Font Family",
+          "description": "Choose a font style. Available fonts are optimized for readability on e-paper screens."
+        },
+        "font_weight": {
+          "name": "Font Weight",
+          "description": "Choose whether text should be Bold or Normal."
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6). Adjusts margins and sizes to better fit content on screen."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow). Automatically detects internal address."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan). To manage views: Settings, Devices and Services, Visionect Joan, Configure. Select Views menu."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "set_display_rotation": {
+      "name": "Set Display Rotation",
+      "description": "Changes the physical display orientation (Portrait/Landscape). Note: The device will reboot to apply the change, which may take a moment.",
+      "fields": {
+        "display_rotation": {
+          "name": "Rotation Angle",
+          "description": "Select the desired screen rotation angle (0, 90, 180, or 270 degrees)."
+        }
+      }
+    },
+    "force_refresh": {
+      "name": "Force Screen Refresh",
+      "description": "Sends a command to the device to wake up immediately (if possible) and fetch the latest image from the server. Useful when displayed content is stale."
+    },
+    "run_self_test": {
+      "name": "Run Self-Test (Diagnostics)",
+      "description": "Runs a lightweight diagnostic for selected Visionect devices. Checks VSS health, refreshes device/session data, and tests session restart. The report includes battery guard metrics (attempts, put_success, skip_duplicate, skip_guard, skip_unchanged) with interpretation.",
+      "fields": {
+        "device_id": {
+          "name": "Device",
+          "description": "Select one or more Visionect devices to include in the diagnostic self-test."
+        }
+      }
+    },
+    "clear_display": {
+      "name": "Clear Display (Flash)",
+      "description": "Forces a full screen refresh by flashing white/black. Used to remove ghosting artifacts that may appear on e-ink screens after long use."
+    },
+    "sleep_device": {
+      "name": "Sleep Device",
+      "description": "Forces the device to disconnect from Wi-Fi and enter deep sleep mode to save battery.",
+      "fields": {
+        "duration": {
+          "name": "Sleep Duration (seconds)",
+          "description": "Specify how long the device should sleep. After this time, it will wake up again to check for new tasks."
+        }
+      }
+    },
+    "wake_device": {
+      "name": "Wake Device",
+      "description": "Attempts to wake up the device immediately. Works reliably only if the device is plugged in or configured in frequent listener mode."
+    },
+    "send_qr_code": {
+      "name": "Send QR Code",
+      "description": "Generates a QR code from provided text (e.g., link, WiFi password) and displays it on the device.",
+      "fields": {
+        "data": {
+          "name": "Data to Encode",
+          "description": "Text, URL, or WiFi config string to be converted into a QR code."
+        },
+        "message": {
+          "name": "Text Message",
+          "description": "Additional text displayed above or below the QR code, e.g., Scan to join WiFi."
+        },
+        "qr_message_text_size": {
+          "name": "Text Size",
+          "description": "Font size for the text message."
+        },
+        "qr_message_position": {
+          "name": "Message Position",
+          "description": "Choose whether text appears above or below the QR code."
+        },
+        "box_size": {
+          "name": "QR Module Size",
+          "description": "Determines the size of individual squares in the QR code. Increase for a physically larger code."
+        },
+        "border": {
+          "name": "Margin (Border)",
+          "description": "Thickness of the white border around the QR code."
+        },
+        "fill_color": {
+          "name": "Code Color",
+          "description": "Color of the QR code elements (usually Black)."
+        },
+        "back_color": {
+          "name": "Background Color",
+          "description": "Background color behind the QR code (usually White)."
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "send_calendar": {
+      "name": "Send Calendar",
+      "description": "Fetches events from a selected Home Assistant calendar and displays them as a list or monthly grid.",
+      "fields": {
+        "calendar_entity": {
+          "name": "Calendar Entity",
+          "description": "Select the calendar entity to source events from."
+        },
+        "duration_days": {
+          "name": "Day Range",
+          "description": "How many upcoming days to fetch events for (applies to list view)."
+        },
+        "display_style": {
+          "name": "Display Style",
+          "description": "Choose look: Modern List, Minimalist List, Full Monthly Grid, or Weather Calendar."
+        },
+        "weather_entity": {
+          "name": "Weather Entity (Weather Calendar only)",
+          "description": "Only used with 'Weather Calendar' display style. Select a weather entity to show a 5-day forecast with weather icons."
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "send_weather": {
+      "name": "Send Weather",
+      "description": "Creates an aesthetic weather screen based on data from a selected weather entity.",
+      "fields": {
+        "weather_entity": {
+          "name": "Weather Entity",
+          "description": "Required when using Weather Calendar style. Select a weather entity for forecasts."
+        },
+        "layout": {
+          "name": "Graphic Layout",
+          "description": "Presentation style: Detailed Summary, Daily Forecast List, or Graph Panel."
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "send_energy_panel": {
+      "name": "Send Energy Panel",
+      "description": "Generates an energy dashboard showing home consumption, production, import, and export.",
+      "fields": {
+        "power_usage_entity": {
+          "name": "Current Usage",
+          "description": "Instant power sensor (W/kW), e.g., house load."
+        },
+        "daily_consumption_entity": {
+          "name": "Daily Consumption",
+          "description": "Energy consumed today sensor (kWh)."
+        },
+        "daily_production_entity": {
+          "name": "Daily Production",
+          "description": "Energy produced today by PV panels sensor (kWh)."
+        },
+        "daily_grid_import_entity": {
+          "name": "Grid Import (Today)",
+          "description": "Amount of energy drawn from the grid."
+        },
+        "daily_grid_export_entity": {
+          "name": "Grid Export (Today)",
+          "description": "Amount of energy sent to the grid."
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "send_todo_list": {
+      "name": "Send To-Do List",
+      "description": "Displays an interactive To-Do or Shopping list.",
+      "fields": {
+        "todo_entity": {
+          "name": "To-Do Entity",
+          "description": "Select the list (todo domain) you want to display."
+        },
+        "title": {
+          "name": "Custom Title",
+          "description": "Optional custom header for the list. If empty, entity name is used."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "send_camera_snapshot": {
+      "name": "Send Camera Snapshot",
+      "description": "Fetches current frame (snapshot) from selected security camera and displays it on device.",
+      "fields": {
+        "camera_entity": {
+          "name": "Select Camera",
+          "description": "Home Assistant camera entity to source image from."
+        },
+        "caption": {
+          "name": "Image Caption",
+          "description": "Text displayed below the image (optional)."
+        },
+        "image_zoom": {
+          "name": "Zoom (%)",
+          "description": "Image scaling. 100% is original. Use e.g., 150% to zoom in."
+        },
+        "display_rotation": {
+          "name": "Image Rotation",
+          "description": "Rotates the photo itself (not the whole screen) by selected angle."
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "send_status_panel": {
+      "name": "Send Status Panel",
+      "description": "Displays a simple, readable list of selected entity states (e.g., open windows, temps, lights).",
+      "fields": {
+        "title": {
+          "name": "Panel Title",
+          "description": "Header displayed at the top of the screen."
+        },
+        "entities": {
+          "name": "Entity List",
+          "description": "Select entities to show on the list. Their names and current states will be displayed."
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "send_sensor_graph": {
+      "name": "Send Sensor Graph",
+      "description": "Generates a history chart for one or more numeric sensors.",
+      "fields": {
+        "entities": {
+          "name": "Select Sensors",
+          "description": "List of sensors (e.g., temperature, humidity) to include in the graph."
+        },
+        "duration_hours": {
+          "name": "Time Range (hours)",
+          "description": "How many hours back to fetch data for."
+        },
+        "graph_type": {
+          "name": "Graph Type",
+          "description": "Choose between Line (continuous) and Bar chart."
+        },
+        "show_points": {
+          "name": "Show Data Points",
+          "description": "Mark individual readings with dots on the line?"
+        },
+        "image_zoom": {
+          "name": "Zoom (%)",
+          "description": "Image scaling. 100% is original. Use e.g., 150% to zoom in."
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6)."
+        },
+        "display_rotation": {
+          "name": "Image Rotation",
+          "description": "Rotates the photo itself (not the whole screen) by selected angle."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "send_rss_feed": {
+      "name": "Send RSS Feed",
+      "description": "Fetches latest news from provided RSS feed and displays headlines on screen.",
+      "fields": {
+        "feed_url": {
+          "name": "RSS Feed URL",
+          "description": "Link to RSS source (.xml or .rss file)."
+        },
+        "title": {
+          "name": "Section Title",
+          "description": "Your custom header for the displayed news."
+        },
+        "max_items": {
+          "name": "Article Count",
+          "description": "How many latest headlines to show in the list."
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "clear_web_cache": {
+      "name": "Clear Web Cache",
+      "description": "Clears browser cache on Visionect device. Helps when device fails to download new graphics despite refresh.",
+      "fields": {
+        "restart_session": {
+          "name": "Restart Session",
+          "description": "Recommended: If checked, session restarts after clearing cache, forcing page reload."
+        }
+      }
+    },
+    "start_slideshow": {
+      "name": "Start Slideshow",
+      "description": "Begins cycling through provided views/URLs in a loop.",
+      "fields": {
+        "views": {
+          "name": "Views List",
+          "description": "Enter defined view names or full URLs - each on a new line."
+        },
+        "seconds_per_slide": {
+          "name": "Slide Duration (s)",
+          "description": "How often to change screen. Warning: Very frequent changes (e.g., every 60s) can drain battery quickly!"
+        },
+        "loop": {
+          "name": "Loop Slideshow",
+          "description": "Return to first slide after the last one? If unchecked, stops at last slide."
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "send_image_url": {
+      "name": "Send Image from URL",
+      "description": "Displays a single image file (JPG/PNG/SVG) fetched from provided web address.",
+      "fields": {
+        "image_url": {
+          "name": "Image Address",
+          "description": "Direct link to file. Can be internet or local (http://HA_IP:8123/local/photo.jpg). Upload image file to //HA_IP/config/www/."
+        },
+        "image_zoom": {
+          "name": "Zoom (%)",
+          "description": "Image scaling."
+        },
+        "display_rotation": {
+          "name": "Image Rotation",
+          "description": "Rotates only the displayed graphic."
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6)."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        }
+      }
+    },
+    "set_session_options": {
+      "name": "Set Session Options",
+      "description": "Advanced configuration of how server processes image for the device.",
+      "fields": {
+        "encoding": {
+          "name": "Encoding (Bit Depth)",
+          "description": "Select 4-bit for gray shades (nicer image) or 1-bit for pure black and white (faster refresh)."
+        },
+        "dithering": {
+          "name": "Dithering Method",
+          "description": "Algorithm simulating gray shades with dots. Affects photo quality."
+        }
+      }
+    },
+    "send_keypad": {
+      "name": "Send PIN Keypad",
+      "description": "Displays screen with numeric keypad. User can enter code which is sent to Home Assistant. Requires a Webhook automation to be configured. The automation trigger must use this ID. The entered code will be available in the template as trigger.json.pin. Example condition: trigger.json.pin == 1234.",
+      "fields": {
+        "title": {
+          "name": "Screen Title",
+          "description": "Prompt text, e.g., Enter Alarm Code."
+        },
+        "action_webhook_id": {
+          "name": "Receiver Webhook ID",
+          "description": "The ID of the webhook automation that will receive the PIN. The trigger must use this ID. Entered code available as trigger.json.pin."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Time to enter code before auto-close."
+        }
+      }
+    },
+    "send_button_panel": {
+      "name": "Send Button Panel",
+      "description": "Displays configurable grid of buttons (up to 12). Each button can trigger a different action in Home Assistant. Requires Webhook automation, set button does not show current HA state.",
+      "fields": {
+        "title": {
+          "name": "Panel Title",
+          "description": "Header visible at top of page."
+        },
+        "button_1_webhook_id": {
+          "name": "Button 1 - Webhook ID",
+          "description": "Webhook ID for first button."
+        },
+        "button_1_name": {
+          "name": "Button 1 - Label",
+          "description": "Caption under button icon."
+        },
+        "button_1_icon": {
+          "name": "Button 1 - Icon",
+          "description": "MDI icon for button."
+        },
+        "button_2_webhook_id": {
+          "name": "Button 2 - Webhook ID"
+        },
+        "button_2_name": {
+          "name": "Button 2 - Label"
+        },
+        "button_2_icon": {
+          "name": "Button 2 - Icon"
+        },
+        "button_3_webhook_id": {
+          "name": "Button 3 - Webhook ID"
+        },
+        "button_3_name": {
+          "name": "Button 3 - Label"
+        },
+        "button_3_icon": {
+          "name": "Button 3 - Icon"
+        },
+        "small_screen_optimized": {
+          "name": "Optimization for Joan 6\"",
+          "description": "Check this if using a 6-inch device (e.g., Joan 6)."
+        },
+        "add_back_button": {
+          "name": "Show Back Button on Left (←)",
+          "description": "Adds an exit/back button. For each device, configure the target in Views Configuration (Visionect Joan)."
+        },
+        "click_anywhere_to_return": {
+          "name": "Click Triggers Back",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Left Back Button (←)."
+        },
+        "back_button_url": {
+          "name": "Override Back Button Target",
+          "description": "Highest priority. If you provide a URL or View Name here, the Back Button (←) will navigate there."
+        },
+        "action_webhook_id": {
+          "name": "Webhook ID (Right Button) (→)",
+          "description": "ID of the webhook triggered when pressing the right button (arrow)."
+        },
+        "action_webhook_2_id": {
+          "name": "Webhook ID (Center Button) (✓)",
+          "description": "ID of the webhook triggered when pressing the center button (check)."
+        },
+        "auto_return_seconds": {
+          "name": "Auto Return Back (seconds)",
+          "description": "Automatically closes the panel after time. Returns to the return target configured in device options."
+        },
+        "click_anywhere_to_action": {
+          "name": "Click Triggers Action",
+          "description": "If checked, hides other buttons. Touching ANY part of the screen will trigger the Right Button Webhook (→)."
+        }
+      }
+    },
+    "read_safe_device_config": {
+      "name": "Safe Config — step 1/3: read TCLV",
+      "description": "Step 1/3 (optional, diagnostic): reads TCLV list and heart beat / system screens / touch from VSS. Some firmware has no live readback; after step 2 you may see cached values. Usually followed by step 2 (apply).",
+      "fields": {
+        "device_id": {
+          "name": "Device",
+          "description": "Visionect device to read safe TCLV fields for."
+        }
+      }
+    },
+    "apply_safe_device_config": {
+      "name": "Safe Config — step 2/3: write TCLV",
+      "description": "Step 2/3 (the actual change): writes heart beat, system screens, and touch mode via TCLV. Backs up previous values for this device before writing (used by step 3). Step 1 (read) is optional. Default heart beat: 3 min.",
+      "fields": {
+        "heart_beat_interval": {
+          "name": "Heart Beat Interval",
+          "description": "How often (in minutes) the tablet sends heartbeat/status pings to server. Default: 3 min."
+        },
+        "system_screens": {
+          "name": "System Screens",
+          "description": "Firmware system screens (TCLV 49). Defines what tablet shows on low battery / disconnected state."
+        },
+        "touch_mode": {
+          "name": "Touch Mode",
+          "description": "Touch mode (TCLV 50). VSS-compatible values: 0 = Off, 1 = On, 3 = On + Beep."
+        }
+      }
+    },
+    "restore_safe_device_config": {
+      "name": "Safe Config — step 3/3: restore backup",
+      "description": "Step 3/3 (optional): restores TCLV values from the backup taken before the last apply on this device. No backup until you run step 2 at least once.",
+      "fields": {
+        "device_id": {
+          "name": "Device",
+          "description": "Same device you used for apply_safe_device_config; restores its saved backup."
+        }
+      }
+    },
+    "send_crypto": {
+      "name": "Send Crypto Panel",
+      "description": "Displays a cryptocurrency panel with prices, trends and optional sparkline history.",
+      "fields": {
+        "coins": {
+          "name": "Coins",
+          "description": "List of coins to display, e.g. bitcoin, ethereum."
+        },
+        "vs_currency": {
+          "name": "Display Currency",
+          "description": "Currency used for prices, e.g. usd, eur, pln."
+        },
+        "history_hours": {
+          "name": "Sparkline History (hours)",
+          "description": "How many hours of history to display in the sparkline. Set 0 to disable."
+        },
+        "show_header": {
+          "name": "Show Header",
+          "description": "Show or hide the panel title/header."
+        }
+      }
+    }
+  }
+}

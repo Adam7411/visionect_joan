@@ -1,0 +1,238 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Serveur Visionect Joan",
+        "description": "Saisissez les informations de connexion. Nom d'utilisateur/mot de passe ou clé API/secret.",
+        "data": {
+          "host": "Adresse du serveur (IP:8081)",
+          "username": "Nom d'utilisateur",
+          "password": "Mot de passe",
+          "api_key": "Clé API",
+          "api_secret": "Secret API"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Échec de l'authentification. Vérifiez les identifiants.",
+      "unknown": "Une erreur inconnue s'est produite."
+    },
+    "abort": {
+      "already_configured": "Ce serveur Visionect est déjà configuré."
+    }
+  },
+  "options": {
+    "step": {
+      "menu": {
+        "title": "Configuration Visionect Joan",
+        "description": "Choisissez une section — chaque page est séparée.",
+        "menu_options": {
+          "views_menu": "Gérer les vues",
+          "recovery_page": "URL par défaut",
+          "cache_cleanup": "Cache et disque",
+          "tablet_language": "Langue de la tablette",
+          "battery_alerts": "Notifications batterie",
+          "ollama": "Analyse des journaux Ollama"
+        }
+      },
+      "recovery_page": {
+        "title": "URL par défaut",
+        "description": "1. Cliquez sur **Valider** pour générer **votre URL par défaut**, puis revenez à cette étape. Laissez le champ token vide et enregistrez — un secret aléatoire sera créé. Si le token fuit, régénérez-le ici et mettez à jour VSS.\n\n2. Ouvrez les **Settings** VSS (**{vss_settings_url}**) -> **HTML Backend** — collez l'adresse générée affichée ci-dessous dans **Default URL** puis enregistrez. L'intégration ne peut **pas** enregistrer les paramètres globaux VSS pour vous, **cette étape est donc obligatoire**.\n\n**Votre URL par défaut :**\n{recovery_url}",
+        "data": {
+          "recovery_page_token": "Jeton d'accès (secret)"
+        }
+      },
+      "views_menu": {
+        "title": "Gestion des vues",
+        "description": "Définissez des noms pour vos URL (tableaux de bord). Dans les services, choisissez Salon au lieu d'une longue adresse http.",
+        "menu_options": {
+          "add_view": "Ajouter une vue",
+          "delete_view": "Supprimer une vue",
+          "edit_view": "Modifier une vue"
+        }
+      },
+      "cache_cleanup": {
+        "title": "Cache et disque",
+        "description": "L'intégration stocke images et HTML temporaires. Réglages de durée de conservation et fréquence de nettoyage.",
+        "data": {
+          "cleanup_max_age_hours": "Âge max. des fichiers (heures) — suppression au-delà",
+          "cleanup_interval_hours": "Fréquence de nettoyage (heures)"
+        }
+      },
+      "tablet_language": {
+        "title": "Langue de la tablette",
+        "description": "Langue des pages Joan et des notifications persistantes Home Assistant (batterie, perte de connexion, Safe Config, diagnostic). Auto = langue de l'interface Home Assistant.",
+        "data": { "tablet_language": "Langue de la tablette" },
+        "data_description": {
+          "tablet_language": "Après changement, exécutez le service visionect_joan.clear_web_cache avec restart_session si l'ancien texte s'affiche encore."
+        }
+      },
+      "battery_alerts": {
+        "title": "Notifications batterie",
+        "description": "Seuil batterie faible (5 / 10 / 15 %) et interrupteurs séparés : tablette, HA batterie faible, HA batterie pleine.",
+        "data": {
+          "battery_low_threshold_pct": "Seuil batterie faible (%)",
+          "battery_tablet_alert_enabled": "Alerte batterie sur la tablette",
+          "battery_ha_low_notification_enabled": "Notification HA batterie faible",
+          "battery_ha_full_notification_enabled": "Notification HA batterie pleine (charge)",
+          "battery_guard_interval_sec": "Intervalle Battery Guard (secondes)"
+        },
+        "data_description": {
+          "battery_low_threshold_pct": "Alerte à ce niveau ou en dessous (selon options ci-dessous).",
+          "battery_tablet_alert_enabled": "Activé : écran batterie faible jusqu'à reprise ou charge. Désactivé : pas d'écran sur la tablette.",
+          "battery_ha_low_notification_enabled": "Activé : notification persistante HA. Désactivé : aucune.",
+          "battery_ha_full_notification_enabled": "Activé : notification à batterie pleine en charge. Désactivé : aucune.",
+          "battery_guard_interval_sec": "Espacement minimum entre changements d'URL de contenu envoyés à la tablette. Valeur plus élevée = meilleure protection batterie."
+        }
+      },
+      "ollama": {
+        "title": "Analyse des journaux Ollama",
+        "description": "Optionnel : envoyer périodiquement le contexte Visionect à Ollama. La langue du texte suit « Langue de la tablette » (Auto = langue de l'interface HA).",
+        "data": {
+          "ollama_enabled": "Activer l'analyse Ollama",
+          "ollama_url": "URL API Ollama (ex. http://192.168.1.10:11434)",
+          "ollama_api_key": "Clé API Ollama ou proxy (optionnel)",
+          "ollama_model": "Nom du modèle (ex. llama3.1:8b)",
+          "ollama_interval_min": "Intervalle d'analyse (minutes) — min. 2 ; rechargement de l'intégration peut être nécessaire"
+        }
+      },
+      "add_view": {
+        "title": "Ajouter une vue",
+        "data": {
+          "view_name": "Nom (ex. Tableau de bord salon)",
+          "view_url": "URL (http://...)"
+        }
+      },
+      "delete_view": {
+        "title": "Supprimer une vue",
+        "data": { "view_to_delete": "Vue à supprimer" }
+      },
+      "edit_view": {
+        "title": "Choisir la vue à modifier",
+        "data": { "view_to_edit": "Vue dans la liste" }
+      },
+      "edit_view_form": {
+        "title": "Modifier la vue",
+        "data": { "new_view_name": "Nouveau nom", "new_view_url": "Nouvelle URL" }
+      }
+    },
+    "error": {
+      "invalid_format": "Erreur de format d'enregistrement.",
+      "name_exists": "Une vue porte déjà ce nom.",
+      "invalid_data": "Le nom et l'URL sont obligatoires."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "state": {
+        "name": "État",
+        "state": {
+          "online": "En ligne",
+          "offline": "Hors ligne",
+          "sleeping": "Veille"
+        }
+      },
+      "battery": { "name": "Batterie" },
+      "temperature": { "name": "Température" },
+      "rssi": { "name": "Force du signal Wi-Fi" },
+      "uptime": { "name": "Durée sans redémarrage" },
+      "storage_free": { "name": "Stockage libre" },
+      "battery_voltage": { "name": "Tension batterie" },
+      "uuid": { "name": "UUID de l'appareil" },
+      "display_rotation": { "name": "Orientation de l'écran" },
+      "application_version": { "name": "Version logicielle" },
+      "storage_total": { "name": "Stockage total" },
+      "storage_used": { "name": "Stockage utilisé" },
+      "last_seen": { "name": "Dernière activité" },
+      "configured_url": { "name": "URL affichée" },
+      "connect_reason": { "name": "Raison de connexion" },
+      "error_code": { "name": "Dernier code d'erreur" }
+    },
+    "binary_sensor": {
+      "online": { "name": "En ligne" },
+      "health_status": { "name": "État de santé" },
+      "is_charging": { "name": "En charge" }
+    },
+    "number": {
+      "reload_interval": { "name": "Rafraîchissement session (serveur)" },
+      "polling_time": { "name": "Intervalle d'interrogation" },
+      "sleep_schedule": {
+        "name": "Veille cyclique (minutes)",
+        "description": "0 = mode Push (défaut) : veille, réveil instantané avec nouveau contenu (Push activé). 1–1440 = réveil cyclique + Push. REQUIS : Sleep Manager dans VSS."
+      }
+    },
+    "text": {
+      "device_name": { "name": "Nom dans Visionect" }
+    },
+    "button": {
+      "check_orphans": { "name": "Vérifier l'état (orphelins)" },
+      "force_refresh": { "name": "Forcer l'actualisation" },
+      "reboot_device": { "name": "Redémarrer l'appareil" },
+      "clear_web_cache": { "name": "Vider le cache web" },
+      "ollama_analyze_logs": { "name": "Analyse des journaux" }
+    },
+    "camera": {
+      "live_view": { "name": "Aperçu écran en direct" }
+    },
+    "select": {
+      "view_select": {
+        "name": "Changer la vue vers…",
+        "state": {
+          "unconfigured_state": "Non configuré",
+          "[Configuration]": "Aller à la configuration…"
+        }
+      },
+      "dithering_select": { "name": "Méthode de tramage" },
+      "encoding_select": {
+        "name": "Profondeur de couleur",
+        "state": {
+          "1": "1 bit (noir et blanc — rapide)",
+          "4": "4 bits (16 niveaux de gris)"
+        }
+      },
+      "rotation_select": {
+        "name": "Orientation",
+        "state": {
+          "Portrait": "Portrait (défaut)",
+          "Landscape, 90\u00b0": "Paysage 90\u00b0",
+          "Portrait, 180\u00b0": "Portrait 180\u00b0",
+          "Landscape, 270\u00b0": "Paysage 270\u00b0"
+        }
+      },
+      "back_view_select": {
+        "name": "Cible du bouton Retour",
+        "state": { "[Configuration]": "Aller à la configuration…" }
+      },
+      "screen_size_select": {
+        "name": "Taille d'écran (contenu généré)",
+        "state": {
+          "auto": "Automatique (appareil)",
+          "joan6": "Joan 6\"",
+          "joan13": "Joan 13\""
+        },
+        "state_attributes": {
+          "effective_screen_size": { "name": "Mise en page active" }
+        }
+      },
+      "periodic_sleep_select": {
+        "name": "Mode veille",
+        "state": { "Periodic": "Périodique", "Disabled": "Désactivé" }
+      },
+      "push_mode_select": {
+        "name": "Mode push",
+        "state": { "Enabled": "Activé", "Disabled": "Désactivé" }
+      },
+      "sleep_schedule_select": {
+        "name": "Veille cyclique (minutes)"
+      },
+      "refresh_profile_select": {
+        "name": "Mode de synchronisation avec Home Assistant",
+        "state": {
+          "eco": "Eco (priorité batterie)",
+          "normal": "Normal (équilibré)",
+          "alert": "Alert (mises à jour plus rapides)"
+        }
+      }
+    }
+  }
+}
