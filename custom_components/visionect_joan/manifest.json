@@ -1,7 +1,7 @@
 {
   "domain": "visionect_joan",
   "name": "Visionect Joan",
-  "version": "3.9.3",
+  "version": "3.9.4",
   "config_flow": true,
   "dependencies": ["http"],
   "documentation": "https://github.com/Adam7411/visionect_joan",
