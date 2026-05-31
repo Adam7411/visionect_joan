@@ -581,6 +581,21 @@ def create_text_message_url(message: str, text_color: str = "black", background_
     if layout == "image_only":
         # Size via width/height % — Visionect WebKit often ignores transform:scale on e-ink.
         zoom_pct = max(10, min(200, int(image_zoom)))
+        if zoom_pct > 100:
+            # Above 100%: drop viewport caps so the image can grow (body overflow clips edges).
+            size_rules = f"""
+                width: {zoom_pct}%;
+                height: {zoom_pct}%;
+                max-width: none;
+                max-height: none;
+            """
+        else:
+            size_rules = f"""
+                width: {zoom_pct}%;
+                height: {zoom_pct}%;
+                max-width: 100vw;
+                max-height: 100vh;
+            """
         style_css = f"""
             body {{ 
                 margin: 0; 
@@ -594,10 +609,7 @@ def create_text_message_url(message: str, text_color: str = "black", background_
                 justify-content: center;
             }}
             img {{ 
-                width: {zoom_pct}%;
-                height: {zoom_pct}%;
-                max-width: 100vw;
-                max-height: 100vh;
+                {size_rules}
                 object-fit: contain;
                 display: block;
                 transform: rotate({image_rotation}deg);
@@ -623,9 +635,9 @@ def create_text_message_url(message: str, text_color: str = "black", background_
         if screen_size == "joan6" and layout in ("image_top", "image_bottom"):
             # Caps scale with image_zoom (fixed width:auto + max-width:72% used to override zoom).
             zoom_pct = max(10, min(200, int(image_zoom)))
-            max_w = min(100, round(72 * zoom_pct / 100))
+            max_w = round(72 * zoom_pct / 100)
             max_h_cap = 78 if layout == "image_top" else 85
-            max_h = min(max_h_cap, round(34 * zoom_pct / 100))
+            max_h = min(100, round(max_h_cap * zoom_pct / 100))
             img_size_extra = (
                 f"width: {zoom_pct}%; max-width: {max_w}%; "
                 f"max-height: {max_h}vh; height: auto;"
