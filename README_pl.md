@@ -27,6 +27,8 @@
 ⬇️ Sprzęt: Joan 6 lub 13PRO ⬇️  
 <br>
 <img width="421" height="328" alt="Joan 6 - tablet e-ink" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
+  <img width="1484" height="1278" alt="Bez tytułu" src="https://github.com/user-attachments/assets/99fb87e0-3d8c-4ecc-b411-ad81f203665d" />
+
 </p>
 
 ---
