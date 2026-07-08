@@ -18,12 +18,12 @@
 
 # Visionect Joan for Home Assistant <a href="https://my.home-assistant.io/redirect/hacs_repository/?owner=Adam7411&repository=visionect_joan&category=integration" target="_blank" rel="noreferrer noopener"><img src="https://my.home-assistant.io/badges/hacs_repository.svg" alt="Otwórz swoją instancję Home Assistant i przejdź do repozytorium w HACS." /></a>
 
-> The `visionect_joan` integration turns the energy‑efficient e‑ink **Joan 6** tablet into a customizable information & control hub for Home Assistant: energy panel, calendar views, shopping / to‑do lists, sensor graphs, multi‑layout weather, RSS feed, camera snapshot, PIN keypad, slideshows, and interactive buttons / webhooks.
+> The `visionect_joan` integration turns the energy‑efficient e‑ink **Joan 6/13PRO** tablet into a customizable information & control hub for Home Assistant: energy panel, calendar views, shopping / to‑do lists, sensor graphs, multi‑layout weather, RSS feed, camera snapshot, PIN keypad, slideshows, and interactive buttons / webhooks.
 
 <img width="1280" height="800" alt="Joan 6 home screen" src="https://github.com/user-attachments/assets/32214988-dc0e-44ce-af14-2d7f71fb8e6c" />
 
 <p align="center">
-⬇️ Hardware: Joan 6 ⬇️  
+⬇️ Hardware: Joan 6/13PRO ⬇️  
 <br>
 <img width="421" height="328" alt="Joan 6 e-ink tablet" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
 </p>
@@ -52,7 +52,7 @@
 
 ## Purpose & Overview
 
-The integration acts as a bridge between Home Assistant and the Visionect Software Suite (VSS). It renders dynamic, e‑ink‑optimized screens on the Joan 6 tablet triggered by context (events, zones, sensor changes, time). Instead of loading a generic dashboard, you generate a complete, static or semi‑static “screen” (energy panel, interactive to‑do list, weather with graph, keypad PIN, 12‑button action panel, etc.).
+The integration acts as a bridge between Home Assistant and the Visionect Software Suite (VSS). It renders dynamic, e‑ink‑optimized screens on the Joan 6/13PRO tablet triggered by context (events, zones, sensor changes, time). Instead of loading a generic dashboard, you generate a complete, static or semi‑static “screen” (energy panel, interactive to‑do list, weather with graph, keypad PIN, 12‑button action panel, etc.).
 
 ---
 
@@ -577,7 +577,7 @@ No—panels are stateless (one‑way). Use `send_status_panel` or a custom dashb
 Frequent high‑contrast refreshes cause artifacts; reduce update frequency and prefer encoding=1 for crisp text.
 
 **Other Joan models supported?**  
-Tested on Joan 6; other models may partially work but are not verified yet.
+Tested on Joan 6/13PRO; other models may partially work but are not verified yet.
 
 **External site not visible in slideshow?**  
 Likely blocked by X‑Frame-Options / CSP. Use local HA/AppDaemon URLs or predefined views.
@@ -594,7 +594,7 @@ MIT
 ---
 
 - The project is not an official integration of Visionect or Home Assistant.
-- Tested on **Joan 6**; other models were not verified.
+- Tested on **Joan 6/13PRO**; other models were not verified.
 - AI was used for faster development.
 - [Visionect Software Suite - installation](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
 - [Joan 6 dashboard Generator](https://github.com/Adam7411/joan_generator/blob/main/README.md)
