@@ -1,7 +1,7 @@
 ***
 - [Visionect Software Suite - Instalacja w Proxmox](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
 - [Visionect Software Suite - Instalacja w Home Assistant](https://github.com/Adam7411/visionect-v3-allinone/blob/main/visionect-v3-allinone/README_pl.md)
-- [Dodatek Joan 6: AppDaemon Dashboard Generator](https://github.com/Adam7411/joan_generator/)
+- [Dodatek Joan 6/13PRO: AppDaemon Dashboard Generator](https://github.com/Adam7411/joan_generator/)
 
 ***
 
@@ -24,7 +24,7 @@
 <img width="1280" height="800" alt="Ekran główny Joan 6" src="https://github.com/user-attachments/assets/32214988-dc0e-44ce-af14-2d7f71fb8e6c" />
 
 <p align="center">
-⬇️ Sprzęt: Joan 6 ⬇️  
+⬇️ Sprzęt: Joan 6 lub 13PRO ⬇️  
 <br>
 <img width="421" height="328" alt="Joan 6 - tablet e-ink" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
 </p>
@@ -576,7 +576,7 @@ Obecnie panel 12 przycisków jest stateless (brak sprzężenia zwrotnego). Do pr
 Częste odświeżenia e‑ink powodują artefakty. Ogranicz liczbę aktualizacji i wybierz wyższy kontrast (encoding=1).
 
 **Czy mogę używać z innymi modelami Joan?**  
-Testowane na Joan 6. Inne modele mogą działać częściowo – brak oficjalnych testów.
+Testowane na Joan 6/13PRO. Inne modele mogą działać częściowo – brak oficjalnych testów.
 
 **Dlaczego zewnętrzna strona nie wyświetla się w slideshow?**  
 Wiele domen blokuje iframe (CSP / X-Frame-Options). Używaj lokalnych URL / predefiniowanych widoków.
@@ -587,13 +587,13 @@ Tak – `data:text/html,<html>...</html>` jako URL w `set_url` lub automatycznie
 ---
 
 - Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
-- Testowany na **Joan 6**; inne modele nie były weryfikowane.
+- Testowany na **Joan 6/13PRO**; inne modele nie były weryfikowane.
 - Do szybszego rozwoju użyto AI.
 ***
 - [Visionect Software Suite - Instalacja w Proxmox](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
 - [Visionect Software Suite - Instalacja w Home Assistant](https://github.com/Adam7411/visionect-v3-allinone/blob/main/visionect-v3-allinone/README_pl.md)
 - [Dodatek Visionect Joan dla Home Assistant](https://github.com/Adam7411/visionect_joan/blob/main/README_pl.md)
-- [Dodatek Joan 6: AppDaemon Dashboard Generator](https://github.com/Adam7411/joan_generator/)
+- [Dodatek Joan /13PRO6: AppDaemon Dashboard Generator](https://github.com/Adam7411/joan_generator/)
 
 ***
 
