@@ -26,7 +26,8 @@
 ⬇️ Hardware: Joan 6/13PRO ⬇️  
 <br>
 <img width="421" height="328" alt="Joan 6 e-ink tablet" src="https://github.com/user-attachments/assets/6fd88078-283a-4363-a801-71250b8211f4" />
-  <img width="1536" height="2048" alt="2" src="https://github.com/user-attachments/assets/48c475ad-3049-4edd-bfaa-b17f11e6786e" />
+<img width="1484" height="1278" alt="Bez tytułu" src="https://github.com/user-attachments/assets/d5415f1e-3059-413c-8694-52d1c8eba09b" />
+
 
 </p>
 
