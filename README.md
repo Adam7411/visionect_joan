@@ -1,7 +1,7 @@
 ***
 - [Visionect Server v3 (All‑in‑One) installation in Home Assistant](https://github.com/Adam7411/visionect-v3-allinone)
 - [Visionect Software Suite - Installation in Proxmox](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant_EN)
-- [Joan 6: AppDaemon Dashboard Generator add-on](https://github.com/Adam7411/joan_generator/blob/main/README_EN.md)
+- [Joan 6 / 13PRO: AppDaemon Dashboard Generator add-on](https://github.com/Adam7411/joan_generator/blob/main/README_EN.md)
 ***
 
 <div align="right">
