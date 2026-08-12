@@ -72,7 +72,7 @@ visionect_joan → bateria, recovery, alerty, chwilowe overlaye (send_*)
 
 | Ustawienie | Przykład |
 |------------|----------|
-| URL AppDaemon | `http://192.168.100.80:5050/Dashboard?skin=default&widget=joan_salon&count=1` |
+| URL AppDaemon | `http://ha_ip:5050/Dashboard?skin=default&widget=joan_salon&count=1` |
 | **Main menu URL** (`configuration.yaml`) | ten sam adres — cel przycisku Wstecz i probe recovery |
 | **Recovery probe URL** (YAML, opcjonalnie) | domyślnie = Main menu URL |
 | **Tryb synchronizacji** (select per tablet) | **Eco** |
