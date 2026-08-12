@@ -1,74 +1,3 @@
-<div align="right">
-***
-- [Visionect Software Suite - Instalacja w Proxmox](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
-- [Visionect Software Suite - Instalacja w Home Assistant](https://github.com/Adam7411/visionect-v3-allinone/blob/main/visionect-v3-allinone/README_pl.md)
-- [Dodatek Joan 6/13 PRO: AppDaemon Dashboard Generator](https://github.com/Adam7411/joan_generator/)
-- [Baza wiedzy dla developera](./docs/INTEGRATION_KNOWLEDGE.md)
-***
-[English](./README.md) | **Polski**
-<div align="right">
-<a href="README.md">English</a> | <strong>Polski</strong>
-</div>
-<p align="center">
-
-[11 lines collapsed]
-
-  </a>
-</p>
-> Integracja **`visionect_joan`** łączy energooszczędny tablet e‑ink **Joan 6 / 13 PRO** z Home Assistant przez **Visionect Software Suite (VSS)** — z ochroną baterii, gotowymi ekranami e‑ink, wsparciem **AppDaemon** + **[joan_generator](https://github.com/Adam7411/joan_generator)** oraz interaktywnymi webhookami.
-> Integracja **`visionect_joan`** zmienia energooszczędny tablet e‑ink **Joan 6 / 13 PRO** w konfigurowalne centrum informacji i sterowania dla Twojego systemu Home Assistant: panele energii, kalendarz, lista zakupów / zadań, grafy sensorów, pogoda (różne układy), kanał RSS, snapshot kamery, PIN keypad, panel crypto, pokazy slajdów oraz interaktywne przyciski / webhooki. Wspiera **AppDaemon** + **[joan_generator](https://github.com/Adam7411/joan_generator)** z profilem **Eco** i ochroną baterii.
-**Powiązane projekty:** [VSS w Proxmox](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant) · [VSS w Home Assistant](https://github.com/Adam7411/visionect-v3-allinone/blob/main/visionect-v3-allinone/README_pl.md) · [Joan Dashboard Generator](https://github.com/Adam7411/joan_generator/) · [Baza wiedzy](./docs/INTEGRATION_KNOWLEDGE.md)
-<img width="1280" height="800" alt="Ekran główny Joan 6" src="https://github.com/user-attachments/assets/32214988-dc0e-44ce-af14-2d7f71fb8e6c" />
-<p align="center">
-
-[12 lines collapsed]
-
-3. [Najważniejsze funkcje](#najważniejsze-funkcje)
-4. [Zrzuty ekranu](#zrzuty-ekranu)
-5. [Instalacja](#instalacja)
-6. [Konfiguracja VSS i integracji](#konfiguracja-vss-i-integracji)
-6. [Konfiguracja Visionect Software Suite (VSS)](#konfiguracja-visionect-software-suite-vss)
-7. [Opcje integracji (UI)](#opcje-integracji-ui)
-8. [Predefiniowane widoki (Views)](#predefiniowane-widoki-views)
-9. [Encje](#encje)
-10. [Profile synchronizacji i battery guard](#profile-synchronizacji-i-battery-guard)
-11. [Usługi – pełna lista](#usługi--pełna-lista)
-11. [Usługi – skrót](#usługi--skrót)
-12. [Szczegóły usług](#szczegóły-usług)
-13. [Warstwa interaktywna, recovery i zdarzenia](#warstwa-interaktywna-recovery-i-zdarzenia)
-13. [Warstwa interaktywna i priorytet „Wstecz”](#warstwa-interaktywna-i-priorytet-wstecz)
-14. [Przykłady automatyzacji](#przykłady-automatyzacji)
-15. [Wydajność i oszczędzanie baterii](#wydajność-i-oszczędzanie-baterii)
-16. [Bezpieczeństwo i webhooki](#bezpieczeństwo-i-webhooki)
-17. [Rozwiązywanie problemów](#rozwiązywanie-problemów)
-17. [Rozwiązywanie problemów (Troubleshooting)](#rozwiązywanie-problemów-troubleshooting)
-18. [FAQ](#faq)
-19. [Rozwój integracji](#rozwój-integracji)
-20. [Licencja](#licencja)
-19. [Licencja](#licencja)
----
-
-[11 lines collapsed]
-
-| URL AppDaemon | `http://192.168.100.80:5050/Dashboard?skin=default&widget=joan_salon&count=1` |
-| **Main menu URL** (`configuration.yaml`) | ten sam adres — cel przycisku Wstecz i probe recovery |
-| **Recovery probe URL** (YAML, opcjonalnie) | domyślnie = Main menu URL |
-| **Tryb synchronizacji** | **Eco** |
-| **Tryb synchronizacji** (select per tablet) | **Eco** |
-AppDaemon sam odświeża widgety z encji HA — **nie** trzeba co chwilę wołać `set_url`. Usługi `send_*` używaj jako **krótkich overlayów** z `auto_return_seconds`.
-
-[12 lines collapsed]
-
-## Opis i przeznaczenie
-Integracja to most między **Home Assistant** a **VSS**. Umożliwia:
-Integracja działa jako „most” między Home Assistant a Visionect Software Suite (VSS). Umożliwia generowanie dynamicznych, zoptymalizowanych pod e‑ink ekranów na Joan 6 / 13 PRO, reagujących na kontekst (zdarzenia, strefy, czas, czujniki). Zamiast zwykłego dashboardu możesz wysłać *w pełni renderowany* widok: panel energii, lista zadań z interaktywnym odhaczaniem (webhook), graf historii, sekcja pogody z wykresem, keypad PIN, panel crypto czy panel 12 przycisków.
-- Ustawianie URL sesji tabletu (AppDaemon, `/local/`, Lovelace, obrazy).
-- Generowanie dynamicznych ekranów e‑ink (energia, pogoda, kalendarz, przyciski, PIN, RSS, crypto, …).
-- Monitorowanie stanu, baterii, orphan sesji; **Naprawy HA** (Repairs).
-- Odzyskiwanie po restarcie HA/VSS z **Eco recovery** (bez zbędnego budzenia tabletu).
-Monitoruje też stan tabletu, baterię, orphan sesji VSS, oferuje **Naprawy HA** (Repairs) i **Eco recovery** po restarcie Home Assistant.
----
-## Najważniejsze funkcje
 - Pełna kontrola ekranu: URL, AppDaemon, `/local/`, HTML `data:`, obrazy.
 - Gotowe ekrany e‑ink: pogoda (3 układy), kalendarz, to‑do/zakupy, energia, status encji, wykres sensora, RSS, QR, **panel crypto**, snapshot kamery.
 - Keypad PIN i panel do 12 przycisków (webhooki HA).
@@ -160,3 +89,210 @@ Monitoruje też stan tabletu, baterię, orphan sesji VSS, oferuje **Naprawy HA**
 | **Domyślny adres URL** | Token strony recovery — wklej wygenerowany URL do VSS → Settings → HTML Backend → Default URL |
 | **Czyszczenie cache i dysku** | `cleanup_max_age_hours`, `cleanup_interval_hours` — wiek plików tymcz. w `www/` |
 | **Język tabletu** | PL / EN / DE / … / Auto — teksty na tablecie i powiadomienia HA |
+| **Powiadomienia** | Podmenu poniżej |
+| **Analiza logów Ollama** | URL, model, interwał — opcjonalna diagnoza AI |
+| **Domyślny adres URL** | Token strony recovery — wklej URL do VSS → Settings → HTML Backend → Default URL |
+| **Czyszczenie cache i dysku** | Wiek plików tymcz. w `www/` |
+| **Język tabletu** | PL / EN / DE / … / Auto |
+| **Powiadomienia** | Bateria, ErrorCode, offline, orphan |
+| **Analiza logów Ollama** | URL, model, interwał (opcjonalnie) |
+### Podmenu Powiadomienia
+| Sekcja | Parametry |
+|--------|-----------|
+| **Bateria** | Próg 5/10/15 %; alert na tablecie; powiadomienia HA (niski stan, pełne naładowanie); **battery guard interval** (sek.) |
+| **Błędy (ErrorCode)** | Powiadomienie HA gdy VSS zgłosi kod błędu tabletu |
+| **Offline** | Włącz/wyłącz; próg **1 / 4 / 24 h**; aktualizacja co pełną godzinę (v3.9.13+) |
+| **Stan / orphan** | Automatyczne powiadomienie przy problemie sesji VSS |
+| **Bateria** | Próg 5/10/15 %; alert na tablecie; powiadomienia HA; battery guard interval |
+| **Błędy (ErrorCode)** | Powiadomienie HA przy kodzie błędu VSS |
+| **Offline** | Włącz/wyłącz; próg 1 / 4 / 24 h (aktualizacja co godzinę, v3.9.13+) |
+| **Stan / orphan** | Automatyczne powiadomienie przy problemie sesji |
+### Opcjonalnie YAML (`configuration.yaml`)
+```yaml
+visionect_joan:
+  main_menu_url: "http://..."
+  recovery_probe_url: "http://..."
+  cleanup_max_age_hours: 24
+  cleanup_interval_hours: 6
+  views:
+    - name: Salon
+      url: "http://192.168.1.10:5050/Dashboard?widget=salon"
+```
+---
+## Predefiniowane widoki (Views)
+1. Opcje integracji → **Zarządzaj widokami** → Dodaj (nazwa + URL).
+2. Używaj w usługach jako `url: NazwaWidoku` lub w select **Wybierz widok**.
+3. Per tablet: select **Cel przycisku Wstecz** i atrybut `assigned_home_view`.
+Widoki zapisujesz w Opcjach integracji:
+Legacy format (`Nazwa: URL` linia po linii) jest nadal parsowany.
+1. Ustawienia → Urządzenia i usługi → Visionect Joan → Konfiguruj.
+2. „Add view” → Nazwa + URL.
+3. Te nazwy możesz potem wybierać przez encję `Choose view` (select) lub podawać jako `predefined_url` / `url` w usługach.
+Format legacy („Name: URL” linia po linii) jest automatycznie migrowany.
+---
+## Encje
+| Typ | Encja / funkcja | Uwagi |
+|-----|-----------------|-------|
+| `camera` | Podgląd ekranu | PNG bieżącego widoku |
+| `sensor` | Stan, bateria, RSSI, temperatura, uptime, napięcie, pamięć, **configured_url**, last_seen, **error_code**, connect_reason | Część domyślnie wyłączona |
+| `binary_sensor` | **Online**, **health** (orphan), **is_charging**, **dashboard_ok** | `dashboard_ok` = URL sesji zgadza się z Main menu / widokiem tabletu |
+| `text` | Nazwa urządzenia | Zapis do VSS |
+| `number` | **ReloadTimeout** (odświeżanie sesji VSS) | 0–86400 s |
+| `select` | Widok, cel Wstecz, **tryb synchronizacji** (eco/normal/alert), rozmiar ekranu (joan6/joan13), rotacja, dithering, encoding, **harmonogram snu** | Per tablet |
+| `button` | **Sprawdź stan**, Force Refresh, Reboot, Clear Web Cache, **Analiza Ollama** | Reboot / Clear często wyłączone domyślnie |
+| Typ encji | Nazwa / Funkcja | Uwagi |
+|-----------|-----------------|-------|
+| `camera` | Podgląd aktualnego ekranu | Koduje zrzut jako obraz PNG |
+| `sensor` | Stan online/offline, bateria, temperatura, RSSI, uptime, napięcie, pamięć, **configured_url**, last_seen, **error_code** | Część domyślnie wyłączona |
+| `binary_sensor` | **Online**, **health** (orphan), **is_charging**, **dashboard_ok** | `dashboard_ok` = URL sesji zgadza się z Main menu |
+| `text` | Nazwa urządzenia | Zmiana wysyłana do API |
+| `number` | `ReloadTimeout` (czas odświeżenia sesji) | 0–86400 s |
+| `select` | Widok, Back target, **tryb synchronizacji** (eco/normal/alert), rozmiar ekranu, rotacja, dithering, encoding, harmonogram snu | Per tablet |
+| `button` | **Sprawdź stan**, Force Refresh, Reboot, Clear Web Cache, **Analiza Ollama** | Reboot / Clear często ukryte |
+| (wewnętrzne) | Panel opcji widoków | Przez OptionsFlow |
+<details>
+  <summary>Zrzut encji urządzenia</summary>
+  <img width="658" height="1002" alt="Encje Joan" src="https://github.com/user-attachments/assets/67de6efe-ffd5-4757-8a82-71e46f039943" />
+  <summary>Pokaż zrzut ekranu</summary>
+  <img width="658" height="1002" alt="Zrzut encji" src="https://github.com/user-attachments/assets/67de6efe-ffd5-4757-8a82-71e46f039943" />
+</details>
+---
+
+[6 lines collapsed]
+
+|--------|--------------|------------|
+| **Eco** | Stały dashboard AppDaemon (domyślny) | Minimalny polling; **nie** robi PUT do VSS gdy URL się nie zmienił |
+| **Normal** | Okazjonalne overlaye | Battery guard aktywny |
+| **Alert** | Kamery, pilne alerty | Szybszy refresh; możliwe wymuszenie wake |
+| **Alert** | Kamery, pilne alerty | Szybszy refresh |
+**Usługa `set_url`:** pole **`wake_tablet: true`** — wymusza zapis sesji nawet w Eco.
+**Eco recovery (v3.9.14):** po restarcie HA, gdy probe AppDaemon OK i URL sesji poprawny → **pomijany** zbędny restart sesji VSS.
+**Eco recovery (v3.9.14):** po restarcie HA, gdy probe AppDaemon OK i URL sesji poprawny → pomijany zbędny restart sesji VSS.
+**Zdarzenie:** `visionect_joan_command_result` — pola m.in. `push_result` (`success`, `skipped_unchanged`, `skipped_guard`), `skipped_wake`.
+**Zdarzenie:** `visionect_joan_command_result` — m.in. `push_result` (`success`, `skipped_unchanged`, `skipped_guard`).
+---
+## Usługi – pełna lista
+## Usługi – skrót
+| Usługa | Kategoria | Overlay | Opis |
+|--------|-----------|---------|------|
+| `visionect_joan.set_url` | Nawigacja | — | URL lub widok; `{uuid}`, **`wake_tablet`** |
+| `visionect_joan.send_text` | Treść | Tak | Tekst + obraz, Jinja2 |
+| `visionect_joan.send_image_url` | Treść | Tak | Obraz z URL |
+| `visionect_joan.send_camera_snapshot` | Treść | Tak | Snapshot encji `camera` |
+| `visionect_joan.send_status_panel` | Status | Tak | Ikony + stany encji |
+| `visionect_joan.send_energy_panel` | Energia | Tak | Moc + dzienne PV/import/export |
+| `visionect_joan.send_weather` | Pogoda | Tak | 3 layouty |
+| `visionect_joan.send_calendar` | Kalendarz | Tak | Lista / minimal / siatka miesiąca |
+| `visionect_joan.send_todo_list` | Lista | Tak | To‑Do / Shopping + webhook toggle |
+| `visionect_joan.send_sensor_graph` | Historia | Tak | Wykres line/bar |
+| `visionect_joan.send_rss_feed` | RSS | Tak | Paginacja wpisów |
+| `visionect_joan.send_qr_code` | QR | Tak | QR + podpis |
+| Usługa | Kategoria | Interaktywność (overlay) | Opis skrócony |
+|--------|-----------|--------------------------|---------------|
+| `visionect_joan.set_url` | Nawigacja | Opcjonalnie | Ustaw URL lub nazwę widoku; **`wake_tablet`** |
+| `visionect_joan.send_text` | Treść | Tak | Tekst + układ obrazu (Jinja2) |
+| `visionect_joan.send_image_url` | Treść | Tak | Sam obraz (PNG/JPG/SVG/WebP) |
+| `visionect_joan.send_camera_snapshot` | Treść | Tak | Snapshot z encji kamery |
+| `visionect_joan.send_status_panel` | Status | Tak | Lista encji (ikony + stan) |
+| `visionect_joan.send_energy_panel` | Energia | Tak | Zużycie + produkcja/import/export |
+| `visionect_joan.send_weather` | Pogoda | Tak | 3 layouty (szczegóły / lista / wykres) |
+| `visionect_joan.send_calendar` | Kalendarz | Tak | Lista / minimalistyczna / miesięczna |
+| `visionect_joan.send_todo_list` | Lista | Tak | To-Do / Shopping List + webhook toggle |
+| `visionect_joan.send_sensor_graph` | Historia | Tak | Wykres line/bar wielu sensorów |
+| `visionect_joan.send_rss_feed` | RSS | Tak | Lista + paginacja |
+| `visionect_joan.send_qr_code` | QR | Tak | Kod + podpis |
+| `visionect_joan.send_crypto` | Crypto | Tak | Notowania CryptoCompare + sparkline |
+| `visionect_joan.start_slideshow` | Nawigacja | Tak | Rotacja widoków / URL w pętli |
+| `visionect_joan.send_keypad` | Wejście | Tak (bez Back domyślnie) | PIN → webhook |
+| `visionect_joan.send_button_panel` | Akcje | Tak | Do 12 przycisków (webhook) |
+| `visionect_joan.send_keypad` | Wejście | Tak | PIN → webhook JSON |
+| `visionect_joan.start_slideshow` | Nawigacja | Tak | Rotacja widoków/URL |
+| `visionect_joan.set_session_options` | Render | — | Encoding, dithering |
+| `visionect_joan.set_display_rotation` | Utrzymanie | — | Rotacja + reboot |
+| `visionect_joan.force_refresh` | Utrzymanie | — | Restart sesji |
+| `visionect_joan.clear_web_cache` | Utrzymanie | — | Cache WebKit |
+| `visionect_joan.clear_display` | Utrzymanie | — | Biały ekran |
+| `visionect_joan.sleep_device` / `wake_device` | Zasilanie | — | Sen / wybudzenie |
+| `visionect_joan.read_safe_device_config` | Safe TCLV | — | Krok 1/3: odczyt |
+| `visionect_joan.apply_safe_device_config` | Safe TCLV | — | Krok 2/3: zapis (heartbeat, system screens, touch) |
+| `visionect_joan.restore_safe_device_config` | Safe TCLV | — | Krok 3/3: przywróć kopię |
+| `visionect_joan.set_session_options` | Render | N/A | Głębia / dithering |
+| `visionect_joan.clear_web_cache` | Utrzymanie | N/A | Czyszczenie cache (opcjonalny restart) |
+| `visionect_joan.force_refresh` | Utrzymanie | N/A | Restart sesji |
+| `visionect_joan.set_display_rotation` | Utrzymanie | N/A | Rotacja + reboot |
+| `visionect_joan.clear_display` | Utrzymanie | N/A | Pusty ekran |
+| `visionect_joan.sleep_device` / `wake_device` | Zasilanie | N/A | Sen / wybudzenie |
+| `visionect_joan.read_safe_device_config` | Safe TCLV | N/A | Odczyt konfiguracji urządzenia |
+| `visionect_joan.apply_safe_device_config` | Safe TCLV | N/A | Zapis + kopia zapasowa |
+| `visionect_joan.restore_safe_device_config` | Safe TCLV | N/A | Przywróć kopię |
+**Diagnostyka w UI (bez osobnych usług):** przycisk **Sprawdź stan** (`check_orphans`), **Analiza logów Ollama**, Naprawy HA, encja `dashboard_ok`.
+Pełna lista pól: `services.yaml` oraz **Narzędzia deweloperskie → Usługi**.
+Wspólne pola wielu usług treści: `add_back_button`, `back_button_url`, `auto_return_seconds`, `click_anywhere_to_return`, `click_anywhere_to_action`, `action_webhook_id`, `screen_size` (joan6/joan13).
+Wspólne pola overlay: `add_back_button`, `back_button_url`, `auto_return_seconds`, `click_anywhere_to_return`, `click_anywhere_to_action`, `action_webhook_id`, `screen_size`.
+Pełna specyfikacja pól: **Narzędzia deweloperskie → Usługi** oraz plik [`services.yaml`](./services.yaml).
+---
+<details>
+<summary>Pełna lista pól wspólnych (overlay / interakcja)</summary>
+## Szczegóły usług
+| Pole | Typ | Opis |
+|------|-----|------|
+| `add_back_button` | bool | Dolny pasek z ← |
+| `back_button_url` | string | Cel Wstecz (widok lub URL) |
+| `auto_return_seconds` | int | Po czasie wraca do poprzedniego URL (AppDaemon) |
+| `click_anywhere_to_return` | bool | Tap w dowolne miejsce = Wstecz (ukrywa pasek) |
+| `click_anywhere_to_action` | bool | Tap = akcja webhook (ukrywa pasek) |
+| `action_webhook_id` | string | ID webhooka HA dla → / tap |
+| `screen_size` | select | `joan6` / `joan13` — rozdzielczość layoutu |
+| `predefined_url` | string | Alias widoku z opcji integracji |
+Poniżej opis wybranych usług wraz ze zrzutami ekranu (zwijane sekcje). Pełna lista pól i selektorów znajduje się w `services.yaml` oraz w UI Home Assistant (Developer Tools → Services).
+</details>
+### Wyświetlanie treści
+---
+- `visionect_joan.send_button_panel`  
+  - Umożliwia stworzenie siatki do 12 konfigurowalnych przycisków. Każdy przycisk może mieć własną nazwę, ikonę i przypisany unikalny `webhook_id`, który wywołuje automatyzacje w Home Assistant.  
+  - Wskazówka: Panel wysyła sygnały do Home Assistant za pomocą webhooków. Aby przycisk działał, musisz stworzyć automatyzację, która na ten sygnał zareaguje.  
+  - ⚠️ Ważne ograniczenie: Brak informacji o stanie. Panel przycisków działa jednokierunkowo (stateless). Wygląd nie aktualizuje się zależnie od stanu urządzeń (do stanów użyj np. dashboardu AppDaemon).
+  <details>
+    <summary>Pokaż zrzut ekranu</summary>
+    <img width="1214" height="3814" alt="Panel przycisków" src="https://github.com/user-attachments/assets/fdbb51ba-0f4b-4db4-98bd-e5d01b34ce77" />
+  </details>
+## Szczegóły usług
+***
+### Wyświetlanie treści
+- `visionect_joan.set_url`  
+  - Ustawia dowolny URL lub nazwę zdefiniowanego widoku (predefined).  
+  - Wskazówka: nazwy widoków dopasowywane są bez rozróżniania wielkości liter. Dodawaj/edytuj widoki w: Ustawienia → Urządzenia i usługi → Visionect Joan → Konfiguruj.  
+  - **`wake_tablet: false`** (domyślnie w Eco) oszczędza baterię, gdy URL się nie zmienił.
+  <details>
+    <summary>Pokaż zrzut ekranu</summary>
+    <img width="1220" height="595" alt="Ustaw URL" src="https://github.com/user-attachments/assets/bfdf8101-1b45-45e0-ab1a-46c7ab79d96b" />
+  </details>
+- **`send_button_panel`** — do 12 przycisków, każdy z `webhook_id`. Stateless — nie pokazuje live stanów encji (do tego AppDaemon / `send_status_panel`).
+  <details><summary>Zrzut</summary>
+  <img width="1214" alt="Panel przycisków" src="https://github.com/user-attachments/assets/fdbb51ba-0f4b-4db4-98bd-e5d01b34ce77" />
+***
+- `visionect_joan.send_text`  
+  - Wysyła sformatowany tekst (obsługuje Jinja2), opcjonalnie z obrazem i różnymi układami (text only, text + image).
+  <details>
+    <summary>Pokaż zrzut ekranu</summary>
+    <img width="1225" height="2066" alt="Wiadomość tekstowa" src="https://github.com/user-attachments/assets/9912da53-becf-4932-ab7e-7f0a17a681d7" />
+  </details>
+- **`set_url`** — URL, nazwa widoku lub `{uuid}`. **`wake_tablet: false`** (domyślnie w Eco) oszczędza baterię gdy URL bez zmian.
+  <details><summary>Zrzut</summary>
+  <img width="1220" alt="Set URL" src="https://github.com/user-attachments/assets/bfdf8101-1b45-45e0-ab1a-46c7ab79d96b" />
+***
+- `visionect_joan.send_image_url`  
+  - Wyświetla obraz z podanego URL (PNG/JPG/SVG/WebP). Dla plików lokalnych użyj `http://<HA_IP>:8123/local/...`.
+  <details>
+    <summary>Pokaż zrzut ekranu</summary>
+    <img width="1234" height="1448" alt="Obraz z URL" src="https://github.com/user-attachments/assets/9da6769f-668a-4adb-9edf-b5fdc5851d55" />
+  </details>
+- **`send_text`** — Jinja2, layouty text/image.
+  <details><summary>Zrzut</summary>
+  <img width="1225" alt="Tekst" src="https://github.com/user-attachments/assets/9912da53-becf-4932-ab7e-7f0a17a681d7" />
+***
+- `visionect_joan.send_camera_snapshot`  
+  - Tworzy snapshot z encji `camera` i wyświetla go (z podpisem i rotacją obrazu).
+  <details>
+    <summary>Pokaż zrzut ekranu</summary>
+    <img width="1223" height="1472" alt="Snapshot kamery" src="https://github.com/user-attachments/assets/6cec8748-a586-46c2-8f2b-2bcf-25237e08" />
