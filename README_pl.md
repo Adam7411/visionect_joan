@@ -756,7 +756,7 @@ Nie domyślnie — AppDaemon odświeża widgety. Slideshow/automaty opcjonalnie.
 - Projekt nie jest oficjalną integracją Visionect ani Home Assistant.
 - Testowany na **Joan 6 / 13 PRO**; inne modele nie były weryfikowane.
 - Do szybszego rozwoju użyto AI.
-- **Wersja:** 3.9.14 · **Dokumentacja:** [`docs/README.md`](./docs/README.md) · [`docs/INTEGRATION_KNOWLEDGE.md`](./docs/INTEGRATION_KNOWLEDGE.md)
+
 
 ***
 - [Visionect Software Suite - Instalacja w Proxmox](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
