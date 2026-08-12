@@ -70,25 +70,16 @@ joan_generator → pliki *.dash → AppDaemon :5050 → tablet (URL sesji VSS)
 visionect_joan → bateria, recovery, alerty, chwilowe overlaye (send_*)
 ```
 
-| Ustawienie | Przykład |
-|------------|----------|
-| URL AppDaemon | `http://ha_ip:5050/Dashboard?skin=default&widget=joan_salon&count=1` |
-| **Main menu URL** (`configuration.yaml`) | ten sam adres — cel przycisku Wstecz i probe recovery |
-| **Recovery probe URL** (YAML, opcjonalnie) | domyślnie = Main menu URL |
+| Ustawienie | Gdzie / przykład |
+|------------|------------------|
+| URL AppDaemon | `http://192.168.100.80:5050/Dashboard?skin=default&widget=joan_salon&count=1` |
+| **Widok predefiniowany** | **Konfiguruj Visionect Joan** → **Zarządzaj widokami** — np. nazwa `MainMenu` z powyższym URL |
+| **Cel przycisku Wstecz** | Select **Back button target** na tablecie — ten sam widok lub URL |
 | **Tryb synchronizacji** (select per tablet) | **Eco** |
 
 AppDaemon sam odświeża widgety z encji HA — **nie** trzeba co chwilę wołać `set_url`. Usługi `send_*` używaj jako **krótkich overlayów** z `auto_return_seconds`.
 
-Opcjonalnie w `configuration.yaml`:
-
-```yaml
-visionect_joan:
-  main_menu_url: "http://192.168.100.80:5050/Dashboard?widget=joan_salon&count=1"
-  recovery_probe_url: "http://192.168.100.80:5050/Dashboard?widget=joan_salon&count=1"
-  views:
-    - name: MainMenu
-      url: "http://192.168.100.80:5050/Dashboard?widget=joan_salon&count=1"
-```
+Wszystko ustawiasz w **Ustawienia → Urządzenia i usługi → Visionect Joan → Konfiguruj** (widoki, strona recovery, powiadomienia).
 
 ---
 
@@ -486,7 +477,7 @@ Priorytet określania celu powrotu:
 
 1. `back_button_url` (w wywołaniu usługi)
 2. Per‑device selektor `Back button target`
-3. Globalny `Main menu URL` (`configuration.yaml`)
+3. Widok z **Opcji integracji** (Zarządzaj widokami) lub select **Choose view** na tablecie
 
 Wyłączenie widocznych przycisków:
 
@@ -497,7 +488,7 @@ Włączenie jednej z opcji ukrywa dolny pasek.
 
 **Overlay → AppDaemon:** przed `send_*` integracja zapamiętuje bieżący URL; `auto_return_seconds` lub ← przywraca dashboard.
 
-**Recovery po restarcie HA:** HTTP GET recovery probe URL → Eco skip restart sesji gdy URL OK → safety net 5/8/10 min.
+**Recovery po restarcie HA:** HTTP GET na URL widoku AppDaemon (z selectów / opcji) → Eco skip restart sesji gdy URL OK → safety net 5/8/10 min.
 
 ---
 
@@ -692,7 +683,7 @@ action:
 | Encoding | `1` dla tekstu / prostych widoków; `4` dla zdjęć i cieniowanych wykresów |
 | Dithering | `none` dla czytelności; `floyd-steinberg` dla obrazów |
 | Duże obrazy | Skaluj do rozdzielczości ekranu przed wysłaniem |
-| Recovery probe | Ustaw na URL AppDaemon |
+| Recovery | Widok AppDaemon w **Konfiguruj Visionect Joan** + select **Choose view** / **Back button target** |
 | Noc | Harmonogram snu tabletu; `sleep_device` opcjonalnie |
 | Sleep | Użyj `sleep_device` gdy tablet nie potrzebuje aktualizacji dłużej (np. noc) |
 
@@ -715,7 +706,7 @@ action:
 |---------|-----------|-------------|
 | Brak reakcji przycisku | Zły `webhook_id` / brak automatyzacji | Podgląd zdarzeń → sprawdź wejście `webhook` |
 | Nie odświeża się ekran | Stara sesja | `force_refresh` lub zmień `ReloadTimeout` |
-| Connection refused po restarcie HA | AppDaemon niedostępny | Recovery probe URL; log `Eco recovery skip` |
+| Connection refused po restarcie HA | AppDaemon niedostępny | Sprawdź URL widoku w opcjach; log `Eco recovery skip` |
 | Zły ekran | Zły URL sesji | `sensor.*_configured_url`, `binary_sensor.*_dashboard_ok` |
 | Alert offline „zawsze 4 h” | Stary bug (naprawiony v3.9.13) | Przeładuj integrację |
 | „Stare” obrazy / CSS | Cache WebKit | `clear_web_cache` (+ opcjonalny restart) |
