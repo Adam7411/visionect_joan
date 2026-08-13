@@ -72,7 +72,7 @@ visionect_joan → battery, recovery, alerts, temporary overlays (send_*)
 
 | Setting | Where / example |
 |---------|-----------------|
-| AppDaemon URL | `http://192.168.100.80:5050/Dashboard?skin=default&widget=joan_salon&count=1` |
+| AppDaemon URL | `http://<ha_ip>:5050/Dashboard?skin=default&widget=joan_salon&count=1` |
 | **Predefined view** | **Configure Visionect Joan** → **Manage views** — e.g. name `MainMenu` with the AppDaemon URL above |
 | **Back button target** | Per-tablet select — same view or URL |
 | **Sync profile** (select per tablet) | **Eco** |
@@ -177,7 +177,7 @@ It also monitors tablet state, battery, VSS orphan sessions, offers **HA Repairs
 2. Click **“+ Add Integration”**.
 3. Search for **“Visionect Joan”** and start setup.
 4. Enter Visionect Software Suite credentials: [VSS installation guide](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant_EN)
-   - Server address (e.g. `http://192.168.x.x:8081`) — VSS address (usually same host as HA)
+   - Server address (e.g. `http://<ha_ip>:8081`) — VSS address (usually same host as HA)
    - Username (`admin`)
    - Password (set your own)
    - API Key and API Secret (VSS → Users → Add new API key)
@@ -338,7 +338,7 @@ Below are selected services with screenshots (collapsible sections). Full field 
 ***
 
 - `visionect_joan.send_image_url`  
-  - Displays an image from URL (PNG/JPG/SVG/WebP). For local files use `http://<HA_IP>:8123/local/...`.
+  - Displays an image from URL (PNG/JPG/SVG/WebP). For local files use `http://<ha_ip>:8123/local/...`.
   <details>
     <summary>Show screenshot</summary>
     <img width="1234" height="1448" alt="Image from URL" src="https://github.com/user-attachments/assets/9da6769f-668a-4adb-9edf-b5fdc5851d55" />
@@ -503,7 +503,7 @@ service: visionect_joan.set_url
 target:
   device_id: 00000000000000000000000000000000  # ← Replace with your device_id
 data:
-  url: "http://192.168.100.80:5050/Dashboard?widget=joan_salon&count=1"
+  url: "http://<ha_ip>:5050/Dashboard?widget=joan_salon&count=1"
   wake_tablet: true  # Force session write on first setup
 ```
 
@@ -632,7 +632,7 @@ data:
   views: |                                     # Each line: view name OR full local URL
     MainMenu
     WeatherPanel
-    http://192.168.1.10:8123/local/announcements.png
+    http://<ha_ip>:8123/local/announcements.png
   seconds_per_slide: 120                       # Eco: min. ~120 s; shorter = more battery use
   loop: true                                   # After last slide return to first
   add_back_button: true                        # Add (←) back to e.g. MainMenu
