@@ -72,7 +72,7 @@ visionect_joan → bateria, recovery, alerty, chwilowe overlaye (send_*)
 
 | Ustawienie | Gdzie / przykład |
 |------------|------------------|
-| URL AppDaemon | `http://192.168.100.80:5050/Dashboard?skin=default&widget=joan_salon&count=1` |
+| URL AppDaemon | `http://<ha_ip>:5050/Dashboard?skin=default&widget=joan_salon&count=1` |
 | **Widok predefiniowany** | **Konfiguruj Visionect Joan** → **Zarządzaj widokami** — np. nazwa `MainMenu` z powyższym URL |
 | **Cel przycisku Wstecz** | Select **Back button target** na tablecie — ten sam widok lub URL |
 | **Tryb synchronizacji** (select per tablet) | **Eco** |
@@ -177,7 +177,7 @@ Monitoruje też stan tabletu, baterię, orphan sesji VSS, oferuje **Naprawy HA**
 2. Kliknij **„+ Dodaj integrację”**.
 3. Wyszukaj **„Visionect Joan”** i rozpocznij konfigurację.
 4. Wprowadź dane do Visionect Software Suite: [Instalacja Visionect Software Suite](https://github.com/Adam7411/Joan-6-Visionect_Home-Assistant)
-   - Adres serwera (np. `http://192.168.x.x:8081`) — adres VSS (zwykle ten sam host co HA)
+   - Adres serwera (np. `http://<ha_ip>:8081`) — adres VSS (zwykle ten sam host co HA)
    - Nazwa użytkownika (`admin`)
    - Hasło (ustaw własne)
    - API Key oraz API Secret (VSS → Users → Add new API key)
@@ -338,7 +338,7 @@ Poniżej opis wybranych usług wraz ze zrzutami ekranu (zwijane sekcje). Pełna 
 ***
 
 - `visionect_joan.send_image_url`  
-  - Wyświetla obraz z podanego URL (PNG/JPG/SVG/WebP). Dla plików lokalnych użyj `http://<HA_IP>:8123/local/...`.
+  - Wyświetla obraz z podanego URL (PNG/JPG/SVG/WebP). Dla plików lokalnych użyj `http://<ha_ip>:8123/local/...`.
   <details>
     <summary>Pokaż zrzut ekranu</summary>
     <img width="1234" height="1448" alt="Obraz z URL" src="https://github.com/user-attachments/assets/9da6769f-668a-4adb-9edf-b5fdc5851d55" />
@@ -503,7 +503,7 @@ service: visionect_joan.set_url
 target:
   device_id: 00000000000000000000000000000000  # ← Wstaw swoje device_id
 data:
-  url: "http://192.168.100.80:5050/Dashboard?widget=joan_salon&count=1"
+  url: "http://<ha_ip>:5050/Dashboard?widget=joan_salon&count=1"
   wake_tablet: true  # Wymuś zapis sesji przy pierwszym ustawieniu
 ```
 
@@ -632,7 +632,7 @@ data:
   views: |                                     # Każda linia: nazwa widoku LUB pełny lokalny URL
     MainMenu
     PogodaPanel
-    http://192.168.1.10:8123/local/ogloszenia.png
+    http://<ha_ip>:8123/local/ogloszenia.png
   seconds_per_slide: 120                       # Eco: min. ~120 s; krócej = większe zużycie baterii
   loop: true                                   # Po ostatnim wróć do pierwszego
   add_back_button: true                        # Dodaj (←) z powrotem do np. MainMenu
