@@ -1,0 +1,494 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Visionect Joan-server",
+        "description": "Verbindingsgegevens voor uw Visionect-server. Gebruikersnaam/wachtwoord of API-sleutel/geheim.",
+        "data": {
+          "host": "Serveradres (IP:8081)",
+          "username": "Gebruikersnaam",
+          "password": "Wachtwoord",
+          "api_key": "API-sleutel",
+          "api_secret": "API-geheim"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Authenticatie mislukt. Controleer de gegevens.",
+      "unknown": "Er is een onbekende fout opgetreden."
+    },
+    "abort": {
+      "already_configured": "Deze Visionect-server is al geconfigureerd."
+    }
+  },
+  "options": {
+    "step": {
+      "menu": {
+        "title": "Visionect Joan-configuratie",
+        "description": "Kies een onderdeel — elk heeft een eigen pagina.",
+        "menu_options": {
+          "views_menu": "Weergaven beheren",
+          "recovery_page": "Standaard-URL",
+          "cache_cleanup": "Cache en schijf",
+          "tablet_language": "Tablettaal",
+          "notifications": "Meldingen",
+          "ollama": "Ollama loganalyse",
+          "sleep_manager": "Sleep Manager (VSS)"
+        }
+      },
+      "notifications": {
+        "title": "Meldingen",
+        "description": "Aparte instellingen voor Home Assistant en tablet — batterij, offline, VSS-foutcodes en orphan-sessies.",
+        "menu_options": {
+          "battery_alerts": "Batterijmeldingen",
+          "error_code_alerts": "Foutmeldingen",
+          "offline_alerts": "Offline-meldingen",
+          "health_alerts": "Status / orphan"
+        }
+      },
+      "recovery_page": {
+        "title": "Standaard-URL",
+        "description": "1. Klik **Indienen** om **je standaard-URL** te genereren en open deze stap opnieuw.\n\n2. Zet **Standaard-URL naar VSS schrijven** aan voor **PUT /api/config**. Lukt dat niet, plak handmatig op **{vss_settings_url}**.\n\n**Jouw standaard-URL:**\n{recovery_url}",
+        "data": {
+          "recovery_page_token": "Toegangstoken (geheim)",
+          "apply_default_url_to_vss": "Standaard-URL naar VSS schrijven (API)"
+        },
+        "data_description": {
+          "apply_default_url_to_vss": "Aan: na opslaan recovery-URL naar VSS-config pushen. Uit: alleen token in Home Assistant."
+        }
+      },
+      "views_menu": {
+        "title": "Weergaven",
+        "description": "Geef namen aan veelgebruikte URL's (dashboards). In diensten kiest u bijv. Woonkamer i.p.v. een lange http-URL.",
+        "menu_options": {
+          "add_view": "Weergave toevoegen",
+          "delete_view": "Weergave verwijderen",
+          "edit_view": "Weergave bewerken"
+        }
+      },
+      "cache_cleanup": {
+        "title": "Cache en schijf",
+        "description": "De integratie slaat tijdelijke afbeeldingen en HTML op. Stel leeftijd en opruiminterval in.",
+        "data": {
+          "cleanup_max_age_hours": "Max. bestandsleeftijd (uur) — ouder wordt verwijderd",
+          "cleanup_interval_hours": "Opruimen elke (uur)"
+        }
+      },
+      "tablet_language": {
+        "title": "Tablettaal",
+        "description": "Taal voor Joan-tabletpagina's en permanente Home Assistant-meldingen (batterij, verbindingsverlies, Safe Config, diagnose). Auto = taal van de Home Assistant-interface.",
+        "data": {
+          "tablet_language": "Tablettaal"
+        },
+        "data_description": {
+          "tablet_language": "Na wijziging: voer visionect_joan.clear_web_cache uit met restart_session als oude tekst blijft."
+        }
+      },
+      "battery_alerts": {
+        "title": "Batterijmeldingen",
+        "description": "Drempel laag (5 / 10 / 15 %) en aparte schakelaars: tablet, HA laag, HA vol.",
+        "data": {
+          "battery_low_threshold_pct": "Drempel lage batterij (%)",
+          "battery_tablet_alert_enabled": "Tablet waarschuwing",
+          "battery_ha_low_notification_enabled": "HA-melding lage batterij",
+          "battery_ha_full_notification_enabled": "HA-melding volle batterij (laden)",
+          "battery_guard_interval_sec": "Battery-guard-interval (seconden)"
+        },
+        "data_description": {
+          "battery_low_threshold_pct": "Waarschuwing op dit niveau of lager (alleen bij ingeschakelde opties).",
+          "battery_tablet_alert_enabled": "Aan: laag-batterijscherm tot herstel of laden. Uit: geen tabletscherm.",
+          "battery_ha_low_notification_enabled": "Aan: vaste HA-melding. Uit: geen.",
+          "battery_ha_full_notification_enabled": "Aan: melding bij vol tijdens laden. Uit: geen.",
+          "battery_guard_interval_sec": "Minimale tussenruimte tussen verschillende URL-inhoudswijzigingen die naar de tablet worden gestuurd. Hogere waarde = betere batterijbescherming."
+        }
+      },
+      "error_code_alerts": {
+        "title": "Foutmeldingen",
+        "description": "Bij een niet-nul VSS ErrorCode kan de integratie een vaste melding tonen met apparaatnaam en korte uitleg.",
+        "data": {
+          "error_code_ha_notification_enabled": "Home Assistant-meldingen bij foutcodes"
+        },
+        "data_description": {
+          "error_code_ha_notification_enabled": "Aan: melding bij elke nieuwe foutcode (bijv. 6 = Wi‑Fi). Uit: geen; bestaande verdwijnen bij de volgende gegevensverversing."
+        }
+      },
+      "offline_alerts": {
+        "title": "Offline-meldingen",
+        "description": "Melding wanneer een tablet langer offline blijft dan de drempel. Verdwijnt wanneer het apparaat weer online is.",
+        "data": {
+          "offline_ha_notification_enabled": "Home Assistant-meldingen bij offline",
+          "offline_threshold_hours": "Offline-drempel (uren)"
+        },
+        "data_description": {
+          "offline_ha_notification_enabled": "Aan: blijvende melding na drempel. Uit: geen.",
+          "offline_threshold_hours": "Hoe lang offline vóór melding (1, 4 of 24 uur)."
+        }
+      },
+      "health_alerts": {
+        "title": "Status / orphan",
+        "description": "Automatische melding bij VSS-orphan- of sessieproblemen (zoals knop Status controleren).",
+        "data": {
+          "health_ha_notification_enabled": "Automatische HA-meldingen bij orphan-fouten"
+        },
+        "data_description": {
+          "health_ha_notification_enabled": "Aan: melding bij OrphanError tijdens polling. Uit: alleen handmatige controle."
+        }
+      },
+      "ollama": {
+        "title": "Ollama loganalyse",
+        "description": "Optioneel: Visionect-context periodiek naar Ollama. De taal van de analyse volgt de tablettaal hierboven (Auto = taal van de HA-interface).",
+        "data": {
+          "ollama_enabled": "Ollama-analyse inschakelen",
+          "ollama_url": "Ollama API-URL (bijv. http://192.168.1.10:11434)",
+          "ollama_api_key": "API-sleutel Ollama of proxy (optioneel)",
+          "ollama_model": "Modelnaam (bijv. llama3.1:8b)",
+          "ollama_interval_min": "Analyse-interval (minuten) — min. 2; integratie kan herladen nodig hebben"
+        }
+      },
+      "add_view": {
+        "title": "Weergave toevoegen",
+        "data": {
+          "view_name": "Naam (bijv. Dashboard woonkamer)",
+          "view_url": "URL (http://...)"
+        }
+      },
+      "delete_view": {
+        "title": "Weergave verwijderen",
+        "data": {
+          "view_to_delete": "Te verwijderen weergave"
+        }
+      },
+      "edit_view": {
+        "title": "Weergave kiezen om te bewerken",
+        "data": {
+          "view_to_edit": "Weergave uit lijst"
+        }
+      },
+      "edit_view_form": {
+        "title": "Weergave bewerken",
+        "data": {
+          "new_view_name": "Nieuwe naam",
+          "new_view_url": "Nieuwe URL"
+        }
+      },
+      "sleep_manager": {
+        "title": "VSS Sleep Manager",
+        "description": "**Sleep Manager** is een **globale** VSS-functie (Settings → Global → Features). Aan = tablets slapen tot **ScheduledWakeup** en zijn **niet op afstand te wekken**.\n\nVoor **Always Online**-dashboards: auto-uit **aan** laten.",
+        "data": {
+          "auto_disable_sleep_manager": "Sleep Manager automatisch uitschakelen"
+        },
+        "data_description": {
+          "auto_disable_sleep_manager": "Aan (aanbevolen): bij start en gezonde VSS uitzetten (tenzij cyclische slaap). Uit: alleen detecteren en waarschuwen."
+        }
+      }
+    },
+    "error": {
+      "invalid_format": "Opslagformaatfout.",
+      "name_exists": "Er bestaat al een weergave met deze naam.",
+      "invalid_data": "Naam en URL zijn verplicht.",
+      "vss_api_unavailable": "Visionect-API nog niet geladen — herlaad de integratie en probeer opnieuw.",
+      "vss_default_url_failed": "Kon standaard-URL niet via VSS-API schrijven. Plak handmatig in VSS → Settings → HTML Backend."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "state": {
+        "name": "Status",
+        "state": {
+          "online": "Online",
+          "offline": "Offline",
+          "sleeping": "Slaapt"
+        }
+      },
+      "battery": {
+        "name": "Batterij"
+      },
+      "temperature": {
+        "name": "Temperatuur"
+      },
+      "rssi": {
+        "name": "Wi-Fi-signaalsterkte"
+      },
+      "uptime": {
+        "name": "Uptime zonder herstart"
+      },
+      "storage_free": {
+        "name": "Vrije opslag"
+      },
+      "battery_voltage": {
+        "name": "Batterijspanning"
+      },
+      "uuid": {
+        "name": "Apparaat-UUID"
+      },
+      "display_rotation": {
+        "name": "Schermoriëntatie"
+      },
+      "application_version": {
+        "name": "Softwareversie"
+      },
+      "storage_total": {
+        "name": "Totale opslag"
+      },
+      "storage_used": {
+        "name": "Gebruikte opslag"
+      },
+      "last_seen": {
+        "name": "Laatst gezien"
+      },
+      "configured_url": {
+        "name": "Huidige URL"
+      },
+      "connect_reason": {
+        "name": "Verbindingsreden"
+      },
+      "error_code": {
+        "name": "Foutcode"
+      },
+      "scheduled_wakeup": {
+        "name": "Gepland ontwaken"
+      },
+      "vss_default_url": {
+        "name": "Standaard-URL"
+      },
+      "vss_hub_info": {
+        "name": "Serverinfo"
+      },
+      "vss_devices_online": {
+        "name": "Verbonden apparaten"
+      },
+      "vss_sessions": {
+        "name": "WebKit-sessies"
+      },
+      "vss_orphans": {
+        "name": "Wees-sessies"
+      }
+    },
+    "binary_sensor": {
+      "online": {
+        "name": "Online"
+      },
+      "health_status": {
+        "name": "Apparaatstatus"
+      },
+      "is_charging": {
+        "name": "Bezig met laden"
+      },
+      "dashboard_ok": {
+        "name": "AppDaemon-dashboard OK"
+      },
+      "vss_sleep_manager": {
+        "name": "Sleep Manager ingeschakeld"
+      }
+    },
+    "number": {
+      "reload_interval": {
+        "name": "Sessie vernieuwen (server)"
+      },
+      "polling_time": {
+        "name": "Pollingtijd",
+        "description": "VSS Options.PollingTime in seconden. −1 = geen polling (typisch Always Online / push)."
+      },
+      "sleep_schedule": {
+        "name": "Cyclisch slaapschema (minuten)",
+        "description": "0 min = Always Online. 1–1440 = optionele cyclische slaap (vereist globale Sleep Manager)."
+      }
+    },
+    "text": {
+      "device_name": {
+        "name": "Naam in Visionect"
+      }
+    },
+    "button": {
+      "check_orphans": {
+        "name": "Status controleren (orphans)"
+      },
+      "force_refresh": {
+        "name": "Scherm verversen"
+      },
+      "reboot_device": {
+        "name": "Apparaat herstarten"
+      },
+      "clear_web_cache": {
+        "name": "Webcache wissen"
+      },
+      "ollama_analyze_logs": {
+        "name": "Loganalyse"
+      },
+      "disable_sleep_manager": {
+        "name": "Sleep Manager uitschakelen"
+      }
+    },
+    "camera": {
+      "live_view": {
+        "name": "Live scherm"
+      }
+    },
+    "select": {
+      "view_select": {
+        "name": "Weergave wijzigen naar…",
+        "state": {
+          "unconfigured_state": "Niet geconfigureerd",
+          "[Configuration]": "Naar configuratie…"
+        }
+      },
+      "dithering_select": {
+        "name": "Dithering (beeldkwaliteit)"
+      },
+      "encoding_select": {
+        "name": "Kleurdiepte",
+        "state": {
+          "1": "1 bit (zwart-wit — snel)",
+          "4": "4 bit (16 grijstinten)"
+        }
+      },
+      "rotation_select": {
+        "name": "Schermoriëntatie",
+        "state": {
+          "Portrait": "Staand (standaard)",
+          "Landscape, 90°": "Liggend 90°",
+          "Portrait, 180°": "Staand 180°",
+          "Landscape, 270°": "Liggend 270°"
+        }
+      },
+      "back_view_select": {
+        "name": "Standaard Terug-doel",
+        "state": {
+          "[Configuration]": "Naar configuratie…"
+        }
+      },
+      "screen_size_select": {
+        "name": "Schermgrootte (gegenereerde inhoud)",
+        "state": {
+          "auto": "Automatisch (apparaat)",
+          "joan6": "Joan 6\"",
+          "joan13": "Joan 13\""
+        },
+        "state_attributes": {
+          "effective_screen_size": {
+            "name": "Actieve lay-out"
+          }
+        }
+      },
+      "periodic_sleep_select": {
+        "name": "Slaapmodus",
+        "state": {
+          "Periodic": "Periodiek",
+          "Disabled": "Uit"
+        }
+      },
+      "push_mode_select": {
+        "name": "Push-modus",
+        "state": {
+          "Enabled": "Aan",
+          "Disabled": "Uit"
+        }
+      },
+      "sleep_schedule_select": {
+        "name": "Cyclische slaap (minuten)"
+      },
+      "refresh_profile_select": {
+        "name": "Synchronisatiemodus met Home Assistant",
+        "state": {
+          "eco": "Eco (batterij eerst)",
+          "normal": "Normal (gebalanceerd)",
+          "alert": "Alert (snellere updates)"
+        }
+      }
+    }
+  },
+  "issues": {
+    "device_orphan": {
+      "title": "Tablet-sessieprobleem ({device})",
+      "description": "VSS meldde: {error}. Bevestig hieronder om WebKit-cache te wissen en de sessie te herstarten.",
+      "fix_flow": {
+        "confirm": {
+          "title": "Sessie repareren?",
+          "description": "Wist de WebKit-cache en herstart de sessie voor **{device}**."
+        }
+      }
+    },
+    "sleep_manager_enabled": {
+      "title": "VSS Sleep Manager is ingeschakeld",
+      "description": "Globale **Sleep Manager** staat aan. Tablets slapen tot **ScheduledWakeup** zonder remote wake.\n\n**Reparatie:** bevestig hieronder of zet uit in VSS → Settings → Global → Features.",
+      "fix_flow": {
+        "confirm": {
+          "title": "Sleep Manager uitschakelen?",
+          "description": "Zet globale Sleep Manager uit zodat tablets Always Online kunnen blijven."
+        }
+      }
+    }
+  },
+  "services": {
+    "diagnose_vss_session": {
+      "name": "VSS-sessie diagnosticeren",
+      "description": "Controleert sessieconsistentie (URL-formaat, bereikbaarheid, online, orphans). Optionele auto-reparatie.",
+      "fields": {
+        "device_id": {
+          "name": "Apparaat",
+          "description": "Kies het Visionect-apparaat om te diagnosticeren."
+        },
+        "check_url_format": {
+          "name": "URL-formaat controleren",
+          "description": "Valideer of de sessie-URL een geldig http(s)-adres lijkt."
+        },
+        "check_url_reachability": {
+          "name": "URL-bereikbaarheid controleren",
+          "description": "Probeer de sessie-URL vanuit Home Assistant te bereiken."
+        },
+        "check_device_online": {
+          "name": "Online / orphans controleren",
+          "description": "Vergelijk online-status en orphan-sessiesignalen van VSS."
+        },
+        "auto_fix": {
+          "name": "Auto-reparatie indien mogelijk",
+          "description": "Probeer veilige automatische reparaties als de diagnose herstelbare problemen vindt."
+        },
+        "timeout_seconds": {
+          "name": "HTTP-timeout (seconden)",
+          "description": "Hoe lang te wachten op HTTP-controles."
+        }
+      }
+    },
+    "health_check_vss_url": {
+      "name": "Gezondheidscheck VSS-URL",
+      "description": "Controleert of de sessie-URL (of een override) bereikbaar is vanuit Home Assistant, optioneel met één-klik-reparatie.",
+      "fields": {
+        "device_id": {
+          "name": "Apparaat",
+          "description": "Kies het apparaat waarvan de sessie-URL gecontroleerd moet worden."
+        },
+        "target_url": {
+          "name": "Override-URL",
+          "description": "Optionele URL om te controleren in plaats van de huidige sessie-URL."
+        },
+        "check_url_format": {
+          "name": "URL-formaat controleren",
+          "description": "Valideer of de URL een geldig http(s)-adres lijkt."
+        },
+        "one_click_fix": {
+          "name": "Eén-klik-reparatie",
+          "description": "Probeer bij mislukking een veilige reparatie (bijv. rewrite / reload)."
+        },
+        "timeout_seconds": {
+          "name": "HTTP-timeout (seconden)",
+          "description": "Hoe lang te wachten op de HTTP-controle."
+        }
+      }
+    },
+    "fetch_status_history": {
+      "name": "Statusgeschiedenis ophalen",
+      "description": "Laadt de laatste N uur van VSS /api/devicestatus en voegt min/max Battery, RSSI en Temperature toe aan die sensoren.",
+      "fields": {
+        "device_id": {
+          "name": "Apparaat",
+          "description": "Kies het apparaat waarvoor statusgeschiedenis geladen moet worden."
+        },
+        "hours": {
+          "name": "Uren",
+          "description": "Hoeveel uur geschiedenis opvragen (1–168)."
+        }
+      }
+    }
+  }
+}
