@@ -1,0 +1,494 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Server Visionect Joan",
+        "description": "Údaje pro připojení k serveru Visionect. Uživatelské jméno/heslo nebo API klíč/tajemství.",
+        "data": {
+          "host": "Adresa serveru (IP:8081)",
+          "username": "Uživatelské jméno",
+          "password": "Heslo",
+          "api_key": "API klíč",
+          "api_secret": "API tajemství"
+        }
+      }
+    },
+    "error": {
+      "auth_failed": "Ověření selhalo. Zkontrolujte přihlašovací údaje.",
+      "unknown": "Došlo k neznámé chybě."
+    },
+    "abort": {
+      "already_configured": "Tento server Visionect je již nakonfigurován."
+    }
+  },
+  "options": {
+    "step": {
+      "menu": {
+        "title": "Nastavení Visionect Joan",
+        "description": "Vyberte sekci — každá má vlastní stránku.",
+        "menu_options": {
+          "views_menu": "Správa pohledů",
+          "recovery_page": "Výchozí URL",
+          "cache_cleanup": "Mezipaměť a disk",
+          "tablet_language": "Jazyk tabletu",
+          "notifications": "Oznámení",
+          "ollama": "Analýza logů Ollama",
+          "sleep_manager": "Sleep Manager (VSS)"
+        }
+      },
+      "notifications": {
+        "title": "Oznámení",
+        "description": "Samostatná nastavení pro Home Assistant a tablet — baterie, offline, chybové kódy VSS a orphan relace.",
+        "menu_options": {
+          "battery_alerts": "Upozornění na baterii",
+          "error_code_alerts": "Upozornění na chyby",
+          "offline_alerts": "Upozornění offline",
+          "health_alerts": "Stav / orphan"
+        }
+      },
+      "recovery_page": {
+        "title": "Výchozí URL",
+        "description": "1. Klikněte **Odeslat** pro vygenerování **výchozí URL** a vraťte se sem.\n\n2. Zapněte **Zapsat výchozí URL do VSS** pro **PUT /api/config**. Jinak vložte ručně na **{vss_settings_url}**.\n\n**Vaše výchozí URL:**\n{recovery_url}",
+        "data": {
+          "recovery_page_token": "Přístupový token (tajný)",
+          "apply_default_url_to_vss": "Zapsat výchozí URL do VSS (API)"
+        },
+        "data_description": {
+          "apply_default_url_to_vss": "Zapnuto: po uložení pošle recovery URL do konfigurace VSS. Vypnuto: jen token v Home Assistant."
+        }
+      },
+      "views_menu": {
+        "title": "Správa pohledů",
+        "description": "Pojmenujte často používané URL (např. panely). Ve službách vyberte např. Obývák místo dlouhé http adresy.",
+        "menu_options": {
+          "add_view": "Přidat pohled",
+          "delete_view": "Smazat pohled",
+          "edit_view": "Upravit pohled"
+        }
+      },
+      "cache_cleanup": {
+        "title": "Mezipaměť a disk",
+        "description": "Integrace ukládá dočasné obrázky a HTML. Nastavte stáří souborů a četnost úklidu.",
+        "data": {
+          "cleanup_max_age_hours": "Max. stáří souborů (hodiny) — starší se smažou",
+          "cleanup_interval_hours": "Jak často úklid (hodiny)"
+        }
+      },
+      "tablet_language": {
+        "title": "Jazyk tabletu",
+        "description": "Jazyk stránek na tabletech Joan a trvalých oznámení v Home Assistant (baterie, ztráta spojení, Safe Config, diagnostika). Auto = jazyk rozhraní Home Assistant.",
+        "data": {
+          "tablet_language": "Jazyk tabletu"
+        },
+        "data_description": {
+          "tablet_language": "Po změně spusťte službu visionect_joan.clear_web_cache s restart_session, pokud tablet stále zobrazuje starý text."
+        }
+      },
+      "battery_alerts": {
+        "title": "Upozornění na baterii",
+        "description": "Práh nízké baterie (5 / 10 / 15 %) a samostatné přepínače: tablet, HA při nízké, HA při plné.",
+        "data": {
+          "battery_low_threshold_pct": "Práh nízké baterie (%)",
+          "battery_tablet_alert_enabled": "Upozornění na tabletu",
+          "battery_ha_low_notification_enabled": "Oznámení HA při nízké baterii",
+          "battery_ha_full_notification_enabled": "Oznámení HA při plné baterii (nabíjení)",
+          "battery_guard_interval_sec": "Interval Battery Guard (sekundy)"
+        },
+        "data_description": {
+          "battery_low_threshold_pct": "Upozornění při této úrovni nebo níže (podle voleb níže).",
+          "battery_tablet_alert_enabled": "Zapnuto: obrazovka nízké baterie do obnovy nebo nabíjení. Vypnuto: žádná obrazovka na tabletu.",
+          "battery_ha_low_notification_enabled": "Zapnuto: trvalé oznámení v HA. Vypnuto: žádné.",
+          "battery_ha_full_notification_enabled": "Zapnuto: oznámení při plné baterii při nabíjení. Vypnuto: žádné.",
+          "battery_guard_interval_sec": "Minimální rozestup mezi různými změnami URL obsahu posílanými na tablet. Vyšší hodnota = lepší ochrana baterie."
+        }
+      },
+      "error_code_alerts": {
+        "title": "Upozornění na chyby",
+        "description": "Když tablet nahlásí nenulový VSS ErrorCode, integrace může zobrazit trvalé oznámení s názvem zařízení a stručným popisem.",
+        "data": {
+          "error_code_ha_notification_enabled": "Oznámení Home Assistant při chybových kódech"
+        },
+        "data_description": {
+          "error_code_ha_notification_enabled": "Zapnuto: oznámení při každém novém kódu (např. 6 = Wi‑Fi). Vypnuto: žádné; stávající zmizí při další aktualizaci dat."
+        }
+      },
+      "offline_alerts": {
+        "title": "Upozornění offline",
+        "description": "Oznámení, když tablet zůstane offline déle než prahová hodnota. Zmizí po návratu online.",
+        "data": {
+          "offline_ha_notification_enabled": "Oznámení HA při offline",
+          "offline_threshold_hours": "Práh offline (hodiny)"
+        },
+        "data_description": {
+          "offline_ha_notification_enabled": "Zapnuto: trvalé oznámení po prahu. Vypnuto: žádné.",
+          "offline_threshold_hours": "Jak dlouho offline před oznámením (1, 4 nebo 24 h)."
+        }
+      },
+      "health_alerts": {
+        "title": "Stav / orphan",
+        "description": "Automatické oznámení při problému relace VSS (orphan), jako tlačítko Kontrola stavu.",
+        "data": {
+          "health_ha_notification_enabled": "Automatická oznámení HA při chybách orphan"
+        },
+        "data_description": {
+          "health_ha_notification_enabled": "Zapnuto: oznámení při OrphanError při obnovení. Vypnuto: pouze ruční kontrola."
+        }
+      },
+      "ollama": {
+        "title": "Analýza logů Ollama",
+        "description": "Volitelné: pravidelně posílat kontext Visionect na Ollama. Jazyk výstupu analýzy odpovídá nastavení jazyka tabletu (Auto = jazyk rozhraní HA).",
+        "data": {
+          "ollama_enabled": "Zapnout analýzu Ollama",
+          "ollama_url": "URL API Ollama (např. http://192.168.1.10:11434)",
+          "ollama_api_key": "API klíč Ollama nebo proxy (volitelné)",
+          "ollama_model": "Název modelu (např. llama3.1:8b)",
+          "ollama_interval_min": "Interval analýzy (minuty) — min. 2; po změně může být potřeba znovu načíst integraci"
+        }
+      },
+      "add_view": {
+        "title": "Přidat pohled",
+        "data": {
+          "view_name": "Název (např. Panel obývák)",
+          "view_url": "URL (http://...)"
+        }
+      },
+      "delete_view": {
+        "title": "Smazat pohled",
+        "data": {
+          "view_to_delete": "Pohled ke smazání"
+        }
+      },
+      "edit_view": {
+        "title": "Vybrat pohled k úpravě",
+        "data": {
+          "view_to_edit": "Pohled ze seznamu"
+        }
+      },
+      "edit_view_form": {
+        "title": "Upravit pohled",
+        "data": {
+          "new_view_name": "Nový název",
+          "new_view_url": "Nová URL"
+        }
+      },
+      "sleep_manager": {
+        "title": "VSS Sleep Manager",
+        "description": "**Sleep Manager** je **globální** funkce VSS (Settings → Global → Features). Zapnutý = tablety spí do **ScheduledWakeup** a **nelze je vzdáleně probudit**.\n\nPro **Always Online** nechte automatické vypnutí **zapnuté**.",
+        "data": {
+          "auto_disable_sleep_manager": "Automaticky vypínat Sleep Manager"
+        },
+        "data_description": {
+          "auto_disable_sleep_manager": "Zapnuto (doporučeno): při startu a zdravém VSS vypne Sleep Manager (kromě cyklického spánku). Vypnuto: jen detekce a varování."
+        }
+      }
+    },
+    "error": {
+      "invalid_format": "Chyba formátu uložení.",
+      "name_exists": "Pohled s tímto názvem již existuje.",
+      "invalid_data": "Je nutný název i URL.",
+      "vss_api_unavailable": "API Visionect ještě není načtené — znovu načtěte integraci a zkuste znovu.",
+      "vss_default_url_failed": "Nepodařilo se zapsat výchozí URL přes API VSS. Vložte ručně ve VSS → Settings → HTML Backend."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "state": {
+        "name": "Stav",
+        "state": {
+          "online": "Online",
+          "offline": "Offline",
+          "sleeping": "Spí"
+        }
+      },
+      "battery": {
+        "name": "Baterie"
+      },
+      "temperature": {
+        "name": "Teplota"
+      },
+      "rssi": {
+        "name": "Síla signálu Wi-Fi"
+      },
+      "uptime": {
+        "name": "Doba bez restartu"
+      },
+      "storage_free": {
+        "name": "Volné úložiště"
+      },
+      "battery_voltage": {
+        "name": "Napětí baterie"
+      },
+      "uuid": {
+        "name": "UUID zařízení"
+      },
+      "display_rotation": {
+        "name": "Orientace obrazovky"
+      },
+      "application_version": {
+        "name": "Verze softwaru"
+      },
+      "storage_total": {
+        "name": "Celkové úložiště"
+      },
+      "storage_used": {
+        "name": "Využité úložiště"
+      },
+      "last_seen": {
+        "name": "Naposledy viděn"
+      },
+      "configured_url": {
+        "name": "Zobrazovaná URL"
+      },
+      "connect_reason": {
+        "name": "Důvod připojení"
+      },
+      "error_code": {
+        "name": "Chybový kód"
+      },
+      "scheduled_wakeup": {
+        "name": "Naplánované probuzení"
+      },
+      "vss_default_url": {
+        "name": "Výchozí URL"
+      },
+      "vss_hub_info": {
+        "name": "Informace o serveru"
+      },
+      "vss_devices_online": {
+        "name": "Připojená zařízení"
+      },
+      "vss_sessions": {
+        "name": "Relace WebKit"
+      },
+      "vss_orphans": {
+        "name": "Opuštěné relace"
+      }
+    },
+    "binary_sensor": {
+      "online": {
+        "name": "Online"
+      },
+      "health_status": {
+        "name": "Stav zařízení"
+      },
+      "is_charging": {
+        "name": "Probíhá nabíjení"
+      },
+      "dashboard_ok": {
+        "name": "AppDaemon dashboard OK"
+      },
+      "vss_sleep_manager": {
+        "name": "Sleep Manager zapnutý"
+      }
+    },
+    "number": {
+      "reload_interval": {
+        "name": "Obnovení relace (server)"
+      },
+      "polling_time": {
+        "name": "Interval pollingu",
+        "description": "VSS Options.PollingTime v sekundách. −1 = bez pollingu (typický Always Online / push)."
+      },
+      "sleep_schedule": {
+        "name": "Cyklický spánkový plán (minuty)",
+        "description": "0 min = Always Online. 1–1440 = volitelný cyklický spánek (vyžaduje globální Sleep Manager)."
+      }
+    },
+    "text": {
+      "device_name": {
+        "name": "Název ve Visionect"
+      }
+    },
+    "button": {
+      "check_orphans": {
+        "name": "Zkontrolovat stav (sirotci)"
+      },
+      "force_refresh": {
+        "name": "Vynutit obnovení obrazovky"
+      },
+      "reboot_device": {
+        "name": "Restartovat zařízení"
+      },
+      "clear_web_cache": {
+        "name": "Vymazat mezipaměť webu"
+      },
+      "ollama_analyze_logs": {
+        "name": "Analýza logů"
+      },
+      "disable_sleep_manager": {
+        "name": "Vypnout Sleep Manager"
+      }
+    },
+    "camera": {
+      "live_view": {
+        "name": "Náhled obrazovky"
+      }
+    },
+    "select": {
+      "view_select": {
+        "name": "Změnit pohled na…",
+        "state": {
+          "unconfigured_state": "Nenakonfigurováno",
+          "[Configuration]": "Přejít do nastavení…"
+        }
+      },
+      "dithering_select": {
+        "name": "Metoda ditheringu"
+      },
+      "encoding_select": {
+        "name": "Barevná hloubka",
+        "state": {
+          "1": "1 bit (černobíle — rychlé)",
+          "4": "4 bity (16 odstínů šedi)"
+        }
+      },
+      "rotation_select": {
+        "name": "Orientace obrazovky",
+        "state": {
+          "Portrait": "Na výšku (výchozí)",
+          "Landscape, 90°": "Na šířku 90°",
+          "Portrait, 180°": "Na výšku 180°",
+          "Landscape, 270°": "Na šířku 270°"
+        }
+      },
+      "back_view_select": {
+        "name": "Výchozí cíl tlačítka Zpět",
+        "state": {
+          "[Configuration]": "Přejít do nastavení…"
+        }
+      },
+      "screen_size_select": {
+        "name": "Velikost obrazovky (generovaný obsah)",
+        "state": {
+          "auto": "Automaticky (ze zařízení)",
+          "joan6": "Joan 6\"",
+          "joan13": "Joan 13\""
+        },
+        "state_attributes": {
+          "effective_screen_size": {
+            "name": "Aktivní rozvržení"
+          }
+        }
+      },
+      "periodic_sleep_select": {
+        "name": "Režim spánku",
+        "state": {
+          "Periodic": "Periodický",
+          "Disabled": "Vypnuto"
+        }
+      },
+      "push_mode_select": {
+        "name": "Režim Push",
+        "state": {
+          "Enabled": "Zapnuto",
+          "Disabled": "Vypnuto"
+        }
+      },
+      "sleep_schedule_select": {
+        "name": "Cyklický spánek (minuty)"
+      },
+      "refresh_profile_select": {
+        "name": "Režim synchronizace s Home Assistant",
+        "state": {
+          "eco": "Eco (priorita baterie)",
+          "normal": "Normal (vyvážené)",
+          "alert": "Alert (rychlejší aktualizace)"
+        }
+      }
+    }
+  },
+  "issues": {
+    "device_orphan": {
+      "title": "Problém relace tabletu ({device})",
+      "description": "VSS hlásí: {error}. Potvrďte níže vyčištění WebKit cache a restart relace.",
+      "fix_flow": {
+        "confirm": {
+          "title": "Opravit relaci?",
+          "description": "Vyčistí WebKit cache a restartuje relaci pro **{device}**."
+        }
+      }
+    },
+    "sleep_manager_enabled": {
+      "title": "VSS Sleep Manager je zapnutý",
+      "description": "Globální **Sleep Manager** je zapnutý. Tablety spí do **ScheduledWakeup** bez vzdáleného buzení.\n\n**Oprava:** potvrďte níže nebo vypněte ve VSS → Settings → Global → Features.",
+      "fix_flow": {
+        "confirm": {
+          "title": "Vypnout Sleep Manager?",
+          "description": "Vypne globální Sleep Manager, aby tablety mohly zůstat Always Online."
+        }
+      }
+    }
+  },
+  "services": {
+    "diagnose_vss_session": {
+      "name": "Diagnostikovat relaci VSS",
+      "description": "Kontroluje konzistenci relace (formát URL, dostupnost, online, orphan). Volitelná auto-oprava.",
+      "fields": {
+        "device_id": {
+          "name": "Zařízení",
+          "description": "Vyberte zařízení Visionect k diagnostice."
+        },
+        "check_url_format": {
+          "name": "Zkontrolovat formát URL",
+          "description": "Ověřit, že URL relace vypadá jako platná adresa http(s)."
+        },
+        "check_url_reachability": {
+          "name": "Zkontrolovat dostupnost URL",
+          "description": "Pokusit se dosáhnout URL relace z Home Assistant."
+        },
+        "check_device_online": {
+          "name": "Zkontrolovat online / orphan",
+          "description": "Porovnat online stav a orphan signály z VSS."
+        },
+        "auto_fix": {
+          "name": "Auto-oprava pokud možné",
+          "description": "Zkusit bezpečné automatické opravy, pokud diagnostika najde opravitelné problémy."
+        },
+        "timeout_seconds": {
+          "name": "HTTP timeout (sekundy)",
+          "description": "Jak dlouho čekat na HTTP kontroly."
+        }
+      }
+    },
+    "health_check_vss_url": {
+      "name": "Kontrola zdraví URL VSS",
+      "description": "Ověří, že URL relace (nebo přepsání) je dosažitelné z Home Assistant, volitelně s opravou jedním kliknutím.",
+      "fields": {
+        "device_id": {
+          "name": "Zařízení",
+          "description": "Vyberte zařízení, jehož URL relace se má zkontrolovat."
+        },
+        "target_url": {
+          "name": "Přepsat URL",
+          "description": "Volitelná URL ke kontrole místo aktuální URL relace."
+        },
+        "check_url_format": {
+          "name": "Zkontrolovat formát URL",
+          "description": "Ověřit, že URL vypadá jako platná adresa http(s)."
+        },
+        "one_click_fix": {
+          "name": "Oprava jedním kliknutím",
+          "description": "Při selhání zkusit bezpečnou opravu (např. rewrite / reload)."
+        },
+        "timeout_seconds": {
+          "name": "HTTP timeout (sekundy)",
+          "description": "Jak dlouho čekat na HTTP kontrolu."
+        }
+      }
+    },
+    "fetch_status_history": {
+      "name": "Načíst historii stavu",
+      "description": "Načte posledních N hodin z VSS /api/devicestatus a připojí min/max Battery, RSSI a Temperature k těmto senzorům.",
+      "fields": {
+        "device_id": {
+          "name": "Zařízení",
+          "description": "Vyberte zařízení, pro které načíst historii stavu."
+        },
+        "hours": {
+          "name": "Hodiny",
+          "description": "Kolik hodin historie vyžádat (1–168)."
+        }
+      }
+    }
+  }
+}
