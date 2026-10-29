@@ -117,7 +117,6 @@ async def async_setup_entry(
         entities.append(VssDevicesOnlineSensor(coordinator, entry))
         entities.append(VssSessionsSensor(coordinator, entry))
         entities.append(VssOrphansSensor(coordinator, entry))
-        entities.append(VssOrphansSensor(coordinator, entry))
     for uuid, device_coordinator in device_coordinators.items():
         for sensor_type in SENSOR_TYPES:
             entities.append(VisionectSensor(device_coordinator, uuid, sensor_type))
