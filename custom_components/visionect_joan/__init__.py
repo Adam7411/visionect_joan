@@ -3174,6 +3174,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         if not isinstance(coordinator.data, dict):
             return False
         discovery_uuids = set(coordinator.data.keys())
+        # An empty discovery result means VSS was unreachable (async_update_data returns {}
+        # when the device list cannot be fetched), not that every tablet was removed.
+        # Treating it as removal drops all device coordinators and triggers a reload on
+        # every VSS outage (e.g. a NAS hosting VSS going to sleep).
+        if not discovery_uuids:
+            return False
         async with device_coordinators_lock:
             current_map = entry_data.get("device_coordinators", {}) or {}
             current_uuids = set(current_map.keys())
@@ -3196,7 +3202,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                 entry.entry_id,
             )
         if trigger_reload:
-            await hass.config_entries.async_reload(entry.entry_id)
+            # Schedule instead of awaiting: this runs inside the entry's own background task
+            # (_async_device_lifecycle_sync). Unloading cancels that task, so awaiting
+            # async_reload here cancels the reload half-way and leaves the config entry stuck
+            # in UNLOAD_IN_PROGRESS until Home Assistant is restarted.
+            hass.config_entries.async_schedule_reload(entry.entry_id)
         return True
 
     async def _async_device_lifecycle_sync() -> None:
